@@ -40,6 +40,6 @@ public class WeatherManager implements IWeatherManager {
 
     @Override
     public void setWeather(City city, String weatherJSON) {
-        JSONObject parser = new JSONObject();
+        //JSONObject parser = new JSONObject();
     }
 }
