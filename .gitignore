@@ -19,6 +19,7 @@ replay_pid*
 
 # Android Studio/IDE Files
 *.iml
+.idea
 .idea/
 .idea/caches
 .idea/libraries
