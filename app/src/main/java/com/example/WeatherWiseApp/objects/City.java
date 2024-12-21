@@ -1,4 +1,4 @@
-package objects;
+package com.example.WeatherWiseApp.objects;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -17,16 +17,16 @@ public class City {
         this.city = city;
     }
 
-    public void updateWeather(double temp, double feelsLike, String description, int humidity, double windSpeed, int timezoneOffset, long sunrise, long sunset) {
+    public void updateWeather(String[] weatherDetails) {
         // atomically update each weather attribute when called
-        this.temp = temp + K_TO_C;
-        this.feelsLike = feelsLike + K_TO_C;
-        this.description = description;
-        this.humidity = humidity;
-        this.windSpeed = windSpeed;
-        this.timezoneOffset = timezoneOffset;
-        this.sunrise = timeStampToTime(sunrise);
-        this.sunset = timeStampToTime(sunset);
+        temp = Math.round((Double.parseDouble(weatherDetails[0]) - K_TO_C) * 100.0) / 100.0;
+        feelsLike = Math.round((Double.parseDouble(weatherDetails[1]) - K_TO_C) * 100.0) / 100.0;
+        description = weatherDetails[2];
+        humidity = Integer.parseInt(weatherDetails[3]);
+        windSpeed = Double.parseDouble(weatherDetails[4]);
+        timezoneOffset = Integer.parseInt(weatherDetails[5]);
+        sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
+        sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
     }
 
     private String timeStampToTime(long timestamp) {
@@ -52,13 +52,13 @@ public class City {
         // return an array of strings that cover the weather details of the city
         String[] weather = new String[7];
 
-        weather[1] = String.valueOf(temp);
-        weather[2] = String.valueOf(feelsLike);
-        weather[3] = description;
-        weather[4] = String.valueOf(humidity);
-        weather[5] = String.valueOf(windSpeed);
-        weather[6] = sunrise;
-        weather[7] = sunset;
+        weather[0] = "Temperature: " + String.valueOf(temp) + "°C";
+        weather[1] = "Feels Like: " + String.valueOf(feelsLike) + "°C";
+        weather[2] = "Description: " + description;
+        weather[3] = "Humidity: " + String.valueOf(humidity) + "%";
+        weather[4] = "Wind Speed: " + String.valueOf(windSpeed) + " m/s";
+        weather[5] = "Sunrise: " + sunrise;
+        weather[6] = "Sunset: " + sunset;
 
         return weather;
     }

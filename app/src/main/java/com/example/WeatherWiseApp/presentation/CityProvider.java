@@ -1,12 +1,20 @@
-package presentation;
+package com.example.WeatherWiseApp.presentation;
+
+import android.widget.EditText;
 
 import java.util.Scanner;
 
 public class CityProvider {
     Scanner scanner = new Scanner(System.in);
+    String city;
+    private EditText input;
+
+    public CityProvider(EditText input) {
+        this.input = input;
+    }
 
     public String getCity() {
-        String city = "";
+        /*String city = "";
         do {
             System.out.println("Enter the default city: ");
             city = scanner.nextLine().trim(); // Read and trim input
@@ -19,9 +27,9 @@ public class CityProvider {
             }
         } while (city.isEmpty() || !city.matches("[a-zA-Z ]+")); // Keep looping until valid
 
-        scanner.close();
+        scanner.close();*/
     
-        return city; // Return the valid city name
+        return String.valueOf(input.getText()); // Return the valid city name
     }
     
 }
