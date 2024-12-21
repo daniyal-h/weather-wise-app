@@ -6,12 +6,15 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class City {
-    private String city, description, sunrise, sunset;
+    private final String city;
+    private String description;
+    private String sunrise;
+    private String sunset;
     private int humidity, timezoneOffset;
     private double temp, feelsLike, windSpeed;
 
     private static final double K_TO_C = 273.15;
-    // String temp, feelsLike, description, windSpeed, humidity, pressure, clouds, sunrise, sunset;
+    private static final double MPS_TO_KMPH = 3.6;
 
     public City(String city) {
         this.city = city;
@@ -23,7 +26,7 @@ public class City {
         feelsLike = Math.round((Double.parseDouble(weatherDetails[1]) - K_TO_C) * 100.0) / 100.0;
         description = weatherDetails[2];
         humidity = Integer.parseInt(weatherDetails[3]);
-        windSpeed = Double.parseDouble(weatherDetails[4]);
+        windSpeed = Math.round((Double.parseDouble(weatherDetails[4]) * MPS_TO_KMPH) * 100.0) / 100.0;
         timezoneOffset = Integer.parseInt(weatherDetails[5]);
         sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
         sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
@@ -52,11 +55,11 @@ public class City {
         // return an array of strings that cover the weather details of the city
         String[] weather = new String[7];
 
-        weather[0] = "Temperature: " + String.valueOf(temp) + "°C";
-        weather[1] = "Feels Like: " + String.valueOf(feelsLike) + "°C";
+        weather[0] = "Temperature: " + temp + "°C";
+        weather[1] = "Feels Like: " + feelsLike + "°C";
         weather[2] = "Description: " + description;
-        weather[3] = "Humidity: " + String.valueOf(humidity) + "%";
-        weather[4] = "Wind Speed: " + String.valueOf(windSpeed) + " m/s";
+        weather[3] = "Humidity: " + humidity + "%";
+        weather[4] = "Wind Speed: " + windSpeed + " km/h";
         weather[5] = "Sunrise: " + sunrise;
         weather[6] = "Sunset: " + sunset;
 
