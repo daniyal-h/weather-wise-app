@@ -7,9 +7,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.WeatherWiseApp.logic.IWeatherCallback;
 import com.example.WeatherWiseApp.logic.WeatherManager;
+import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.example.WeatherWiseApp.objects.City;
 import com.example.WeatherWiseApp.presentation.CityProvider;
 
@@ -51,10 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            City defaultCity = new City(cityName);
-
             // Update the TextView with city name
-            cityTextView.setText("City: " + defaultCity.getCity());
+            City defaultCity = new City(cityName);
 
             fetchWeather(defaultCity); // Fetch weather data asynchronously
         });
@@ -65,24 +66,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
                 // Update weather details
-                weatherManager.setWeather(city, response);
-                String[] weather = city.getWeather();
+                try {
+                    cityTextView.setText("City: " + city.getCity());
 
-                weatherDetails.setText(""); // Clear previous details
-                for (String detail : weather) {
-                    weatherDetails.append(detail + "\n");
+                    weatherManager.setWeather(city, response);
+                    String[] weather = city.getWeather();
+
+                    weatherDetails.setText(""); // Clear previous details
+                    for (String detail : weather) {
+                        weatherDetails.append(detail + "\n");
+                    }
+                }
+
+                catch (InvalidJsonParsingException e) {
+                    showToast(e.getMessage(), Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onError(String error) {
-                showToast("Error fetching weather: " + error, Toast.LENGTH_LONG);
+                showCriticalError("Unable to fetch weather data. Please check the city name and try again.");
                 Log.e(TAG, "Error fetching weather for city " + city.getCity() + " - " + error);
+                resetTextBoxes();
             }
         });
     }
 
     private void showToast(String message, int duration) {
         Toast.makeText(MainActivity.this, message, duration).show();
+    }
+
+    private void showCriticalError(String error) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Error")
+                .setMessage(error)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+    private void resetTextBoxes() {
+        cityInput.setText("");
+        cityTextView.setText("");
+        weatherDetails.setText("");
     }
 }
