@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(String response) {
                 // Update weather details
                 try {
-                    cityTextView.setText("City: " + city.getCity());
+                    cityTextView.setText(city.getCity().toUpperCase());
 
                     weatherManager.setWeather(city, response);
                     String[] weather = city.getWeather();
