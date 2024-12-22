@@ -16,7 +16,7 @@ public class WeatherManager implements IWeatherManager {
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     @Override
-    public void getWeatherJSON(Context context, City city, final WeatherCallback callback) {
+    public void getWeatherJSON(Context context, City city, final IWeatherCallback callback) {
         // URL-encode the city name to handle spaces and special characters
         String url = BASE_URL + "?q=" + Uri.encode(city.getCity()) + "&appid=" + API_KEY;
 
