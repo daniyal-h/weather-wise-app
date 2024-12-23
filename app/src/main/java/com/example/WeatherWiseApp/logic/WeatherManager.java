@@ -19,7 +19,7 @@ public class WeatherManager implements IWeatherManager {
     @Override
     public void getWeatherJSON(Context context, City city, final IWeatherCallback callback) {
         // URL-encode the city name to handle spaces and special characters
-        String url = BASE_URL + "?q=" + Uri.encode(city.getCity()) + "&appid=" + API_KEY;
+        String url = BASE_URL + "?q=" + city.getCity() + "&appid=" + API_KEY;
 
         // Create a StringRequest
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
