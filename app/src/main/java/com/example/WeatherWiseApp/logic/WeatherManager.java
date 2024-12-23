@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.example.WeatherWiseApp.objects.City;
 
 public class WeatherManager implements IWeatherManager {
@@ -16,7 +17,7 @@ public class WeatherManager implements IWeatherManager {
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     @Override
-    public void getWeatherJSON(Context context, City city, final WeatherCallback callback) {
+    public void getWeatherJSON(Context context, City city, final IWeatherCallback callback) {
         // URL-encode the city name to handle spaces and special characters
         String url = BASE_URL + "?q=" + Uri.encode(city.getCity()) + "&appid=" + API_KEY;
 
