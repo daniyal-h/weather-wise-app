@@ -1,4 +1,3 @@
-// MainActivity.java
 package com.example.WeatherWiseApp;
 
 import android.os.Bundle;
@@ -14,12 +13,10 @@ import com.example.WeatherWiseApp.logic.IWeatherCallback;
 import com.example.WeatherWiseApp.logic.WeatherManager;
 import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.example.WeatherWiseApp.objects.City;
-import com.example.WeatherWiseApp.presentation.CityProvider;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private WeatherManager weatherManager;
-    private CityProvider cityProvider;
     private EditText cityInput;
     private TextView cityTextView, weatherDetails;
     private Button fetchWeatherButton;
@@ -42,13 +39,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLogicClasses() {
-        cityProvider = new CityProvider(cityInput);
         weatherManager = new WeatherManager();
     }
 
     private void setEventListeners() {
         fetchWeatherButton.setOnClickListener(v -> {
-            String cityName = cityProvider.getCity();
+            String cityName = String.valueOf(cityInput.getText());
             if (cityName.isEmpty()) {
                 showToast("Please enter a city name", Toast.LENGTH_SHORT);
                 return;
@@ -105,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetTextBoxes() {
-        cityInput.setText("");
         cityTextView.setText("");
         weatherDetails.setText("");
     }
