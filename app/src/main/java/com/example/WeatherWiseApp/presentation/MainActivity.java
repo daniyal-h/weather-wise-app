@@ -1,4 +1,4 @@
-package com.example.WeatherWiseApp;
+package com.example.WeatherWiseApp.presentation;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.WeatherWiseApp.R;
 import com.example.WeatherWiseApp.logic.IWeatherCallback;
 import com.example.WeatherWiseApp.logic.WeatherManager;
 import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
