@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
      * Initializes logic classes with dependency injection.
      */
     private void initializeLogicClasses() {
-        // Initialize WeatherManager with Context; uses default WeatherJsonAdapter
+        // Initialize WeatherManager and inject Context
         weatherManager = new WeatherManager(this);
     }
 

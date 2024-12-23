@@ -15,13 +15,15 @@ public class WeatherManager implements IWeatherManager {
     private final RequestQueue requestQueue;
     private final WeatherJsonAdapter jsonAdapter;
 
+    // inject context which indirectly injects the volley through overloading
+    public WeatherManager(Context context) {
+        this(Volley.newRequestQueue(context), new WeatherJsonAdapter());
+    }
+
+    // overloaded constructor
     public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter jsonAdapter) {
         this.requestQueue = requestQueue;
         this.jsonAdapter = jsonAdapter;
-    }
-
-    public WeatherManager(Context context) {
-        this(Volley.newRequestQueue(context), new WeatherJsonAdapter());
     }
 
     @Override
