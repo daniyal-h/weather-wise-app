@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.WeatherWiseApp.logic.IWeatherCallback;
 import com.example.WeatherWiseApp.logic.WeatherManager;
 import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
@@ -38,13 +39,17 @@ public class MainActivity extends AppCompatActivity {
         weatherDetails = findViewById(R.id.weatherDetailsTextView);
     }
 
+    /**
+     * Initializes logic classes with dependency injection.
+     */
     private void initializeLogicClasses() {
-        weatherManager = new WeatherManager();
+        // Initialize WeatherManager with Context; uses default WeatherJsonAdapter
+        weatherManager = new WeatherManager(this);
     }
 
     private void setEventListeners() {
         fetchWeatherButton.setOnClickListener(v -> {
-            String cityName = String.valueOf(cityInput.getText());
+            String cityName = cityInput.getText().toString().trim();
             if (cityName.isEmpty()) {
                 showToast("Please enter a city name", Toast.LENGTH_SHORT);
                 return;
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchWeather(City city) {
-        weatherManager.getWeatherJSON(MainActivity.this, city, new IWeatherCallback() {
+        weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
             public void onSuccess(String response) {
                 // Update weather details
@@ -72,9 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     for (String detail : weather) {
                         weatherDetails.append(detail + "\n");
                     }
-                }
-
-                catch (InvalidJsonParsingException e) {
+                } catch (InvalidJsonParsingException e) {
                     showToast(e.getMessage(), Toast.LENGTH_LONG);
                 }
             }
@@ -103,5 +106,9 @@ public class MainActivity extends AppCompatActivity {
     private void resetTextBoxes() {
         cityTextView.setText("");
         weatherDetails.setText("");
+    }
+
+    public void setWeatherManager(WeatherManager weatherManager) {
+        this.weatherManager = weatherManager;
     }
 }
