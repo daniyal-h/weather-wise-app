@@ -22,11 +22,11 @@ public class City {
 
     public void updateWeather(String[] weatherDetails) {
         // atomically update each weather attribute when called
-        temp = Math.round((Double.parseDouble(weatherDetails[0]) - K_TO_C) * 100.0) / 100.0;
-        feelsLike = Math.round((Double.parseDouble(weatherDetails[1]) - K_TO_C) * 100.0) / 100.0;
+        temp = Math.round(Double.parseDouble(weatherDetails[0]) - K_TO_C);
+        feelsLike = Math.round(Double.parseDouble(weatherDetails[1]) - K_TO_C);
         description = weatherDetails[2];
         humidity = Integer.parseInt(weatherDetails[3]);
-        windSpeed = Math.round((Double.parseDouble(weatherDetails[4]) * MPS_TO_KMPH) * 100.0) / 100.0;
+        windSpeed = Math.round(Double.parseDouble(weatherDetails[4]) * MPS_TO_KMPH);
         timezoneOffset = Integer.parseInt(weatherDetails[5]);
         sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
         sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
@@ -55,11 +55,11 @@ public class City {
         // return an array of strings that cover the weather details of the city
         String[] weather = new String[7];
 
-        weather[0] = "Temperature: " + temp + "°C";
-        weather[1] = "Feels Like: " + feelsLike + "°C";
+        weather[0] = "Temperature: " + (int) temp + "°C";
+        weather[1] = "Feels Like: " + (int) feelsLike + "°C";
         weather[2] = "Description: " + description;
         weather[3] = "Humidity: " + humidity + "%";
-        weather[4] = "Wind Speed: " + windSpeed + " km/h";
+        weather[4] = "Wind Speed: " + (int) windSpeed + " km/h";
         weather[5] = "Sunrise: " + sunrise;
         weather[6] = "Sunset: " + sunset;
 
