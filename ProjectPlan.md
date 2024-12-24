@@ -100,3 +100,5 @@ Our Weather App aims to provide users with quick, reliable, and visually appeali
 - **Iteration 1**: December 29, 2024
 - **Iteration 2**: January 12, 2025
 - **Iteration 3**: January 19, 2025
+
+Note: Project began on December 19, 2024
