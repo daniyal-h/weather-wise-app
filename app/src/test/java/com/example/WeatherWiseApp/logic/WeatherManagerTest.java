@@ -2,7 +2,6 @@ package com.example.WeatherWiseApp.logic;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.example.WeatherWiseApp.objects.City;
