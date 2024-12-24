@@ -1,12 +1,11 @@
-package com.example.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic;
 
-import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-
+import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import org.json.JSONObject;
 
 public class WeatherJsonAdapter implements IWeatherJsonAdapter {
     @Override
-    public String[] parseWeather(String JSON) throws InvalidJsonParsingException {
+    public String[] parseWeather(String JSON) {
         String[] weatherDetails = new String[8];
         try {
             // Parse the JSON data

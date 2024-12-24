@@ -1,5 +1,4 @@
-// MainActivity.java
-package com.example.WeatherWiseApp;
+package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,16 +9,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.WeatherWiseApp.logic.IWeatherCallback;
-import com.example.WeatherWiseApp.logic.WeatherManager;
-import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.example.WeatherWiseApp.objects.City;
-import com.example.WeatherWiseApp.presentation.CityProvider;
+
+import com.daniyalh.WeatherWiseApp.R;
+import com.daniyalh.WeatherWiseApp.logic.CityManager;
+import com.daniyalh.WeatherWiseApp.logic.IWeatherCallback;
+import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private WeatherManager weatherManager;
-    private CityProvider cityProvider;
+    private CityManager cityManager; // track all cities searched
     private EditText cityInput;
     private TextView cityTextView, weatherDetails;
     private Button fetchWeatherButton;
@@ -42,27 +43,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLogicClasses() {
-        cityProvider = new CityProvider(cityInput);
-        weatherManager = new WeatherManager();
+        cityManager = new CityManager();
+        weatherManager = new WeatherManager(this);
     }
 
     private void setEventListeners() {
         fetchWeatherButton.setOnClickListener(v -> {
-            String cityName = cityProvider.getCity();
+            String cityName = cityInput.getText().toString().trim().toLowerCase();
             if (cityName.isEmpty()) {
                 showToast("Please enter a city name", Toast.LENGTH_SHORT);
                 return;
             }
 
-            // Update the TextView with city name
-            City defaultCity = new City(cityName);
-
-            fetchWeather(defaultCity); // Fetch weather data asynchronously
+            fetchWeather(cityName); // Fetch weather data asynchronously
         });
     }
 
-    private void fetchWeather(City city) {
-        weatherManager.getWeatherJSON(MainActivity.this, city, new IWeatherCallback() {
+    private void fetchWeather(String cityName) {
+        City city = new City(cityName);
+        weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
             public void onSuccess(String response) {
                 // Update weather details
@@ -76,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
                     for (String detail : weather) {
                         weatherDetails.append(detail + "\n");
                     }
+                    cityManager.addCity(city); // add or update record
                 }
-
                 catch (InvalidJsonParsingException e) {
                     showToast(e.getMessage(), Toast.LENGTH_LONG);
                 }
@@ -105,8 +104,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetTextBoxes() {
-        cityInput.setText("");
         cityTextView.setText("");
         weatherDetails.setText("");
+    }
+
+    public void setWeatherManager(WeatherManager weatherManager) {
+        this.weatherManager = weatherManager;
     }
 }
