@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.WeatherWiseApp"
+    namespace = "com.daniyalh.WeatherWiseApp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.WeatherWiseApp"
+        applicationId = "com.daniyalh.WeatherWiseApp"
         minSdk = 29
         targetSdk = 34
         versionCode = 1

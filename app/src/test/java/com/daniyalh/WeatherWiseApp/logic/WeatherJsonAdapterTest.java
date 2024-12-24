@@ -1,9 +1,9 @@
-package com.example.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 
 public class WeatherJsonAdapterTest {
     WeatherJsonAdapter jsonAdapter = new WeatherJsonAdapter();

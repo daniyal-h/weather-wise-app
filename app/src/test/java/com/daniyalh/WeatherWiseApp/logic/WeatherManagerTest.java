@@ -1,10 +1,10 @@
-package com.example.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
-import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.example.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.objects.City;
 
 import org.junit.Before;
 import org.junit.Test;

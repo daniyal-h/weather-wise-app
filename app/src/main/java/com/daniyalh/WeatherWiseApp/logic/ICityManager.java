@@ -1,6 +1,6 @@
-package com.example.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic;
 
-import com.example.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.City;
 
 public interface ICityManager {
     void addCity(City city);

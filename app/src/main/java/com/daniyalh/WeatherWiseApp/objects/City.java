@@ -1,6 +1,4 @@
-package com.example.WeatherWiseApp.objects;
-
-import com.example.WeatherWiseApp.logic.WeatherManager;
+package com.daniyalh.WeatherWiseApp.objects;
 
 import java.time.Instant;
 import java.time.ZoneOffset;

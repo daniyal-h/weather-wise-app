@@ -1,4 +1,4 @@
-package com.example.WeatherWiseApp.logic.exceptions;
+package com.daniyalh.WeatherWiseApp.logic.exceptions;
 
 public class InvalidJsonParsingException extends ParsingException {
     private static final String INVALID_JSON_MSG = "Unable to process weather data. Please try again.";

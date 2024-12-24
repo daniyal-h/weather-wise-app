@@ -1,4 +1,4 @@
-package com.example.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.WeatherWiseApp.R;
-import com.example.WeatherWiseApp.logic.CityManager;
-import com.example.WeatherWiseApp.logic.IWeatherCallback;
-import com.example.WeatherWiseApp.logic.WeatherManager;
-import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.example.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.R;
+import com.daniyalh.WeatherWiseApp.logic.CityManager;
+import com.daniyalh.WeatherWiseApp.logic.IWeatherCallback;
+import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";

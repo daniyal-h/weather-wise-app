@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Weatherwiseapp"
         tools:targetApi="31">
         <activity
-            android:name="com.example.WeatherWiseApp.presentation.MainActivity"
+            android:name="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Weatherwiseapp">

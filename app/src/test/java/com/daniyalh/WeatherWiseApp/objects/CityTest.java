@@ -1,4 +1,4 @@
-package com.example.WeatherWiseApp.objects;
+package com.daniyalh.WeatherWiseApp.objects;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

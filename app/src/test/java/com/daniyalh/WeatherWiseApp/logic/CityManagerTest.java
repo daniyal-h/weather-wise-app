@@ -1,9 +1,9 @@
-package com.example.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.example.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class CityManagerTest {
     CityManager cityManager = new CityManager();
