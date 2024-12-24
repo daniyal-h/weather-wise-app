@@ -10,12 +10,12 @@ public class WeatherJsonAdapterTest {
     String[] weatherDetails;
     @Test
     public void testWeatherJsonAdapter() {
-        System.out.println("Starting testWeatherJsonAdapter...");
+        System.out.println("----- Starting WeatherJsonAdapterTest -----");
 
         validJsonParsing();
         invalidJsonParsing();
 
-        System.out.println("Finished testWeatherJsonAdapter successfully.\n");
+        System.out.println("----- Finished WeatherJsonAdapterTest -----\n");
     }
 
     private void validJsonParsing() {

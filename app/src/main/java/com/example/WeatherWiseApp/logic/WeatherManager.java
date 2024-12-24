@@ -5,6 +5,7 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.example.WeatherWiseApp.objects.City;
 
 public class WeatherManager implements IWeatherManager {
@@ -28,7 +29,6 @@ public class WeatherManager implements IWeatherManager {
 
     @Override
     public void getWeatherJSON(City city, final IWeatherCallback callback) {
-        // URL-encode the city name to handle spaces and special characters
         String url = BASE_URL + "?q=" + city.getCity() + "&appid=" + API_KEY;
 
         // Create a StringRequest
@@ -42,8 +42,13 @@ public class WeatherManager implements IWeatherManager {
 
     @Override
     public void setWeather(City city, String weatherJSON) {
-        String[] weatherDetails = jsonAdapter.parseWeather(weatherJSON);
-        city.updateWeather(weatherDetails);
+        try {
+            String[] weatherDetails = jsonAdapter.parseWeather(weatherJSON);
+            city.updateWeather(weatherDetails);
+        }
+        catch (InvalidJsonParsingException e) {
+            throw new InvalidJsonParsingException(e); // throw to layer that can handle it
+        }
     }
 
     public RequestQueue getRequestQueue() {

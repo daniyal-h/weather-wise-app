@@ -8,7 +8,7 @@ public class CityTest {
     public void testCity() {
         City city;
 
-        System.out.println("\nStarting testCity...");
+        System.out.println("\n----- Starting CityTest -----");
 
         city = new City("Winnipeg");
 
@@ -26,6 +26,6 @@ public class CityTest {
         assertEquals("Sunrise: 08:24 a.m.", details[5]);
         assertEquals("Sunset: 04:30 p.m.", details[6]);
 
-        System.out.println("Finished testCity successfully.\n");
+        System.out.println("----- Finished CityTest -----\n");
     }
 }

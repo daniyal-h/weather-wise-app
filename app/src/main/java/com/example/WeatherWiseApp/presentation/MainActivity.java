@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
         weatherDetails = findViewById(R.id.weatherDetailsTextView);
     }
 
-    /**
-     * Initializes logic classes with dependency injection.
-     */
     private void initializeLogicClasses() {
         // Initialize WeatherManager and inject Context
         weatherManager = new WeatherManager(this);
