@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.WeatherWiseApp.R;
+import com.example.WeatherWiseApp.logic.CityManager;
 import com.example.WeatherWiseApp.logic.IWeatherCallback;
 import com.example.WeatherWiseApp.logic.WeatherManager;
 import com.example.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
@@ -19,6 +20,7 @@ import com.example.WeatherWiseApp.objects.City;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private WeatherManager weatherManager;
+    private CityManager cityManager; // track all cities searched
     private EditText cityInput;
     private TextView cityTextView, weatherDetails;
     private Button fetchWeatherButton;
@@ -41,26 +43,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLogicClasses() {
-        // Initialize WeatherManager and inject Context
+        cityManager = new CityManager();
         weatherManager = new WeatherManager(this);
     }
 
     private void setEventListeners() {
         fetchWeatherButton.setOnClickListener(v -> {
-            String cityName = cityInput.getText().toString().trim();
+            String cityName = cityInput.getText().toString().trim().toLowerCase();
             if (cityName.isEmpty()) {
                 showToast("Please enter a city name", Toast.LENGTH_SHORT);
                 return;
             }
 
-            // Update the TextView with city name
-            City defaultCity = new City(cityName);
-
-            fetchWeather(defaultCity); // Fetch weather data asynchronously
+            fetchWeather(cityName); // Fetch weather data asynchronously
         });
     }
 
-    private void fetchWeather(City city) {
+    private void fetchWeather(String cityName) {
+        City city = new City(cityName);
         weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
             public void onSuccess(String response) {
@@ -75,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                     for (String detail : weather) {
                         weatherDetails.append(detail + "\n");
                     }
-                } catch (InvalidJsonParsingException e) {
+                    cityManager.addCity(city); // add or update record
+                }
+                catch (InvalidJsonParsingException e) {
                     showToast(e.getMessage(), Toast.LENGTH_LONG);
                 }
             }
