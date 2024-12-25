@@ -14,7 +14,9 @@
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
         android:ems="10"
         android:inputType="text"
-        android:hint="Enter City..." />
+        android:hint="Enter City..."
+        android:textColor="@color/text_dark"
+        android:fontFamily="@font/domine_regular"/>
 
     <TextView
         android:id="@+id/cityTextView"
@@ -22,20 +24,26 @@
         android:layout_height="wrap_content"
         android:inputType="textNoSuggestions"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textAlignment="center"
-        android:autoLink="none"/>
+        android:autoLink="none"
+        android:textColor="@color/text_dark"
+        android:fontFamily="@font/domine_bold"/>
 
     <Button
         android:id="@+id/buttonFetchWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Weather" />
+        android:text="Get Weather"
+        android:textColor="@color/text_dark"
+        android:fontFamily="@font/domine_medium"/>
 
     <TextView
         android:id="@+id/weatherDetailsTextView"
         android:layout_width="match_parent"
         android:layout_height="571dp"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textColor="@color/text_dark"
+        android:fontFamily="@font/domine_regular"/>
 
 </LinearLayout>
