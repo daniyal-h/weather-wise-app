@@ -55,13 +55,13 @@ public class City {
         // return an array of strings that cover the weather details of the city
         String[] weather = new String[7];
 
-        weather[0] = "Temperature: " + (int) temp + "°C";
-        weather[1] = "Feels Like: " + (int) feelsLike + "°C";
-        weather[2] = "Description: " + description;
-        weather[3] = "Humidity: " + humidity + "%";
-        weather[4] = "Wind Speed: " + (int) windSpeed + " km/h";
-        weather[5] = "Sunrise: " + sunrise;
-        weather[6] = "Sunset: " + sunset;
+        weather[0] = (int) temp + "°C";
+        weather[1] = "Feels Like " + (int) feelsLike;
+        weather[2] = description;
+        weather[3] = humidity + "%";
+        weather[4] = (int) windSpeed + " km/h";
+        weather[5] = sunrise;
+        weather[6] = sunset;
 
         return weather;
     }
