@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
         android:ems="10"
-        android:inputType="text"
+        android:fontFamily="sans-serif"
         android:hint="Enter City..."
-        android:textColor="@color/text_dark"
-        android:fontFamily="@font/domine_regular"/>
+        android:inputType="text"
+        android:textColor="@color/text_dark" />
 
     <TextView
         android:id="@+id/cityTextView"
@@ -34,9 +34,9 @@
         android:id="@+id/buttonFetchWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
         android:text="Get Weather"
-        android:textColor="@color/text_dark"
-        android:fontFamily="@font/domine_medium"/>
+        android:textColor="@color/text_dark" />
 
     <TextView
         android:id="@+id/weatherDetailsTextView"
