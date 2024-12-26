@@ -82,7 +82,7 @@ public class WeatherManagerTest {
                 +     "\"humidity\":56"
                 + "},"
                 + "\"weather\":[{"
-                +     "\"description\":\"light rain\""
+                +     "\"description\":\"light rain\", \"icon\":\"01n\""
                 + "}],"
                 + "\"wind\":{"
                 +     "\"speed\":4.1"
@@ -102,7 +102,8 @@ public class WeatherManagerTest {
                 "4.1",             // Wind Speed (m/s)
                 "3600",            // Timezone Offset
                 "1627893600",      // Sunrise Timestamp
-                "1627947600"       // Sunset Timestamp
+                "1627947600",      // Sunset Timestamp
+                "n"                // nighttime
         };
 
         // Mock the parseWeather to return all 8 elements
@@ -116,13 +117,14 @@ public class WeatherManagerTest {
 
         String[] weather = city.getWeather();
 
-        assertEquals("Temperature: 20°C", weather[0]);         // 293.15K -> 20°C
-        assertEquals("Feels Like: 19°C", weather[1]);          // 291.86K -> 19°C
-        assertEquals("Description: light rain", weather[2]);
-        assertEquals("Humidity: 56%", weather[3]);
-        assertEquals("Wind Speed: 15 km/h", weather[4]);       // 4.1 m/s -> 14 km/h
-        assertEquals("Sunrise: 09:40 AM", weather[5]);
-        assertEquals("Sunset: 12:40 AM", weather[6]);
+        assertEquals("20°C", weather[0]);         // 293.15K -> 20°C
+        assertEquals("Feels Like 19", weather[1]);          // 291.86K -> 19°C
+        assertEquals("light rain", weather[2]);
+        assertEquals("56%", weather[3]);
+        assertEquals("15 km/h", weather[4]);       // 4.1 m/s -> 14 km/h
+        assertEquals("09:40 am", weather[5]);
+        assertEquals("12:40 am", weather[6]);
+        assertEquals("n", weather[7]);
 
         System.out.println("Finished testSetWeather_ValidJSON successfully.\n");
     }

@@ -12,6 +12,7 @@ public class City {
     private String sunset;
     private int humidity, timezoneOffset;
     private double temp, feelsLike, windSpeed;
+    private char timeOfDay;
 
     private static final double K_TO_C = 273.15;
     private static final double MPS_TO_KMPH = 3.6;
@@ -30,6 +31,7 @@ public class City {
         timezoneOffset = Integer.parseInt(weatherDetails[5]);
         sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
         sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
+        timeOfDay = weatherDetails[8].charAt(0); // is either 'd' or 'n'
     }
 
     private String timeStampToTime(long timestamp) {
@@ -53,15 +55,16 @@ public class City {
 
     public String[] getWeather() {
         // return an array of strings that cover the weather details of the city
-        String[] weather = new String[7];
+        String[] weather = new String[8];
 
-        weather[0] = "Temperature: " + (int) temp + "°C";
-        weather[1] = "Feels Like: " + (int) feelsLike + "°C";
-        weather[2] = "Description: " + description;
-        weather[3] = "Humidity: " + humidity + "%";
-        weather[4] = "Wind Speed: " + (int) windSpeed + " km/h";
-        weather[5] = "Sunrise: " + sunrise;
-        weather[6] = "Sunset: " + sunset;
+        weather[0] = (int) temp + "°C";
+        weather[1] = "Feels Like " + (int) feelsLike;
+        weather[2] = description;
+        weather[3] = humidity + "%";
+        weather[4] = (int) windSpeed + " km/h";
+        weather[5] = sunrise.toLowerCase();
+        weather[6] = sunset.toLowerCase();
+        weather[7] = String.valueOf(timeOfDay);
 
         return weather;
     }
@@ -70,6 +73,6 @@ public class City {
         // return an array of strings that cover the unconverted values of the city
         return new String[]{String.valueOf(temp), String.valueOf(feelsLike), String.valueOf(description),
                 String.valueOf(humidity), String.valueOf(windSpeed), String.valueOf(timezoneOffset),
-                String.valueOf(sunrise), String.valueOf(sunset)};
+                String.valueOf(sunrise), String.valueOf(sunset), String.valueOf(timeOfDay)};
     }
 }

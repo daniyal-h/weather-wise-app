@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class WeatherJsonAdapter implements IWeatherJsonAdapter {
     @Override
     public String[] parseWeather(String JSON) {
-        String[] weatherDetails = new String[8];
+        String[] weatherDetails = new String[9];
         try {
             // Parse the JSON data
             JSONObject root = new JSONObject(JSON);
@@ -20,6 +20,10 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
             weatherDetails[5] = String.valueOf(root.getInt("timezone"));                                   // Timezone Offset
             weatherDetails[6] = String.valueOf(root.getJSONObject("sys").getLong("sunrise"));        // Sunrise Timestamp
             weatherDetails[7] = String.valueOf(root.getJSONObject("sys").getLong("sunset"));         // Sunset Timestamp
+
+            String icon = root.getJSONArray("weather").getJSONObject(0).getString("icon"); // e.g., "02d" or "02n"
+            weatherDetails[8] = icon.substring(icon.length() - 1); // Get the last character ('d' or 'n')
+
         }
         catch (Exception e) {
             throw new InvalidJsonParsingException(e);

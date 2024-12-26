@@ -1,45 +1,31 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.logic.CityManager;
-import com.daniyalh.WeatherWiseApp.logic.IWeatherCallback;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
-import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
     private WeatherManager weatherManager;
-    private CityManager cityManager; // track all cities searched
-    private EditText cityInput;
-    private TextView cityTextView, weatherDetails;
-    private Button fetchWeatherButton;
+    private CityManager cityManager;
+
+    private UIManager uiManager;
+    private WeatherController weatherController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
 
-        initializeUI();
         initializeLogicClasses();
+        initializeUIManager();
+        initializeWeatherController();
         setEventListeners();
-    }
-
-    private void initializeUI() {
-        cityInput = findViewById(R.id.defaultCityInputTextView);
-        cityTextView = findViewById(R.id.cityTextView);
-        fetchWeatherButton = findViewById(R.id.buttonFetchWeather);
-        weatherDetails = findViewById(R.id.weatherDetailsTextView);
     }
 
     private void initializeLogicClasses() {
@@ -47,68 +33,28 @@ public class MainActivity extends AppCompatActivity {
         weatherManager = new WeatherManager(this);
     }
 
+    private void initializeUIManager() {
+        View rootView = findViewById(R.id.root_layout);
+        uiManager = new UIManager(this, rootView);
+    }
+
+    private void initializeWeatherController() {
+        weatherController = new WeatherController(weatherManager, cityManager, uiManager);
+    }
+
     private void setEventListeners() {
-        fetchWeatherButton.setOnClickListener(v -> {
-            String cityName = cityInput.getText().toString().trim().toLowerCase();
+        uiManager.getGetWeatherButton().setOnClickListener(v -> {
+            uiManager.hideKeyboard(v);
+
+            // Get City Name Input
+            String cityName = uiManager.getCityName();
             if (cityName.isEmpty()) {
-                showToast("Please enter a city name", Toast.LENGTH_SHORT);
+                uiManager.showToast("Please enter a city name", Toast.LENGTH_SHORT);
                 return;
             }
 
-            fetchWeather(cityName); // Fetch weather data asynchronously
+            // Fetch Weather Data
+            weatherController.fetchWeather(cityName);
         });
-    }
-
-    private void fetchWeather(String cityName) {
-        City city = new City(cityName);
-        weatherManager.getWeatherJSON(city, new IWeatherCallback() {
-            @Override
-            public void onSuccess(String response) {
-                // Update weather details
-                try {
-                    cityTextView.setText(city.getCity().toUpperCase());
-
-                    weatherManager.setWeather(city, response);
-                    String[] weather = city.getWeather();
-
-                    weatherDetails.setText(""); // Clear previous details
-                    for (String detail : weather) {
-                        weatherDetails.append(detail + "\n");
-                    }
-                    cityManager.addCity(city); // add or update record
-                }
-                catch (InvalidJsonParsingException e) {
-                    showToast(e.getMessage(), Toast.LENGTH_LONG);
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                showCriticalError("Unable to fetch weather data. Please check the city name and try again.");
-                Log.e(TAG, "Error fetching weather for city " + city.getCity() + " - " + error);
-                resetTextBoxes();
-            }
-        });
-    }
-
-    private void showToast(String message, int duration) {
-        Toast.makeText(MainActivity.this, message, duration).show();
-    }
-
-    private void showCriticalError(String error) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Error")
-                .setMessage(error)
-                .setPositiveButton("OK", null)
-                .show();
-    }
-
-    private void resetTextBoxes() {
-        cityTextView.setText("");
-        weatherDetails.setText("");
-    }
-
-    public void setWeatherManager(WeatherManager weatherManager) {
-        this.weatherManager = weatherManager;
     }
 }
