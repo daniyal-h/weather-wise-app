@@ -2,7 +2,7 @@
 Work-in-progress: The weather app showcases weather updates of favourited cities and provides offline support for immediate weather.
 
 # The Vision
-Our Weather App aims to provide users with quick, reliable, and visually appealing access to real-time and forecasted weather information. It helps users plan activities effectively by providing information on immediate weather conditions and favourite locations while also providing offline support.
+Our Weather Wise App aims to provide users with quick, reliable, and visually appealing access to real-time and forecasted weather information. It helps users plan activities effectively by providing information on immediate weather conditions and favourite locations while also providing offline support.
 
 # Features
 - **Real-time Weather:** Provide immediate weather conditions for any city entered.
