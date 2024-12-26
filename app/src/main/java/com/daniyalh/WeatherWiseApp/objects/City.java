@@ -73,6 +73,6 @@ public class City {
         // return an array of strings that cover the unconverted values of the city
         return new String[]{String.valueOf(temp), String.valueOf(feelsLike), String.valueOf(description),
                 String.valueOf(humidity), String.valueOf(windSpeed), String.valueOf(timezoneOffset),
-                String.valueOf(sunrise), String.valueOf(sunset)};
+                String.valueOf(sunrise), String.valueOf(sunset), String.valueOf(timeOfDay)};
     }
 }

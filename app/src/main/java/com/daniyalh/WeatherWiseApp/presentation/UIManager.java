@@ -25,7 +25,7 @@ public class UIManager {
             sunriseLabelTextView, sunsetLabelTextView, windLabelTextView, humidityLabelTextView,
             tempTextView, feelsLikeTextView, sunriseTextView, sunsetTextView, windTextView, humidityTextView;
 
-    private LottieAnimationView sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie;
+    private LottieAnimationView loadingIconLottie, sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie;
 
     private Button getWeatherButton;
 
@@ -54,6 +54,7 @@ public class UIManager {
         windTextView = rootView.findViewById(R.id.wind_text_view);
         humidityTextView = rootView.findViewById(R.id.humidity_text_view);
 
+        loadingIconLottie = rootView.findViewById(R.id.loading_icon_lottie);
         sunIconLottie = rootView.findViewById(R.id.sun_icon_lottie);
         moonIconLottie = rootView.findViewById(R.id.moon_icon_lottie);
         windIconLottie = rootView.findViewById(R.id.wind_icon_lottie);
@@ -81,7 +82,19 @@ public class UIManager {
         cityInputEditText.clearFocus();
     }
 
+    public void showLoadingIcon(boolean visible) {
+        if (visible) {
+            loadingIconLottie.setVisibility(View.VISIBLE);
+            loadingIconLottie.playAnimation();
+        }
+        else {
+            loadingIconLottie.setVisibility(View.GONE);
+            loadingIconLottie.cancelAnimation();
+        }
+    }
+
     public void setStaticUIVisibility(boolean visible) {
+        // make the static UI elements invisible or visible
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
 
         sunriseLabelTextView.setVisibility(visibility);
@@ -93,6 +106,20 @@ public class UIManager {
         moonIconLottie.setVisibility(visibility);
         windIconLottie.setVisibility(visibility);
         humidityIconLottie.setVisibility(visibility);
+
+        // stop or play the animations to reduce memory usage
+        if (visible) {
+            sunIconLottie.playAnimation();
+            moonIconLottie.playAnimation();
+            windIconLottie.playAnimation();
+            humidityIconLottie.playAnimation();
+        }
+        else { // invisible icons shouldn't be playing
+            sunIconLottie.cancelAnimation();
+            moonIconLottie.cancelAnimation();
+            windIconLottie.cancelAnimation();
+            humidityIconLottie.cancelAnimation();
+        }
     }
 
     public void updateWeatherDetails(String[] details) {
@@ -107,9 +134,10 @@ public class UIManager {
     }
 
     private void setTimeOfDay(char timeOfDay) {
+        // set the background colour depending on the time of day
         if (timeOfDay == 'd') {
             rootView.setBackgroundColor(ContextCompat.getColor(context, R.color.day_background));
-        } else {
+        } else { // nighttime
             rootView.setBackgroundColor(ContextCompat.getColor(context, R.color.night_background));
         }
     }

@@ -30,9 +30,11 @@
         android:id="@+id/get_weather_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+        android:fontFamily="sans-serif-medium"
         android:text="Get Weather"
         android:textColor="@color/text_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/city_text_view"
         app:layout_constraintEnd_toEndOf="@+id/city_input_edit_text"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,12 +53,12 @@
         android:padding="8dp"
         android:textAlignment="center"
         android:textColor="@color/text_dark"
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/get_weather_button"
         app:layout_constraintStart_toStartOf="@+id/get_weather_button"
         app:layout_constraintTop_toBottomOf="@+id/get_weather_button"
-        tools:text="WINNIPEG" />
+        tools:text="WINNIPEG, CA" />
 
     <TextView
         android:id="@+id/temperature_text_view"
@@ -140,6 +142,22 @@
         tools:text="04:30 p.m." />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading_icon_lottie"
+        android:layout_width="700px"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="80dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/sun_icon_lottie"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -149,7 +167,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/sunrise_text_view"
         app:layout_constraintTop_toBottomOf="@+id/sunrise_text_view"
-        app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/sun_icon" />
 
@@ -162,7 +179,6 @@
         app:layout_constraintEnd_toEndOf="@+id/sunset_text_view"
         app:layout_constraintStart_toStartOf="@+id/sunset_text_view"
         app:layout_constraintTop_toBottomOf="@+id/sunset_text_view"
-        app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/moon_icon" />
 
@@ -175,7 +191,6 @@
         app:layout_constraintEnd_toEndOf="@+id/wind_text_view"
         app:layout_constraintStart_toStartOf="@+id/wind_text_view"
         app:layout_constraintTop_toBottomOf="@+id/wind_text_view"
-        app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/wind_icon" />
 
@@ -189,7 +204,6 @@
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="@+id/humidity_text_view"
         app:layout_constraintTop_toBottomOf="@+id/humidity_text_view"
-        app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/humidity_icon" />
 

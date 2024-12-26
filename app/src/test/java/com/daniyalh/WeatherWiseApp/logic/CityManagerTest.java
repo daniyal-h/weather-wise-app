@@ -17,14 +17,14 @@ public class CityManagerTest {
     int cityCount = 0;
 
     String[] emptyValues = new String[]
-            {"0.0", "0.0", "null", "0", "0.0", "0", "null", "null"};
+            {"0.0", "0.0", "null", "0", "0.0", "0", "null", "null", "\u0000"};
 
     String[] weatherReadings = new String[]
-            {"273.15", "273.15", "OCD satisfied", "50", "27.777778", "0", "0", "0"};
+            {"273.15", "273.15", "OCD satisfied", "50", "27.777778", "0", "0", "0", "n"};
 
     String[] expectedDetails = new String[]
-            {"Temperature: 0°C", "Feels Like: 0°C", "Description: OCD satisfied", "Humidity: 50%",
-                    "Wind Speed: 100 km/h", "Sunrise: 12:00 a.m.", "Sunset: 12:00 a.m."};
+            {"0°C", "Feels Like 0", "OCD satisfied", "50%",
+                    "100 km/h", "12:00 a.m.", "12:00 a.m.", "n"};
 
     @Test
     public void testCityManager() {

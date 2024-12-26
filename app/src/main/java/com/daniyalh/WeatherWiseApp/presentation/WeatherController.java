@@ -24,10 +24,14 @@ public class WeatherController {
 
     public void fetchWeather(String cityName) {
         City city = new City(cityName);
+
+        // display the loading icon while fetching weather asynchronously
+        uiManager.showLoadingIcon(true);
         weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
+                    uiManager.showLoadingIcon(false);
                     uiManager.setCityLabel(city);
                     weatherManager.setWeather(city, response);
 
@@ -42,7 +46,9 @@ public class WeatherController {
 
             @Override
             public void onError(String error) {
-                uiManager.showAlertDialog("Error", "Unable to fetch weather data. Please check the city name and try again.");
+                uiManager.showLoadingIcon(false);
+                uiManager.showAlertDialog("Error", "Unable to fetch weather data." +
+                        " Please check the city name and try again.");
                 Log.e(TAG, "Error fetching weather for city " + city.getCity() + " - " + error);
                 uiManager.resetUI();
             }
