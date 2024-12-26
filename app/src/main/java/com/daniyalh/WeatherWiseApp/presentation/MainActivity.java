@@ -1,7 +1,10 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,18 +46,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setEventListeners() {
-        uiManager.getGetWeatherButton().setOnClickListener(v -> {
-            uiManager.hideKeyboard(v);
+        // run if button is clicked
+        uiManager.getGetWeatherButton().setOnClickListener(this::handleWeatherRequest);
 
-            // Get City Name Input
-            String cityName = uiManager.getCityName();
-            if (cityName.isEmpty()) {
-                uiManager.showToast("Please enter a city name", Toast.LENGTH_SHORT);
-                return;
+        // run if enter key is pressed
+        uiManager.getCityInputEditText().setOnEditorActionListener((v, actionId, event) -> {
+            Log.d("MainActivity", "Editor action ID: " + actionId);
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
+                handleWeatherRequest(v);
+                return true; // Indicates that the action has been handled
             }
-
-            // Fetch Weather Data
-            weatherController.fetchWeather(cityName);
+            return false;
         });
+
+        // secondary enter key check (fallback)
+        uiManager.getCityInputEditText().setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                handleWeatherRequest(v);
+                return true; // Indicates that the key event has been handled
+            }
+            return false;
+        });
+
+    }
+
+    private void handleWeatherRequest(View v) {
+        uiManager.hideKeyboard(v);
+
+        // Get City Name Input
+        String cityName = uiManager.getCityName();
+        if (cityName.isEmpty()) {
+            uiManager.showToast("Please enter a city name", Toast.LENGTH_SHORT);
+            return;
+        }
+
+        // Fetch Weather Data
+        weatherController.fetchWeather(cityName);
     }
 }

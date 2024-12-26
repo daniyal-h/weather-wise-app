@@ -69,6 +69,10 @@ public class UIManager {
         return getWeatherButton;
     }
 
+    public EditText getCityInputEditText() {
+        return cityInputEditText;
+    }
+
     public String getCityName() {
         return cityInputEditText.getText().toString().trim().toLowerCase();
     }
@@ -79,7 +83,6 @@ public class UIManager {
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        cityInputEditText.clearFocus();
     }
 
     public void showLoadingIcon(boolean visible) {

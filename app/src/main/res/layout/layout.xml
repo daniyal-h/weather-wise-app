@@ -14,11 +14,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:padding="12dp"
-
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
         android:fontFamily="sans-serif"
         android:hint="Enter City..."
+        android:imeOptions="actionDone"
         android:inputType="text"
+        android:maxLines="1"
         android:textColor="@color/text_dark"
         app:layout_constraintBottom_toTopOf="@+id/get_weather_button"
         app:layout_constraintEnd_toEndOf="parent"
