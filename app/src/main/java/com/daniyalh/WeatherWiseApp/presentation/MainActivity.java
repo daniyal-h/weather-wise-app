@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+//import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
@@ -25,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private WeatherManager weatherManager;
     private CityManager cityManager; // track all cities searched
-    //private EditText cityInput;
-    //private TextView cityTextView, weatherDetails;
-    //private Button fetchWeatherButton;
 
     private EditText cityInputEditText;
     private TextView cityTextView, descriptionTextView,
@@ -37,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie;
 
     private Button getWeatherButton;
+
+    View rootView;// = findViewById(R.id.root_layout);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +50,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        //cityInput = findViewById(R.id.city_input_edit_text);
-        //cityTextView = findViewById(R.id.city_text_view);
-        //fetchWeatherButton = findViewById(R.id.get_weather_button);
-        //weatherDetails = findViewById(R.id.weatherDetailsTextView);
+        rootView = findViewById(R.id.root_layout);
+
         cityInputEditText = findViewById(R.id.city_input_edit_text);
         cityTextView = findViewById(R.id.city_text_view);
         descriptionTextView = findViewById(R.id.description_text_view);
@@ -151,6 +150,15 @@ public class MainActivity extends AppCompatActivity {
         windTextView.setText(details[4]);
         sunriseTextView.setText(details[5]);
         sunsetTextView.setText(details[6]);
+        setTimeOfDay(details[7].charAt(0)); // d or n
+    }
+
+    private void setTimeOfDay(char timeOfDay) {
+        if (timeOfDay == 'd') {
+            rootView.setBackgroundColor(ContextCompat.getColor(this, R.color.day_background));
+        } else {
+            rootView.setBackgroundColor(ContextCompat.getColor(this, R.color.night_background));
+        }
     }
 
     private void showToast(String message, int duration) {

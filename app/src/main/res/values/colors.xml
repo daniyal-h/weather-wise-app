@@ -9,8 +9,15 @@
     <color name="primary">#1E88E5</color> <!-- Blue -->
     <color name="primaryVariant">#1565C0</color> <!-- Darker Blue -->
     <color name="secondary">#FFCA28</color> <!-- Yellow -->
-    <color name="background">#F5F5F5</color>
+    <color name="day_background">#F5F5F5</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#CCCCCC</color>
-    <color name="text_dark">#333333</color>
+    <color name="text_dark">#000000</color>
+    <color name="night_background">#98a1f3</color>
+    <color name="night_primary">#1A237E</color> <!-- Indigo -->
+    <color name="night_primary_variant">#0D133C</color> <!-- Darker Indigo -->
+    <color name="night_secondary">#FFAB00</color> <!-- Amber for contrast -->
+    <color name="background_dark">#121212</color> <!-- Almost Black -->
+    <color name="text_light">#FFFFFF</color> <!-- White -->
+    <color name="text_secondary_light">#B3B3B3</color> <!-- Light Gray -->
 </resources>
