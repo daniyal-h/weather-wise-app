@@ -12,9 +12,9 @@ import com.daniyalh.WeatherWiseApp.objects.City;
 public class WeatherController {
     private static final String TAG = "WeatherController";
 
-    private WeatherManager weatherManager;
-    private CityManager cityManager;
-    private UIManager uiManager;
+    private final WeatherManager weatherManager;
+    private final CityManager cityManager;
+    private final UIManager uiManager;
 
     public WeatherController(WeatherManager weatherManager, CityManager cityManager, UIManager uiManager) {
         this.weatherManager = weatherManager;

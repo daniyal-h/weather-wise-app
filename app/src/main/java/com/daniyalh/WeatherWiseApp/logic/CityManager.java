@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CityManager implements ICityManager {
-    private Map<String, City> cities = new HashMap<>();
+    private final Map<String, City> cities = new HashMap<>();
 
     public void addCity(City city) {
         cities.put(city.getCity(), city);
