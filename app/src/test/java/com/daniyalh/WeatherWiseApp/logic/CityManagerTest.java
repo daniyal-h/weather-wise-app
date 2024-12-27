@@ -20,10 +20,10 @@ public class CityManagerTest {
             {"0.0", "0.0", "null", "0", "0.0", "0", "null", "null", "\u0000"};
 
     String[] weatherReadings = new String[]
-            {"273.15", "273.15", "OCD satisfied", "50", "27.777778", "0", "0", "0", "n"};
+            {"CA", "0", "1", "OCD satisfied", "50", "27.777778", "0", "0", "0", "n"};
 
     String[] expectedDetails = new String[]
-            {"0°C", "Feels Like 0", "OCD satisfied", "50%",
+            {"0°C", "Feels Like 1", "OCD satisfied", "50%",
                     "100 km/h", "12:00 a.m.", "12:00 a.m.", "n"};
 
     @Test
@@ -56,6 +56,7 @@ public class CityManagerTest {
         assertEquals(cityCount, cityManager.getCityCount());
 
         // values should be updated
+        assertEquals("CA", cityManager.getCity("city e").getCountry());
         assertArrayEquals(expectedDetails, cityManager.getCity("city e").getWeather());
 
         System.out.println("----- Finished CityManagerTest -----\n");

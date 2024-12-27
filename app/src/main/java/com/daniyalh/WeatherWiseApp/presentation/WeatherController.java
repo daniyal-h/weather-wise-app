@@ -32,8 +32,8 @@ public class WeatherController {
             public void onSuccess(String response) {
                 try {
                     uiManager.showLoadingIcon(false);
-                    uiManager.setCityLabel(city);
                     weatherManager.setWeather(city, response);
+                    uiManager.setCityLabel(city);
 
                     uiManager.setStaticUIVisibility(true);
                     uiManager.updateWeatherDetails(city.getWeather());

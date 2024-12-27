@@ -77,8 +77,8 @@ public class WeatherManagerTest {
         City city = new City("New York");
         String sampleJson = "{"
                 + "\"main\":{"
-                +     "\"temp\":293.15,"
-                +     "\"feels_like\":291.86,"
+                +     "\"temp\":20.44,"
+                +     "\"feels_like\":18.51,"
                 +     "\"humidity\":56"
                 + "},"
                 + "\"weather\":[{"
@@ -89,14 +89,16 @@ public class WeatherManagerTest {
                 + "},"
                 + "\"timezone\":3600,"
                 + "\"sys\":{"
+                +     "\"country\":US,"
                 +     "\"sunrise\":1627893600,"
                 +     "\"sunset\":1627947600"
                 + "}"
                 + "}";
 
         String[] expectedWeatherDetails = {
-                "293.15",          // Temperature (K)
-                "291.86",          // Feels Like (K)
+                "US",              // Country
+                "20",              // Temperature (K)
+                "19",              // Feels Like (K)
                 "light rain",      // Description
                 "56",              // Humidity (%)
                 "4.1",             // Wind Speed (m/s)
@@ -117,8 +119,8 @@ public class WeatherManagerTest {
 
         String[] weather = city.getWeather();
 
-        assertEquals("20°C", weather[0]);         // 293.15K -> 20°C
-        assertEquals("Feels Like 19", weather[1]);          // 291.86K -> 19°C
+        assertEquals("20°C", weather[0]);
+        assertEquals("Feels Like 19", weather[1]);
         assertEquals("light rain", weather[2]);
         assertEquals("56%", weather[3]);
         assertEquals("15 km/h", weather[4]);       // 4.1 m/s -> 14 km/h
@@ -153,7 +155,7 @@ public class WeatherManagerTest {
                 + "\"sys\":{"
                 +     "\"sunrise\":1627893600,"
                 +     "\"sunset\":1627947600"
-                // Missing closing braces
+                // Missing closing braces and country
                 ;
 
         // Mock parseWeather to throw exception for malformed JSON

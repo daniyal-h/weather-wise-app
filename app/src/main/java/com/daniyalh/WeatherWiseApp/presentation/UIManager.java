@@ -16,8 +16,8 @@ import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class UIManager {
-    private Context context;
-    private View rootView;
+    private final Context context;
+    private final View rootView;
 
     // UI Components
     private EditText cityInputEditText;
@@ -63,7 +63,7 @@ public class UIManager {
 
     // Setters and Getters for UI Components
     public void setCityLabel(City city) {
-        cityTextView.setText(city.getCity().toUpperCase());
+        cityTextView.setText(city.getCity().toUpperCase() + ", " + city.getCountry());
     }
     public Button getGetWeatherButton() {
         return getWeatherButton;
