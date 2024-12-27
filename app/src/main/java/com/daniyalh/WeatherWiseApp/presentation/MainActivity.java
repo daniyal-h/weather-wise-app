@@ -10,13 +10,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.daniyalh.WeatherWiseApp.R;
+import com.daniyalh.WeatherWiseApp.data.MyDatabase;
 import com.daniyalh.WeatherWiseApp.logic.CityManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 
 public class MainActivity extends AppCompatActivity {
     private WeatherManager weatherManager;
     private CityManager cityManager;
-
     private UIManager uiManager;
     private WeatherController weatherController;
 
@@ -82,5 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Fetch Weather Data
         weatherController.fetchWeather(cityName);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
