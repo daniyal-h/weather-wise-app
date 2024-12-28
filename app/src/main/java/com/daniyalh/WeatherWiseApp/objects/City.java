@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class City {
     private final String city;
-    private String country, description, sunrise, sunset;
+    private String country, countryCode,description, sunrise, sunset;
     private int humidity, timezoneOffset;
     private double temp, feelsLike, windSpeed;
     private char timeOfDay;
@@ -20,7 +20,7 @@ public class City {
 
     public void updateWeather(String[] weatherDetails) {
         // atomically update each weather attribute when called
-        country = weatherDetails[0];
+        countryCode = weatherDetails[0];
         temp = Math.round(Double.parseDouble(weatherDetails[1]));
         feelsLike = Math.round(Double.parseDouble(weatherDetails[2]));
         description = weatherDetails[3];
@@ -47,12 +47,20 @@ public class City {
         return time.format(formatter);
     }
 
+    public void setCountry(String country, String countryCode) {
+        this.country = country;
+        this.countryCode = countryCode;
+    }
+
     public String getCity() {
         return city; // get city name
     }
 
     public String getCountry() {
         return country;
+    }
+    public String getCountryCode() {
+        return countryCode;
     }
 
     public String[] getWeather() {

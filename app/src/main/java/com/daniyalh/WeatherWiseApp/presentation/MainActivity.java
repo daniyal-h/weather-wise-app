@@ -1,50 +1,56 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.data.MyDatabase;
+import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.CityManager;
+import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 
 public class MainActivity extends AppCompatActivity {
+    private MyDatabaseHelper myDatabase;
     private WeatherManager weatherManager;
     private CityManager cityManager;
     private UIManager uiManager;
     private WeatherController weatherController;
+    private SearchManager searchManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
 
+        initializeDatabase();
         initializeLogicClasses();
         initializeUIManager();
         initializeWeatherController();
-        setEventListeners();
+        //setEventListeners();
+    }
+
+    private void initializeDatabase() {
+        myDatabase = MyDatabaseHelper.getInstance(this);
     }
 
     private void initializeLogicClasses() {
         cityManager = new CityManager();
         weatherManager = new WeatherManager(this);
+        searchManager = new SearchManager(myDatabase);
     }
 
     private void initializeUIManager() {
         View rootView = findViewById(R.id.root_layout);
-        uiManager = new UIManager(this, rootView);
+        uiManager = new UIManager(this, rootView, searchManager);
     }
 
     private void initializeWeatherController() {
         weatherController = new WeatherController(weatherManager, cityManager, uiManager);
+        uiManager.setWeatherController(weatherController);
     }
-
+    /*
     private void setEventListeners() {
         // run if button is clicked
         uiManager.getGetWeatherButton().setOnClickListener(this::handleWeatherRequest);
@@ -75,18 +81,21 @@ public class MainActivity extends AppCompatActivity {
         uiManager.hideKeyboard(v);
 
         // Get City Name Input
-        String cityName = uiManager.getCityName();
-        if (cityName.isEmpty()) {
+        //String cityName = uiManager.getCityName();
+        //if (cityName.isEmpty()) {
             uiManager.showToast("Please enter a city name", Toast.LENGTH_SHORT);
             return;
         }
 
         // Fetch Weather Data
-        weatherController.fetchWeather(cityName);
-    }
+        //weatherController.fetchWeather(cityName);
+    //}
+    8/
+     */
 
     @Override
     protected void onDestroy() {
+        uiManager.cleanup();
         super.onDestroy();
     }
 }

@@ -18,7 +18,7 @@ public class CityTest {
 
         String[] details = city.getWeather();
 
-        assertEquals("EX", city.getCountry());
+        assertEquals("EX", city.getCountryCode());
         assertEquals("0°C", details[0]);
         assertEquals("Feels Like 100", details[1]);
         assertEquals("raining cats and dogs", details[2]);

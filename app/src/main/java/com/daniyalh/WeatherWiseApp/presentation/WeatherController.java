@@ -22,8 +22,9 @@ public class WeatherController {
         this.uiManager = uiManager;
     }
 
-    public void fetchWeather(String cityName) {
+    public void fetchWeather(String cityName, String country, String country_code) {
         City city = new City(cityName);
+        city.setCountry(country, country_code);
 
         // display the loading icon while fetching weather asynchronously
         uiManager.showLoadingIcon(true);

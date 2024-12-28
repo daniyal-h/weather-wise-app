@@ -56,7 +56,7 @@ public class CityManagerTest {
         assertEquals(cityCount, cityManager.getCityCount());
 
         // values should be updated
-        assertEquals("CA", cityManager.getCity("city e").getCountry());
+        assertEquals("CA", cityManager.getCity("city e").getCountryCode());
         assertArrayEquals(expectedDetails, cityManager.getCity("city e").getWeather());
 
         System.out.println("----- Finished CityManagerTest -----\n");

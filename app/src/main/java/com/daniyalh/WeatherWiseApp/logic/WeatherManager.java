@@ -29,7 +29,7 @@ public class WeatherManager implements IWeatherManager {
 
     @Override
     public void getWeatherJSON(City city, final IWeatherCallback callback) {
-        String url = BASE_URL + "?q=" + city.getCity() + "&units=metric&appid=" + API_KEY;
+        String url = BASE_URL + "?q=" + city.getCity() + "," + city.getCountryCode() + "&units=metric&appid=" + API_KEY;
 
         // Create a StringRequest
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
