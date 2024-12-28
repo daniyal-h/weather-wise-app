@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
+        uiManager.getCloseAppButton().setOnClickListener(view -> finish());
     }
 
     private void handleWeatherRequest(View v) {

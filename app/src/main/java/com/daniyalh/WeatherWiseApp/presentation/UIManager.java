@@ -27,7 +27,7 @@ public class UIManager {
 
     private LottieAnimationView loadingIconLottie, sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie;
 
-    private Button getWeatherButton;
+    private Button getWeatherButton, closeAppButton;
 
     public UIManager(Context context, View rootView) {
         this.context = context;
@@ -46,6 +46,7 @@ public class UIManager {
         humidityLabelTextView = rootView.findViewById(R.id.humidity_label_text_view);
 
         getWeatherButton = rootView.findViewById(R.id.get_weather_button);
+        closeAppButton = rootView.findViewById(R.id.close_app_button);
 
         tempTextView = rootView.findViewById(R.id.temperature_text_view);
         feelsLikeTextView = rootView.findViewById(R.id.feels_like_text_view);
@@ -69,6 +70,10 @@ public class UIManager {
         return getWeatherButton;
     }
 
+    public Button getCloseAppButton() {
+        return closeAppButton;
+    }
+
     public EditText getCityInputEditText() {
         return cityInputEditText;
     }
@@ -86,6 +91,7 @@ public class UIManager {
     }
 
     public void showLoadingIcon(boolean visible) {
+        // toggle the loading icon
         if (visible) {
             loadingIconLottie.setVisibility(View.VISIBLE);
             loadingIconLottie.playAnimation();
