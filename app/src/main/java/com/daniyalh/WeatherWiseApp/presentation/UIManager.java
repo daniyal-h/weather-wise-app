@@ -1,8 +1,15 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.content.Context;
+import android.database.Cursor;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,30 +20,45 @@ import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
+import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
+import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class UIManager {
-    private Context context;
-    private View rootView;
+    private final Context context;
+    private final View rootView;
+    private final SearchManager searchManager;
+    private WeatherController weatherController;
 
     // UI Components
-    private EditText cityInputEditText;
+    private AutoCompleteTextView autoCompleteCityTextView;
+    private final CityCursorAdapter cityCursorAdapter;
+
     private TextView cityTextView, descriptionTextView,
             sunriseLabelTextView, sunsetLabelTextView, windLabelTextView, humidityLabelTextView,
             tempTextView, feelsLikeTextView, sunriseTextView, sunsetTextView, windTextView, humidityTextView;
 
     private LottieAnimationView loadingIconLottie, sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie;
 
-    private Button getWeatherButton;
+    private Button closeAppButton;
 
-    public UIManager(Context context, View rootView) {
+    private boolean isSelecting = false;
+
+    public UIManager(Context context, View rootView, SearchManager searchManager) {
         this.context = context;
         this.rootView = rootView;
+        this.searchManager = searchManager;
+        cityCursorAdapter = new CityCursorAdapter(context, null);
+
         initializeUI();
+        setupListeners();
     }
 
     private void initializeUI() {
-        cityInputEditText = rootView.findViewById(R.id.city_input_edit_text);
+        autoCompleteCityTextView = rootView.findViewById(R.id.autocomplete_city_text_view);
+        autoCompleteCityTextView.setThreshold(1);
+        autoCompleteCityTextView.setAdapter(cityCursorAdapter);
+
         cityTextView = rootView.findViewById(R.id.city_text_view);
         descriptionTextView = rootView.findViewById(R.id.description_text_view);
 
@@ -45,7 +67,7 @@ public class UIManager {
         windLabelTextView = rootView.findViewById(R.id.wind_label_text_view);
         humidityLabelTextView = rootView.findViewById(R.id.humidity_label_text_view);
 
-        getWeatherButton = rootView.findViewById(R.id.get_weather_button);
+        closeAppButton = rootView.findViewById(R.id.close_app_button);
 
         tempTextView = rootView.findViewById(R.id.temperature_text_view);
         feelsLikeTextView = rootView.findViewById(R.id.feels_like_text_view);
@@ -61,31 +83,83 @@ public class UIManager {
         humidityIconLottie = rootView.findViewById(R.id.humidity_icon_lottie);
     }
 
+    private void setupListeners() {
+        autoCompleteCityTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!isSelecting && !s.toString().equals("inSelection")) {
+                    searchManager.searchCities(s.toString(), new ISearchManager.SearchCallback() {
+                        @Override
+                        public void onResults(Cursor cursor) {
+                            cityCursorAdapter.changeCursor(cursor);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            showToast(error, Toast.LENGTH_SHORT);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        autoCompleteCityTextView.setOnItemClickListener((parent, view, position, id) -> {
+            isSelecting = true; // prevents TextWatcher after selection
+            handleCitySelection((Cursor) parent.getItemAtPosition(position));
+            isSelecting = false; // reset flag after handling
+        });
+    }
+
+    private void handleCitySelection(Cursor cursor) {
+        String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
+        String cityName = pair.substring(0, pair.indexOf(","));
+        String countryName = pair.substring(pair.indexOf(",")+2);
+        String country_code = cursor.getString(cursor.getColumnIndexOrThrow("country_code"));
+
+        autoCompleteCityTextView.setText("");
+        autoCompleteCityTextView.clearFocus();
+
+        weatherController.fetchWeather(cityName, countryName, country_code);
+
+        hideKeyboard(autoCompleteCityTextView);
+    }
+
+    public void cleanup() {
+        cityCursorAdapter.changeCursor(null); // Close the cursor when done
+    }
+
     // Setters and Getters for UI Components
+    public void setWeatherController(WeatherController weatherController) {
+        this.weatherController = weatherController;
+    }
     public void setCityLabel(City city) {
-        cityTextView.setText(city.getCity().toUpperCase());
-    }
-    public Button getGetWeatherButton() {
-        return getWeatherButton;
+        cityTextView.setText(city.getCity().toUpperCase() + ", " + city.getCountryCode());
     }
 
-    public EditText getCityInputEditText() {
-        return cityInputEditText;
-    }
-
-    public String getCityName() {
-        return cityInputEditText.getText().toString().trim().toLowerCase();
+    public Button getCloseAppButton() {
+        return closeAppButton;
     }
 
     // UI Update Methods
     public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
     public void showLoadingIcon(boolean visible) {
+        // toggle the loading icon
         if (visible) {
             loadingIconLottie.setVisibility(View.VISIBLE);
             loadingIconLottie.playAnimation();
