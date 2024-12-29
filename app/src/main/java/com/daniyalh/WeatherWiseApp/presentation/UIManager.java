@@ -25,6 +25,7 @@ import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class UIManager {
+
     private final Context context;
     private final View rootView;
     private final SearchManager searchManager;
@@ -50,10 +51,11 @@ public class UIManager {
         this.searchManager = searchManager;
         cityCursorAdapter = new CityCursorAdapter(context, null);
 
-        initializeUI();
-        setupListeners();
+        //initializeUI();
+        //setupListeners();
     }
 
+   /*
     private void initializeUI() {
         autoCompleteCityTextView = rootView.findViewById(R.id.autocomplete_city_text_view);
         autoCompleteCityTextView.setThreshold(1);
@@ -132,7 +134,7 @@ public class UIManager {
         weatherController.fetchWeather(cityName, countryName, country_code);
 
         hideKeyboard(autoCompleteCityTextView);
-    }
+    }*/
 
     public void cleanup() {
         cityCursorAdapter.changeCursor(null); // Close the cursor when done
