@@ -14,43 +14,42 @@ public class WeatherController {
 
     private final WeatherManager weatherManager;
     private final CityManager cityManager;
-    private final UIManager uiManager;
+    private final ForecastDetailActivity context;
 
-    public WeatherController(WeatherManager weatherManager, CityManager cityManager, UIManager uiManager) {
+    public WeatherController(WeatherManager weatherManager, CityManager cityManager, ForecastDetailActivity context) {
         this.weatherManager = weatherManager;
         this.cityManager = cityManager;
-        this.uiManager = uiManager;
+        this.context = context;
     }
 
-    public void fetchWeather(String cityName) {
+    public void fetchWeather(String cityName, String country, String country_code) {
         City city = new City(cityName);
+        city.setCountry(country, country_code);
 
-        // display the loading icon while fetching weather asynchronously
-        uiManager.showLoadingIcon(true);
         weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
-                    uiManager.showLoadingIcon(false);
-                    uiManager.setCityLabel(city);
+                    context.showLoadingIcon(false);
                     weatherManager.setWeather(city, response);
+                    context.setCityLabel(city);
 
-                    uiManager.setStaticUIVisibility(true);
-                    uiManager.updateWeatherDetails(city.getWeather());
+                    context.setStaticUIVisibility(true);
+                    context.updateWeatherDetails(city.getWeather());
 
                     cityManager.addCity(city); // Add or update record
                 } catch (InvalidJsonParsingException e) {
-                    uiManager.showToast(e.getMessage(), Toast.LENGTH_LONG);
+                    context.showToast(e.getMessage(), Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onError(String error) {
-                uiManager.showLoadingIcon(false);
-                uiManager.showAlertDialog("Error", "Unable to fetch weather data." +
+                context.showLoadingIcon(false);
+                context.showAlertDialog("Error", "Unable to fetch weather data." +
                         " Please check the city name and try again.");
                 Log.e(TAG, "Error fetching weather for city " + city.getCity() + " - " + error);
-                uiManager.resetUI();
+                context.resetUI();
             }
         });
     }

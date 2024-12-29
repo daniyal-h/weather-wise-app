@@ -7,14 +7,11 @@ import java.time.format.DateTimeFormatter;
 
 public class City {
     private final String city;
-    private String description;
-    private String sunrise;
-    private String sunset;
+    private String country, countryCode,description, sunrise, sunset;
     private int humidity, timezoneOffset;
     private double temp, feelsLike, windSpeed;
     private char timeOfDay;
 
-    private static final double K_TO_C = 273.15;
     private static final double MPS_TO_KMPH = 3.6;
 
     public City(String city) {
@@ -23,15 +20,16 @@ public class City {
 
     public void updateWeather(String[] weatherDetails) {
         // atomically update each weather attribute when called
-        temp = Math.round(Double.parseDouble(weatherDetails[0]) - K_TO_C);
-        feelsLike = Math.round(Double.parseDouble(weatherDetails[1]) - K_TO_C);
-        description = weatherDetails[2];
-        humidity = Integer.parseInt(weatherDetails[3]);
-        windSpeed = Math.round(Double.parseDouble(weatherDetails[4]) * MPS_TO_KMPH);
-        timezoneOffset = Integer.parseInt(weatherDetails[5]);
-        sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
-        sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
-        timeOfDay = weatherDetails[8].charAt(0); // is either 'd' or 'n'
+        countryCode = weatherDetails[0];
+        temp = Math.round(Double.parseDouble(weatherDetails[1]));
+        feelsLike = Math.round(Double.parseDouble(weatherDetails[2]));
+        description = weatherDetails[3];
+        humidity = Integer.parseInt(weatherDetails[4]);
+        windSpeed = Math.round(Double.parseDouble(weatherDetails[5]) * MPS_TO_KMPH);
+        timezoneOffset = Integer.parseInt(weatherDetails[6]);
+        sunrise = timeStampToTime(Long.parseLong(weatherDetails[7]));
+        sunset = timeStampToTime(Long.parseLong(weatherDetails[8]));
+        timeOfDay = weatherDetails[9].charAt(0); // is either 'd' or 'n'
     }
 
     private String timeStampToTime(long timestamp) {
@@ -49,8 +47,20 @@ public class City {
         return time.format(formatter);
     }
 
+    public void setCountry(String country, String countryCode) {
+        this.country = country;
+        this.countryCode = countryCode;
+    }
+
     public String getCity() {
         return city; // get city name
+    }
+
+    public String getCountry() {
+        return country;
+    }
+    public String getCountryCode() {
+        return countryCode;
     }
 
     public String[] getWeather() {

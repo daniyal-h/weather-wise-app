@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.daniyalh.WeatherWiseApp.presentation.ForecastDetailActivity"
+            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
+            android:theme="@style/Theme.WeatherWiseApp"
+            android:exported="false"/>
     </application>
 
 </manifest>
