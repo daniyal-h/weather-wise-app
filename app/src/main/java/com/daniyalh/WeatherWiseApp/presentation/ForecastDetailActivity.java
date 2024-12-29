@@ -2,6 +2,7 @@ package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +20,6 @@ import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class ForecastDetailActivity extends AppCompatActivity {
-    private WeatherManager weatherManager;
-    private CityManager cityManager;
     private WeatherController weatherController;
 
     private TextView cityTextView, descriptionTextView,
@@ -43,10 +42,12 @@ public class ForecastDetailActivity extends AppCompatActivity {
         String countryCode = intent.getStringExtra(Constants.EXTRA_COUNTRY_CODE);
 
         initializeClasses();
+
+        // display the loading icon while fetching weather asynchronously
+        showLoadingIcon(true);
         weatherController.fetchWeather(cityName, countryName, countryCode);
 
-        setListener();
-
+        goBackButton.setOnClickListener(v -> finish()); // home page
     }
 
     @Override
@@ -84,22 +85,13 @@ public class ForecastDetailActivity extends AppCompatActivity {
     }
 
     private void initializeClasses() {
-        weatherManager = new WeatherManager(this);
-        cityManager = new CityManager();
+        WeatherManager weatherManager = new WeatherManager(this);
+        CityManager cityManager = new CityManager();
         weatherController = new WeatherController(weatherManager, cityManager, this);
     }
 
-    private void setListener() {
-        goBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close the current activity and return to MainActivity
-                finish();
-            }
-        });
-    }
-
     public void setCityLabel(City city) {
+        // set as "city, countryCode"
         cityTextView.setText(city.getCity().toUpperCase() + ", " + city.getCountryCode());
     }
 

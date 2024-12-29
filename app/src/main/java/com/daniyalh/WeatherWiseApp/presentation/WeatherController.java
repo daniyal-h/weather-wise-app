@@ -1,6 +1,5 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ public class WeatherController {
 
     private final WeatherManager weatherManager;
     private final CityManager cityManager;
-    //private final UIManager uiManager;
     private final ForecastDetailActivity context;
 
     public WeatherController(WeatherManager weatherManager, CityManager cityManager, ForecastDetailActivity context) {
@@ -28,8 +26,6 @@ public class WeatherController {
         City city = new City(cityName);
         city.setCountry(country, country_code);
 
-        // display the loading icon while fetching weather asynchronously
-        context.showLoadingIcon(true);
         weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
             public void onSuccess(String response) {

@@ -1,11 +1,13 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
@@ -13,31 +15,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
-import com.daniyalh.WeatherWiseApp.logic.CityManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
-import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
-
 public class MainActivity extends AppCompatActivity {
     private MyDatabaseHelper myDatabase;
-    private WeatherManager weatherManager;
-    private CityManager cityManager;
-    private UIManager uiManager;
     private SearchManager searchManager;
     private AutoCompleteTextView autoCompleteCityTextView;
     private CityCursorAdapter cityCursorAdapter;
-    private View RootView;
     boolean isSelecting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout);
+        setContentView(R.layout.activity_home);
 
         initializeDatabase();
         initializeLogicClasses();
-        initializeUIManager();
-        initializeWeatherController();
         initializeUI();
         setListeners();
     }
@@ -47,19 +40,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLogicClasses() {
-        //cityManager = new CityManager();
-        //weatherManager = new WeatherManager(this);
         searchManager = new SearchManager(myDatabase);
-    }
-
-    private void initializeUIManager() {
-        View rootView = findViewById(R.id.root_layout);
-        uiManager = new UIManager(this, rootView, searchManager);
-    }
-
-    private void initializeWeatherController() {
-        //weatherController = new WeatherController(weatherManager, cityManager, uiManager);
-        //uiManager.setWeatherController(weatherController);
     }
 
     private void initializeUI() {
@@ -83,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
                     searchManager.searchCities(s.toString(), new ISearchManager.SearchCallback() {
                         @Override
                         public void onResults(Cursor cursor) {
-                            cityCursorAdapter.changeCursor(cursor);
+                            cityCursorAdapter.changeCursor(cursor); // update drop down
                         }
 
                         @Override
                         public void onError(String error) {
-                            uiManager.showToast(error, Toast.LENGTH_SHORT);
+                            showToast(error, Toast.LENGTH_SHORT);
                         }
                     });
                 }
@@ -116,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteCityTextView.setText("");
         autoCompleteCityTextView.clearFocus();
 
-        //weatherController.fetchWeather(cityName, countryName, country_code);
         Intent intent = new Intent(MainActivity.this, ForecastDetailActivity.class);
         intent.putExtra(Constants.EXTRA_CITY_NAME, cityName);
         intent.putExtra(Constants.EXTRA_COUNTRY_NAME, countryName);
@@ -125,7 +105,18 @@ public class MainActivity extends AppCompatActivity {
         // start forecastDetailActivity for selected city
         startActivity(intent);
 
-        uiManager.hideKeyboard(autoCompleteCityTextView);
+        hideKeyboard(autoCompleteCityTextView);
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public void showToast(String message, int duration) {
+        Toast.makeText(this, message, duration).show();
     }
 
     public void cleanup() {
@@ -134,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        uiManager.cleanup();
         cleanup();
         super.onDestroy();
     }
