@@ -6,31 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <AutoCompleteTextView
-        android:id="@+id/autocomplete_city_text_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Enter City..."
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/city_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="8dp"
         android:autoLink="none"
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
         android:fontFamily="sans-serif-black"
-        android:inputType="textNoSuggestions"
+        android:focusable="false"
+        android:longClickable="false"
+        android:clickable="false"
+        android:inputType="none"
         android:maxLines="1"
         android:padding="8dp"
         android:textAlignment="center"
@@ -38,9 +30,9 @@
         android:textIsSelectable="true"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/autocomplete_city_text_view"
-        app:layout_constraintStart_toStartOf="@+id/autocomplete_city_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/autocomplete_city_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Winnipeg, CA" />
 
     <TextView
@@ -48,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="128dp"
         android:fontFamily="sans-serif-black"
         android:textAlignment="center"
@@ -63,7 +55,7 @@
         android:id="@+id/feels_like_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="sans-serif-medium"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -254,15 +246,15 @@
         tools:text="overcast clouds" />
 
     <Button
-        android:id="@+id/close_app_button"
+        android:id="@+id/go_back_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Close App"
+        android:text="Go Back"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/autocomplete_city_text_view"
-        app:layout_constraintStart_toStartOf="@+id/autocomplete_city_text_view" />
+        app:layout_constraintEnd_toEndOf="@+id/city_text_view"
+        app:layout_constraintStart_toStartOf="@+id/city_text_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
