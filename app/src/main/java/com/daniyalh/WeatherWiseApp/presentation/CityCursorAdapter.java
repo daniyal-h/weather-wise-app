@@ -12,7 +12,7 @@ public class CityCursorAdapter extends SimpleCursorAdapter {
     }
     @Override
     public CharSequence convertToString(Cursor cursor) {
-        return "inSelection";
+        return UIConstants.SELECTION_FLAG;
     }
 }
 

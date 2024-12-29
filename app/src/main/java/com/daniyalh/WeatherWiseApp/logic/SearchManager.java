@@ -1,7 +1,5 @@
 package com.daniyalh.WeatherWiseApp.logic;
 
-import android.database.Cursor;
-
 import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
 
 public class SearchManager implements ISearchManager {
@@ -13,18 +11,11 @@ public class SearchManager implements ISearchManager {
     @Override
     public void searchCities(String query, SearchCallback callback) {
         if (query == null || query.trim().isEmpty()) {
-            callback.onError("Query cannot be empty");
+            callback.onError("please enter a city");
             return;
         }
 
-        // Fetch results from the data layer
-        Cursor cursor = myDatabase.getCitiesByQuery(query);
-
-        if (cursor == null || cursor.getCount() == 0) {
-            if (cursor != null) cursor.close();
-            callback.onError("No results found");
-        } else {
-            callback.onResults(cursor);
-        }
+        // pass the cursor to the callback
+        callback.onResults(myDatabase.getCitiesByQuery(query));
     }
 }

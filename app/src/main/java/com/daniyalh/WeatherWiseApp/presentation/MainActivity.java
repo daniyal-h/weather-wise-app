@@ -60,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isSelecting && !s.toString().equals("inSelection")) {
+                if(!isSelecting && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
                     searchManager.searchCities(s.toString(), new ISearchManager.SearchCallback() {
                         @Override
                         public void onResults(Cursor cursor) {
-                            cityCursorAdapter.changeCursor(cursor); // update drop down
+                            if (cursor == null || cursor.getCount() == 0)
+                                showToast("No results found", Toast.LENGTH_SHORT);
+                            cityCursorAdapter.swapCursor(cursor); // update drop down
                         }
 
                         @Override
@@ -98,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteCityTextView.clearFocus();
 
         Intent intent = new Intent(MainActivity.this, ForecastDetailActivity.class);
-        intent.putExtra(Constants.EXTRA_CITY_NAME, cityName);
-        intent.putExtra(Constants.EXTRA_COUNTRY_NAME, countryName);
-        intent.putExtra(Constants.EXTRA_COUNTRY_CODE, countryCode);
+        intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
+        intent.putExtra(UIConstants.EXTRA_COUNTRY_NAME, countryName);
+        intent.putExtra(UIConstants.EXTRA_COUNTRY_CODE, countryCode);
 
         // start forecastDetailActivity for selected city
         startActivity(intent);
@@ -119,8 +121,12 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, duration).show();
     }
 
-    public void cleanup() {
-        cityCursorAdapter.changeCursor(null); // Close the cursor when done
+    private void cleanup() {
+        if (cityCursorAdapter != null)
+            cityCursorAdapter.changeCursor(null); // Close the cursor when done
+
+        if (myDatabase != null)
+            myDatabase.close();
     }
 
     @Override
