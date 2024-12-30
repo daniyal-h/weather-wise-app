@@ -49,7 +49,7 @@ public class WeatherManagerTest {
         System.out.println("----- Starting WeatherManagerTest -----\n");
         System.out.println("Starting testGetWeatherJSON...");
         // Arrange
-        City city = new City("London");
+        City city = new City(1);
         String expectedResponse = "{\"weather\":\"sunny\"}";
 
         // Act
@@ -74,7 +74,7 @@ public class WeatherManagerTest {
         System.out.println("Starting testSetWeather_ValidJSON...");
 
         // Arrange
-        City city = new City("New York");
+        City city = new City(2);
         String sampleJson = "{"
                 + "\"main\":{"
                 +     "\"temp\":20.44,"
@@ -136,7 +136,7 @@ public class WeatherManagerTest {
         System.out.println("Starting testSetWeather_InvalidJSON...");
         System.out.println("Expecting 1 error to be thrown...");
 
-        City city = new City("New York");
+        City city = new City(3);
 
         // Example of malformed JSON (missing closing brace)
         String malformedJson = "{"

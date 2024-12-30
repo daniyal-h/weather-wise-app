@@ -10,7 +10,7 @@ public class CityTest {
 
         System.out.println("\n----- Starting CityTest -----");
 
-        city = new City("Winnipeg");
+        city = new City(1);
 
         String[] fixedDetails = {"EX", "0", "100", "raining cats and dogs", "100", "27.7778", "-21600", "1734877486", "1734906604", "d"};
 
