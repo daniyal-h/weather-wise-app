@@ -25,9 +25,13 @@ public class ForecastDetailActivity extends AppCompatActivity {
             sunriseLabelTextView, sunsetLabelTextView, windLabelTextView, humidityLabelTextView,
             tempTextView, feelsLikeTextView, sunriseTextView, sunsetTextView, windTextView, humidityTextView;
 
-    private LottieAnimationView loadingIconLottie, sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie;
+    private LottieAnimationView loadingIconLottie, sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie,
+    favouritingAnimation;
 
     private Button goBackButton;
+
+    private boolean isFavourite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,17 +40,19 @@ public class ForecastDetailActivity extends AppCompatActivity {
         initializeUI();
 
         Intent intent = getIntent();
+        int cityID = intent.getIntExtra(UIConstants.EXTRA_CITY_ID, 0);
         String cityName = intent.getStringExtra(UIConstants.EXTRA_CITY_NAME);
         String countryName = intent.getStringExtra(UIConstants.EXTRA_COUNTRY_NAME);
         String countryCode = intent.getStringExtra(UIConstants.EXTRA_COUNTRY_CODE);
+        isFavourite = intent.getIntExtra(UIConstants.EXTRA_IS_FAVOURITE, 0) == 1;
 
         initializeClasses();
 
         // display the loading icon while fetching weather asynchronously
         showLoadingIcon(true);
-        weatherController.fetchWeather(cityName, countryName, countryCode);
+        weatherController.fetchWeather(cityID, cityName, countryName, countryCode);
 
-        goBackButton.setOnClickListener(v -> finish()); // home page
+        setButtonListeners();
     }
 
     @Override
@@ -68,6 +74,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         humidityLabelTextView = findViewById(R.id.humidity_label_text_view);
 
         goBackButton = findViewById(R.id.go_back_button);
+        favouritingAnimation = findViewById(R.id.favourite_icon_lottie);
 
         tempTextView = findViewById(R.id.temperature_text_view);
         feelsLikeTextView = findViewById(R.id.feels_like_text_view);
@@ -106,6 +113,25 @@ public class ForecastDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void setButtonListeners() {
+        favouritingAnimation.setOnClickListener(v -> {
+            if (isFavourite) {
+                favouritingAnimation.setSpeed(-1f);
+                favouritingAnimation.playAnimation();
+                showToast("Unfavourited city", Toast.LENGTH_SHORT);
+                isFavourite = false;
+            }
+            else {
+                favouritingAnimation.playAnimation();
+                showToast("Favourited city", Toast.LENGTH_SHORT);
+                isFavourite = true;
+            }
+            weatherController.favouriteCity(isFavourite); // toggle favourite
+        });
+
+        goBackButton.setOnClickListener(v -> finish()); // home page
+    }
+
     public void setStaticUIVisibility(boolean visible) {
         // make the static UI elements invisible or visible
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
@@ -119,6 +145,8 @@ public class ForecastDetailActivity extends AppCompatActivity {
         moonIconLottie.setVisibility(visibility);
         windIconLottie.setVisibility(visibility);
         humidityIconLottie.setVisibility(visibility);
+        favouritingAnimation.setVisibility(visibility);
+        if (isFavourite) favouritingAnimation.playAnimation();
 
         // stop or play the animations to reduce memory usage
         if (visible) {
@@ -132,6 +160,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
             moonIconLottie.cancelAnimation();
             windIconLottie.cancelAnimation();
             humidityIconLottie.cancelAnimation();
+            favouritingAnimation.cancelAnimation();
         }
     }
 
@@ -149,9 +178,11 @@ public class ForecastDetailActivity extends AppCompatActivity {
     private void setTimeOfDay(char timeOfDay) {
         // set the background colour depending on the time of day
         if (timeOfDay == 'd') {
-            findViewById(R.id.root_layout).setBackgroundColor(ContextCompat.getColor(this, R.color.day_background));
+            findViewById(R.id.root_layout).setBackgroundColor
+                    (ContextCompat.getColor(this, R.color.day_background));
         } else { // nighttime
-            findViewById(R.id.root_layout).setBackgroundColor(ContextCompat.getColor(this, R.color.night_background));
+            findViewById(R.id.root_layout).setBackgroundColor
+                    (ContextCompat.getColor(this, R.color.night_background));
         }
     }
 
