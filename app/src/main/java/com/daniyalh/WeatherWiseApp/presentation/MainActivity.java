@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -91,18 +92,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleCitySelection(Cursor cursor) {
+        int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
         String cityName = pair.substring(0, pair.indexOf(","));
         String countryName = pair.substring(pair.indexOf(",")+2); // Winnipeg, *Canada* (,+2)
         String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("country_code"));
+        int isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("is_favourite")); // 0 or 1
 
         autoCompleteCityTextView.setText("");
         autoCompleteCityTextView.clearFocus();
 
+        /////////////////////////// TESTING! ///////////////
+        searchManager.getFavourites(new ISearchManager.SearchCallback() {
+            @Override
+            public void onResults(Cursor cursor2) {
+                showToast("Favourite Count: " + cursor2.getCount(), Toast.LENGTH_SHORT);
+                cursor2.close();
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        }); ///////////////////////
+
         Intent intent = new Intent(MainActivity.this, ForecastDetailActivity.class);
+        intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
         intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
         intent.putExtra(UIConstants.EXTRA_COUNTRY_NAME, countryName);
         intent.putExtra(UIConstants.EXTRA_COUNTRY_CODE, countryCode);
+        intent.putExtra(UIConstants.EXTRA_IS_FAVOURITE, isFavourite);
 
         // start forecastDetailActivity for selected city
         startActivity(intent);

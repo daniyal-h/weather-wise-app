@@ -6,16 +6,16 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class City {
-    private final String city;
-    private String country, countryCode,description, sunrise, sunset;
+    private final int cityID;
+    private String city, country, countryCode,description, sunrise, sunset;
     private int humidity, timezoneOffset;
     private double temp, feelsLike, windSpeed;
     private char timeOfDay;
 
     private static final double MPS_TO_KMPH = 3.6;
 
-    public City(String city) {
-        this.city = city;
+    public City(int cityID) {
+        this.cityID = cityID;
     }
 
     public void updateWeather(String[] weatherDetails) {
@@ -47,11 +47,15 @@ public class City {
         return time.format(formatter);
     }
 
-    public void setCountry(String country, String countryCode) {
+    public void setCountry(String city, String country, String countryCode) {
+        this.city = city;
         this.country = country;
         this.countryCode = countryCode;
     }
 
+    public int getCityID() {
+        return cityID;
+    }
     public String getCity() {
         return city; // get city name
     }

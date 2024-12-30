@@ -18,4 +18,9 @@ public class SearchManager implements ISearchManager {
         // pass the cursor to the callback
         callback.onResults(myDatabase.getCitiesByQuery(query));
     }
+
+    @Override
+    public void getFavourites(SearchCallback callback) {
+        callback.onResults(myDatabase.getFavouriteCities());
+    }
 }

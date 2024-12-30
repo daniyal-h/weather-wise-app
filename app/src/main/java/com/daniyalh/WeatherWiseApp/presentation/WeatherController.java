@@ -16,15 +16,17 @@ public class WeatherController {
     private final CityManager cityManager;
     private final ForecastDetailActivity context;
 
+    private City city;
+
     public WeatherController(WeatherManager weatherManager, CityManager cityManager, ForecastDetailActivity context) {
         this.weatherManager = weatherManager;
         this.cityManager = cityManager;
         this.context = context;
     }
 
-    public void fetchWeather(String cityName, String country, String country_code) {
-        City city = new City(cityName);
-        city.setCountry(country, country_code);
+    public void fetchWeather(int cityID, String cityName, String country, String country_code) {
+        city = new City(cityID);
+        city.setCountry(cityName, country, country_code);
 
         weatherManager.getWeatherJSON(city, new IWeatherCallback() {
             @Override
@@ -52,5 +54,15 @@ public class WeatherController {
                 context.resetUI();
             }
         });
+    }
+
+    public void favouriteCity(boolean isFavourite) {
+        /*if (cityManager.isFavourite(city)) {
+            cityManager.unfavouriteCity(city);
+        }
+        else {
+            cityManager.favouriteCity(city);
+        }*/
+        cityManager.favouriteCity(city, isFavourite);
     }
 }
