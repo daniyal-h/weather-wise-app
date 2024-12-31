@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,8 +54,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getFavouriteCities() {
         SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "SELECT name, country_code FROM cities WHERE is_favourite = 1";
-        return database.rawQuery(sql, new String[]{});
+        String sql = "SELECT name || ', ' || country_code AS display_name FROM cities WHERE is_favourite = 1";
+        return database.rawQuery(sql, null);
     }
 
     public Cursor getCitiesByQuery(String query) {

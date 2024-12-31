@@ -23,4 +23,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/favourite_selection_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Choose from Favourites:"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/autocomplete_city_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/autocomplete_city_text_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favourites_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="369dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="@+id/autocomplete_city_text_view"
+        app:layout_constraintStart_toStartOf="@+id/favourite_selection_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/favourite_selection_text_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
