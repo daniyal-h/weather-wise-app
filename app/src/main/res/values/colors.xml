@@ -10,7 +10,7 @@
     <color name="primaryVariant">#1565C0</color> <!-- Darker Blue -->
     <color name="secondary">#FFCA28</color> <!-- Yellow -->
     <color name="home_background">#BBDEFB</color>
-    <color name="day_background">#FFF9C4</color>
+    <color name="day_background">#FFFACD</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#CCCCCC</color>
     <color name="text_dark">#000000</color>

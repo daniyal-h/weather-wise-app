@@ -33,14 +33,17 @@ public class FavouritesManager implements IFavouritesManager {
         executorService.execute(() -> {
             List<String> favourites = new ArrayList<>();
             Cursor cursor = null;
+
             try {
                 cursor = myDatabase.getFavouriteCities();
                 if (cursor != null && cursor.moveToFirst()) {
                     do {
+                        // get all necessary parameters
                         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("cityID"));
                         String displayName = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
                         String country = cursor.getString(cursor.getColumnIndexOrThrow("country"));
 
+                        // track favourites details and prepare list with display names
                         trackFavourites(displayName, cityID, country);
                         favourites.add(displayName);
                     } while (cursor.moveToNext());
@@ -53,7 +56,7 @@ public class FavouritesManager implements IFavouritesManager {
                 mainHandler.post(() -> callback.onError(e));
             } finally {
                 if (cursor != null && !cursor.isClosed()) {
-                    cursor.close();
+                    cursor.close(); // clean up
                 }
             }
         });
@@ -78,7 +81,9 @@ public class FavouritesManager implements IFavouritesManager {
         // track each favourite in a Map
         String cityName = displayName.substring(0, displayName.indexOf(","));
         String countryCode = displayName.substring(displayName.indexOf(",")+2);
-        favouriteCities.put(displayName, new String[]{String.valueOf(cityID), cityName, country, countryCode});
+
+        favouriteCities.put(displayName,
+                new String[]{String.valueOf(cityID), cityName, country, countryCode});
     }
 
     public String[] getFavouriteDetails(String displayName) {
