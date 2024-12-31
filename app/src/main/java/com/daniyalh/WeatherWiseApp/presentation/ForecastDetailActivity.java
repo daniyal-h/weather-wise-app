@@ -73,7 +73,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         windLabelTextView = findViewById(R.id.wind_label_text_view);
         humidityLabelTextView = findViewById(R.id.humidity_label_text_view);
 
-        goBackButton = findViewById(R.id.go_back_button);
+        goBackButton = findViewById(R.id.clear_favourites_button);
         favouritingAnimation = findViewById(R.id.favourite_icon_lottie);
 
         tempTextView = findViewById(R.id.temperature_text_view);

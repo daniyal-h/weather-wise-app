@@ -6,6 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/clear_favourites_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Clear Favourites"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/favourites_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/favourites_recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/favourites_recycler_view" />
+
     <AutoCompleteTextView
         android:id="@+id/autocomplete_city_text_view"
         android:layout_width="0dp"
@@ -39,7 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="64dp"
         android:background="?attr/selectableItemBackground"
         android:fadeScrollbars="false"
         android:scrollbarStyle="outsideOverlay"

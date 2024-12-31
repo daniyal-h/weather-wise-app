@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private CityCursorAdapter cityCursorAdapter;
     private RecyclerView favouritesRecyclerView;
     private FavouritesAdapter favouritesAdapter;
+    private Button clearFavouritesButton;
     boolean isSelecting = false;
 
     @Override
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         favouritesRecyclerView = findViewById(R.id.favourites_recycler_view);
         favouritesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        clearFavouritesButton = findViewById(R.id.clear_favourites_button);
     }
 
     private void displayFavourites() {
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // update the drop down when change is detected
                 if(!isSelecting && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
                     searchManager.searchCities(s.toString(), new ISearchManager.SearchCallback() {
                         @Override
@@ -132,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             handleCitySelection((Cursor) parent.getItemAtPosition(position));
             isSelecting = false; // reset flag after handling
         });
+
+        clearFavouritesButton.setOnClickListener(v -> handleClearing());
     }
 
     private void handleCitySelection(Cursor cursor) {
@@ -161,6 +169,23 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
         hideKeyboard(autoCompleteCityTextView);
+    }
+
+    private void handleClearing() {
+        if (favouritesAdapter != null && favouritesAdapter.getItemCount() > 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Confirm")
+                    .setMessage("Are you sure you want to clear all favourites?")
+                    .setPositiveButton("Yes", (dialog, which) -> clearFavourites())
+                    .setNegativeButton("No", null) // Dismisses the dialog
+                    .show();
+        }
+        else showToast("No favourites to clear", Toast.LENGTH_SHORT);
+    }
+
+    private void clearFavourites() {
+        searchManager.clearFavourites();
+        displayFavourites();
     }
 
     private void hideKeyboard(View view) {

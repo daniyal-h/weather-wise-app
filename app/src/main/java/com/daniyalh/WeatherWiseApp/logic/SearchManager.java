@@ -67,7 +67,7 @@ public class SearchManager implements ISearchManager {
     }
 
     public void clearFavourites() {
-
+        myDatabase.clearFavourites();
     }
 
     private void trackFavourites(String displayName, int cityID, String country) {
