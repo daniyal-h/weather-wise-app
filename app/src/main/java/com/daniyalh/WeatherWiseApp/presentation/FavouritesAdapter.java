@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.daniyalh.WeatherWiseApp.R;
+
 import java.util.List;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.ViewHolder> {
@@ -27,7 +29,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_favourite, parent, false);
         return new ViewHolder(view);
     }
 
@@ -48,11 +50,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
 
         ViewHolder(View itemView) {
             super(itemView);
-            cityName = itemView.findViewById(android.R.id.text1);
+            cityName = itemView.findViewById(R.id.favourite_text_view);
         }
 
-        void bind(final String city, final OnItemClickListener listener) {
-            itemView.setOnClickListener(v -> listener.onItemClick(city));
+        void bind(final String displayName, final OnItemClickListener listener) {
+            itemView.setOnClickListener(v -> listener.onItemClick(displayName));
         }
     }
 }

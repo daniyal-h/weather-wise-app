@@ -9,7 +9,8 @@
     <color name="primary">#1E88E5</color> <!-- Blue -->
     <color name="primaryVariant">#1565C0</color> <!-- Darker Blue -->
     <color name="secondary">#FFCA28</color> <!-- Yellow -->
-    <color name="day_background">#F5F5F5</color>
+    <color name="home_background">#BBDEFB</color>
+    <color name="day_background">#FFF9C4</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#CCCCCC</color>
     <color name="text_dark">#000000</color>
@@ -20,4 +21,6 @@
     <color name="background_dark">#121212</color> <!-- Almost Black -->
     <color name="text_light">#FFFFFF</color> <!-- White -->
     <color name="text_secondary_light">#B3B3B3</color> <!-- Light Gray -->
+    <color name="hover_color">#E0E0E0</color> <!-- Light Gray for Hover -->
+    <color name="pressed_color">#BDBDBD</color>
 </resources>
