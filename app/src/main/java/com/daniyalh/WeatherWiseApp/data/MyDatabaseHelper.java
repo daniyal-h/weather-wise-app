@@ -54,7 +54,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getFavouriteCities() {
         SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "SELECT name || ', ' || country_code AS display_name FROM cities WHERE is_favourite = 1";
+        String sql = "SELECT cityID, name || ', ' || country_code AS display_name, country "
+                   + "FROM cities WHERE is_favourite = 1 "
+                   + "ORDER BY display_name";
         return database.rawQuery(sql, null);
     }
 
@@ -70,6 +72,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         String sql = "UPDATE cities SET is_favourite = ? WHERE cityID = ?";
         database.execSQL(sql, new Object[]{isFavourite ? 1 : 0, cityID});
         Log.d(TAG, "Updated favourite status for cityID: " + cityID);
+    }
+
+    public void clearFavourites() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String sql = "UPDATE cities SET is_favourite = 0 WHERE is_favourite = 1";
+        database.execSQL(sql, new Object[]{});
+        Log.d(TAG, "Removed all favourites");
     }
 
     @Override

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        displayFavourites();
+        displayFavourites(); // updates favourites when returning from forecast
     }
 
     private void initializeDatabase() {
@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         favouritesRecyclerView = findViewById(R.id.favourites_recycler_view);
         favouritesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        displayFavourites();
-
     }
 
     private void displayFavourites() {
@@ -74,8 +72,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFavouritesFetched(List<String> favourites) {
                 Log.d("MainActivity", "Fetched Favourites: " + favourites);
-                favouritesAdapter = new FavouritesAdapter(MainActivity.this, favourites, city -> {
-                    // TODO
+
+
+                favouritesAdapter = new FavouritesAdapter(MainActivity.this, favourites, displayName -> {
+                    String[] favouriteDetails = searchManager.getFavouriteDetails(displayName);
+                    int cityID = Integer.parseInt(favouriteDetails[0]);
+                    String cityName = favouriteDetails[1];
+                    String countryName = favouriteDetails[2];
+                    String countryCode = favouriteDetails[3];
+                    int isFavourite = 1; // always a favourite
+
+                    forecastDetails(cityID, cityName, countryName, countryCode, isFavourite);
                 });
                 favouritesRecyclerView.setAdapter(favouritesAdapter);
             }
@@ -138,6 +145,11 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteCityTextView.setText("");
         autoCompleteCityTextView.clearFocus();
 
+
+        forecastDetails(cityID, cityName, countryName, countryCode, isFavourite);
+    }
+
+    private void forecastDetails(int cityID, String cityName, String countryName, String countryCode, int isFavourite) {
         Intent intent = new Intent(MainActivity.this, ForecastDetailActivity.class);
         intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
         intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
