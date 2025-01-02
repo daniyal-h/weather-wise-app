@@ -2,8 +2,6 @@ package com.daniyalh.WeatherWiseApp.logic;
 
 import android.database.Cursor;
 
-import java.util.List;
-
 public interface ISearchManager {
     void searchCities(String query, SearchCallback callback);
 

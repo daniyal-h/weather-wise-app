@@ -57,12 +57,6 @@ public class WeatherController {
     }
 
     public void favouriteCity(boolean isFavourite) {
-        /*if (cityManager.isFavourite(city)) {
-            cityManager.unfavouriteCity(city);
-        }
-        else {
-            cityManager.favouriteCity(city);
-        }*/
         cityManager.favouriteCity(city, isFavourite);
     }
 }

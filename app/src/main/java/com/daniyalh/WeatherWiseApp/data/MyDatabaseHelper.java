@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
