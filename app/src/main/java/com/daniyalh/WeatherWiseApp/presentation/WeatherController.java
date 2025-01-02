@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.daniyalh.WeatherWiseApp.logic.CityManager;
+import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.IWeatherCallback;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
@@ -13,14 +14,16 @@ public class WeatherController {
     private static final String TAG = "WeatherController";
 
     private final WeatherManager weatherManager;
-    private final CityManager cityManager;
+    //private final CityManager cityManager;
+    private final FavouritesManager favouritesManager;
     private final ForecastDetailActivity context;
 
     private City city;
 
-    public WeatherController(WeatherManager weatherManager, CityManager cityManager, ForecastDetailActivity context) {
+    public WeatherController(WeatherManager weatherManager, FavouritesManager favouritesManager, ForecastDetailActivity context) {
         this.weatherManager = weatherManager;
-        this.cityManager = cityManager;
+        //this.cityManager = cityManager;
+        this.favouritesManager = favouritesManager;
         this.context = context;
     }
 
@@ -39,7 +42,7 @@ public class WeatherController {
                     context.setStaticUIVisibility(true);
                     context.updateWeatherDetails(city.getWeather());
 
-                    cityManager.addCity(city); // Add or update record
+                    //cityManager.addCity(city); // Add or update record
                 } catch (InvalidJsonParsingException e) {
                     context.showToast(e.getMessage(), Toast.LENGTH_LONG);
                 }
@@ -56,7 +59,7 @@ public class WeatherController {
         });
     }
 
-    public void favouriteCity(boolean isFavourite) {
-        cityManager.favouriteCity(city, isFavourite);
+    public void toggleFavourite(boolean isFavourite) {
+        favouritesManager.toggleFavourite(city, isFavourite);
     }
 }

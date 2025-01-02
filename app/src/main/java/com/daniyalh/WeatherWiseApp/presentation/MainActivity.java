@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeLogicClasses() {
         searchManager = new SearchManager(myDatabase);
-        favouritesManager = new FavouritesManager(myDatabase);
+        favouritesManager = FavouritesManager.getInstance(myDatabase);
     }
 
     private void initializeUI() {
