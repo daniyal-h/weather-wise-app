@@ -1,5 +1,6 @@
 package WeatherWiseApp.data;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -33,7 +34,6 @@ public class MyDatabaseHelperInstrumentedTest {
     private MyDatabaseHelper dbHelper;
     private Context context;
     private File dbFile;
-    private final Map<String, String[]> favouriteCities = new HashMap<>();
 
     @Before
     public void setUp() throws IOException {
@@ -106,7 +106,13 @@ public class MyDatabaseHelperInstrumentedTest {
     }
 
     @Test
-    public void testClearFavourites() {
+    public void testFavouriting() {
+        dbHelper.clearFavourites(); // reset
+
+        Cursor cursor = dbHelper.getFavouriteCities();
+        assertFalse("Favourites should be cleared", cursor.moveToFirst());
+        cursor.close();
+
         // Insert test data
         dbHelper.updateFavouriteStatus(1, true);
         dbHelper.updateFavouriteStatus(2, true);
@@ -115,14 +121,18 @@ public class MyDatabaseHelperInstrumentedTest {
         dbHelper.clearFavourites();
 
         // Verify favourites are cleared
-        Cursor cursor = dbHelper.getFavouriteCities();
+        cursor = dbHelper.getFavouriteCities();
         assertFalse("Favourites should be cleared", cursor.moveToFirst());
         cursor.close();
 
         dbHelper.updateFavouriteStatus(1, true);
-        dbHelper.updateFavouriteStatus(2, true);
+        dbHelper.updateFavouriteStatus(82, true);
+
+        String[] expectedCity1 = new String[]{"New York City, US", "United States"};
+        String[] expectedCity2 = new String[]{"Winnipeg, CA", "Canada"};
 
         cursor = dbHelper.getFavouriteCities();
+        Map<Integer, String[]> favouriteCities = new HashMap<>();
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -130,12 +140,17 @@ public class MyDatabaseHelperInstrumentedTest {
                 int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("cityID"));
                 String displayName = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
                 String country = cursor.getString(cursor.getColumnIndexOrThrow("country"));
-                favouriteCities.put(displayName, new String[]{String.valueOf(cityID), country});
+                favouriteCities.put(cityID, new String[]{displayName, country});
             } while (cursor.moveToNext());
         }
 
         assertEquals(2, favouriteCities.size());
+
+        assertArrayEquals(expectedCity1, favouriteCities.get(1));
+        assertArrayEquals(expectedCity2, favouriteCities.get(82));
+
         cursor.close();
+        dbHelper.clearFavourites(); // reset
     }
 
     @Test
@@ -144,5 +159,53 @@ public class MyDatabaseHelperInstrumentedTest {
         File dbPath = context.getDatabasePath("WeatherWiseApp_stub1.db");
         assertNotNull("getDatabasePath should return a File", dbPath);
         assertEquals(dbFile, dbPath);
+    }
+
+    @Test
+    public void testGetCitiesByQuery() {
+        // empty, space, x
+        // test a few set of strings
+
+        dbHelper.clearFavourites();
+        dbHelper.updateFavouriteStatus(89, true);
+        Map<Integer, Object[]> cities = new HashMap<>();
+
+        Object[] expectedCity1 = new Object[]{"CA", "Winnipeg, Canada", 0};
+        Object[] expectedCity2 = new Object[]{"CA", "Windsor, Canada", 1};
+
+        Cursor cursor = dbHelper.getCitiesByQuery("win");
+        assertEquals(2, cursor.getCount());
+
+        if (cursor.moveToFirst()) {
+            do {
+                int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
+                String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("country_code"));
+                String displayName = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
+                int isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("is_favourite"));
+
+                cities.put(cityID, new Object[]{countryCode, displayName, isFavourite});
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        assertEquals(2, cities.size());
+
+        assertArrayEquals(expectedCity1, cities.get(82));
+        assertArrayEquals(expectedCity2, cities.get(89));
+
+        // edge case: empty space
+        cursor = dbHelper.getCitiesByQuery(" ");
+        assertEquals(0, cursor.getCount());
+        cursor.close();
+
+        // edge case: empty space
+        cursor = dbHelper.getCitiesByQuery("                       ");
+        assertEquals(0, cursor.getCount());
+        cursor.close();
+
+        // edge case: no input (logic layer would account for this but since we test only data, it returns the limit)
+        cursor = dbHelper.getCitiesByQuery("");
+        assertEquals(10, cursor.getCount());
+        cursor.close();
     }
 }

@@ -114,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // update the drop down when change is detected
-                if(!isSelecting && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
+                // update the drop down when useful change is detected
+                if (!isSelecting && !s.toString().trim().equals("")
+                        && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
                     handleSearching(s);
                 }
             }
@@ -140,7 +141,11 @@ public class MainActivity extends AppCompatActivity {
             public void onResults(Cursor cursor) {
                 if (cursor == null || cursor.getCount() == 0)
                     showToast("No results found", Toast.LENGTH_SHORT);
-                cityCursorAdapter.swapCursor(cursor); // update drop down
+
+                Cursor oldCursor = cityCursorAdapter.swapCursor(cursor); // update drop down
+                if (oldCursor != null) {
+                    oldCursor.close(); // close the old cursor
+                }
             }
             @Override
             public void onError(String error) {
@@ -153,10 +158,15 @@ public class MainActivity extends AppCompatActivity {
         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
         String cityName = pair.substring(0, pair.indexOf(","));
-        String countryName = pair.substring(pair.indexOf(",")+2); // Winnipeg, *Canada* (,+2)
+        String countryName = pair.substring(pair.indexOf(",")+2); // Winnipeg, *Canada* (comma+2)
         String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("country_code"));
         int isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("is_favourite")); // 0 or 1
 
+        // close the old cursor so it doesn't remain active while viewing forecast
+        Cursor oldCursor = cityCursorAdapter.swapCursor(null);
+        if (oldCursor != null) {
+            //oldCursor.close();
+        }
         autoCompleteCityTextView.setText("");
         autoCompleteCityTextView.clearFocus();
 
@@ -174,8 +184,6 @@ public class MainActivity extends AppCompatActivity {
 
         // start forecastDetailActivity for selected city
         startActivity(intent);
-
-        hideKeyboard(autoCompleteCityTextView);
     }
 
     private void handleClearing() {

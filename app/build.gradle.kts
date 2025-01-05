@@ -75,5 +75,8 @@ dependencies {
     implementation("androidx.test.espresso:espresso-core:3.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
 
+tasks.register("runAllTests") {
+    dependsOn("test", "connectedAndroidTest")
 }
