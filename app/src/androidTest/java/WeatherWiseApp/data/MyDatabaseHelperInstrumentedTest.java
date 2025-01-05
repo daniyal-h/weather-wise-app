@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -37,32 +38,22 @@ public class MyDatabaseHelperInstrumentedTest {
 
     @Before
     public void setUp() throws IOException {
-        // Obtain the target context (app under test)
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        // Obtain the test context (to access test-specific assets)
+        context = ApplicationProvider.getApplicationContext();
 
         // Define the database name
         String dbName = "WeatherWiseApp_stub1.db";
 
-        // Get the database file path
-        dbFile = context.getDatabasePath(dbName);
+        // Redirect database path to test app's internal storage
+        dbFile = new File(context.getFilesDir(), dbName);
 
-        // Ensure the parent directories exist
-        File parentDir = dbFile.getParentFile();
-        if (!parentDir.exists()) {
-            boolean dirsCreated = parentDir.mkdirs();
-            Log.d("MyDatabaseHelperTest", "Database directory created: " + dirsCreated);
-            assertTrue("Failed to create database directory", dirsCreated);
-        } else {
-            Log.d("MyDatabaseHelperTest", "Database directory exists.");
-        }
-
-        // Delete existing database file if it exists
+        // Ensure the database file doesn't exist
         if (dbFile.exists()) {
             boolean deleted = dbFile.delete();
             Log.d("MyDatabaseHelperTest", "Existing DB File Deleted: " + deleted);
         }
 
-        // Copy the stub database from test assets to the database path
+        // Copy the stub database from test assets to the redirected database path
         try (InputStream is = context.getAssets().open(dbName);
              OutputStream os = new FileOutputStream(dbFile)) {
 
@@ -72,14 +63,14 @@ public class MyDatabaseHelperInstrumentedTest {
                 os.write(buffer, 0, length);
             }
             os.flush();
-            Log.d("MyDatabaseHelperTest", "Stub database copied to database path.");
+            Log.d("MyDatabaseHelperTest", "Stub database copied successfully to: " + dbFile.getAbsolutePath());
         } catch (IOException e) {
             Log.e("MyDatabaseHelperTest", "Error copying stub database: " + e.getMessage());
             throw e; // Re-throw to fail the setup
         }
 
-        // Initialize the MyDatabaseHelper with the database name
-        dbHelper = MyDatabaseHelper.getInstance(context, dbName);
+        // Initialize the MyDatabaseHelper with the redirected database path
+        dbHelper = MyDatabaseHelper.getInstance(context, dbFile.getAbsolutePath());
 
         // Ensure the database is opened
         try {
@@ -151,14 +142,6 @@ public class MyDatabaseHelperInstrumentedTest {
 
         cursor.close();
         dbHelper.clearFavourites(); // reset
-    }
-
-    @Test
-    public void testDatabasePathInitialization() {
-        assertNotNull("Context should not be null", context);
-        File dbPath = context.getDatabasePath("WeatherWiseApp_stub1.db");
-        assertNotNull("getDatabasePath should return a File", dbPath);
-        assertEquals(dbFile, dbPath);
     }
 
     @Test
