@@ -81,7 +81,5 @@ public class MyDatabaseHelperMockTest {
         assertFalse(cursor.moveToFirst()); // No favourites should be present
         cursor.close();
     }
-
-    // Additional tests can be added here...
 }
 
