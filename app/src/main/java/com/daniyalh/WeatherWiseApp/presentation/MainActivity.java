@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeDatabase() {
-        myDatabase = MyDatabaseHelper.getInstance(this);
+        myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
     }
 
     private void initializeLogicClasses() {

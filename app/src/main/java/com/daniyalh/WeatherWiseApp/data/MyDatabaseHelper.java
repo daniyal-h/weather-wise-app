@@ -13,27 +13,29 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
-    public static final String DB_NAME = "WeatherWiseApp.db";
+    //public static final String DB_NAME = "WeatherWiseApp.db";
+    public final String dbName;
     private static final int DB_VERSION = 1;
     private static MyDatabaseHelper instance;
     private static final String TAG = "MyDatabase";
 
-    private MyDatabaseHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    private MyDatabaseHelper(Context context, String dbName) {
+        super(context, dbName, null, DB_VERSION);
+        this.dbName = dbName;
         copyDatabaseToInternalStorage(context);
     }
 
-    public static synchronized MyDatabaseHelper getInstance(Context context) {
-        if (instance == null) {
-            instance = new MyDatabaseHelper(context.getApplicationContext());
+    public static synchronized MyDatabaseHelper getInstance(Context context, String dbName) {
+        if (instance == null || !instance.dbName.equals(dbName)) {
+            instance = new MyDatabaseHelper(context.getApplicationContext(), dbName);
         }
         return instance;
     }
 
     private void copyDatabaseToInternalStorage(Context context) {
-        File dbFile = context.getDatabasePath(DB_NAME);
+        File dbFile = context.getDatabasePath(dbName);
         if (!dbFile.exists()) {
-            try (InputStream is = context.getAssets().open(DB_NAME);
+            try (InputStream is = context.getAssets().open(dbName);
                  OutputStream os = new FileOutputStream(dbFile)) {
                 byte[] buffer = new byte[1024];
                 int length;
@@ -41,12 +43,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     os.write(buffer, 0, length);
                 }
                 os.flush();
-                Log.d(TAG, "Database copied to internal storage.");
+                Log.d(TAG, "Database "  + dbName + " copied to internal storage.");
             } catch (IOException e) {
-                Log.e(TAG, "Error copying database", e);
+                Log.e(TAG, "Error copying database " + dbName, e);
             }
         } else {
-            Log.d(TAG, "Database already exists in internal storage.");
+            Log.d(TAG, "Database " + dbName + " already exists in internal storage.");
         }
     }
 

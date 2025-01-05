@@ -13,9 +13,9 @@ import com.daniyalh.WeatherWiseApp.R;
 import java.util.List;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.ViewHolder> {
-    private List<String> favouriteCities;
-    private Context context;
-    private OnItemClickListener listener;
+    private final List<String> favouriteCities;
+    private final Context context;
+    private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(String city);
