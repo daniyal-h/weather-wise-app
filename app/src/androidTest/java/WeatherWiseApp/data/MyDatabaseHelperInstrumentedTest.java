@@ -24,6 +24,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 @RunWith(AndroidJUnit4.class)
 public class MyDatabaseHelperInstrumentedTest {
@@ -31,11 +33,12 @@ public class MyDatabaseHelperInstrumentedTest {
     private MyDatabaseHelper dbHelper;
     private Context context;
     private File dbFile;
+    private final Map<String, String[]> favouriteCities = new HashMap<>();
 
     @Before
     public void setUp() throws IOException {
         // Obtain the target context (app under test)
-        context = InstrumentationRegistry.getInstrumentation().getContext();
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         // Define the database name
         String dbName = "WeatherWiseApp_stub1.db";
@@ -114,6 +117,24 @@ public class MyDatabaseHelperInstrumentedTest {
         // Verify favourites are cleared
         Cursor cursor = dbHelper.getFavouriteCities();
         assertFalse("Favourites should be cleared", cursor.moveToFirst());
+        cursor.close();
+
+        dbHelper.updateFavouriteStatus(1, true);
+        dbHelper.updateFavouriteStatus(2, true);
+
+        cursor = dbHelper.getFavouriteCities();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // get all necessary parameters
+                int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("cityID"));
+                String displayName = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
+                String country = cursor.getString(cursor.getColumnIndexOrThrow("country"));
+                favouriteCities.put(displayName, new String[]{String.valueOf(cityID), country});
+            } while (cursor.moveToNext());
+        }
+
+        assertEquals(2, favouriteCities.size());
         cursor.close();
     }
 
