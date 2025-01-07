@@ -5,9 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
-import com.daniyalh.WeatherWiseApp.objects.City;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +15,8 @@ import java.util.concurrent.Executors;
 
 public class FavouritesManager implements IFavouritesManager {
     private final MyDatabaseHelper myDatabase;
-    private final ExecutorService executorService;
-    private final Handler mainHandler;
+    private ExecutorService executorService;
+    private Handler mainHandler;
     private final Map<String, String[]> favouriteCities = new HashMap<>();
     private static FavouritesManager instance;
     private FavouritesManager(MyDatabaseHelper myDatabase) {
@@ -34,10 +32,15 @@ public class FavouritesManager implements IFavouritesManager {
         return instance;
     }
 
+    public void setAsynchronicity(ExecutorService executorService, Handler mainHandler) {
+        this.executorService = executorService;
+        this.mainHandler = mainHandler;
+    }
+
     @Override
-    public void toggleFavourite(City city, boolean isFavourite) {
+    public void toggleFavourite(int cityID, boolean isFavourite) {
         // favourite or unfavourite a given city
-        myDatabase.updateFavouriteStatus(city.getCityID(), isFavourite);
+        myDatabase.updateFavouriteStatus(cityID, isFavourite);
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.daniyalh.WeatherWiseApp.logic.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

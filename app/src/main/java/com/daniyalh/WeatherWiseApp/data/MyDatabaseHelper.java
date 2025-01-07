@@ -13,16 +13,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
-    //public static final String DB_NAME = "WeatherWiseApp.db";
     public final String dbName;
+    private final Context context;
     private static final int DB_VERSION = 1;
     private static MyDatabaseHelper instance;
     private static final String TAG = "MyDatabase";
+    private SQLiteDatabase inMemoryDb;
+
+    /*private MyDatabaseHelper(Context context, String dbName) {
+        super(context, dbName, null, DB_VERSION);
+        this.dbName = dbName;
+        copyDatabaseToInternalStorage(context);
+    }*/
 
     private MyDatabaseHelper(Context context, String dbName) {
         super(context, dbName, null, DB_VERSION);
         this.dbName = dbName;
-        copyDatabaseToInternalStorage(context);
+        this.context = context;
+        if ("WeatherWiseApp.db".equals(dbName)) {
+            copyDatabaseToInternalStorage(context);
+        }
     }
 
     public static synchronized MyDatabaseHelper getInstance(Context context, String dbName) {
@@ -34,6 +44,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private void copyDatabaseToInternalStorage(Context context) {
         File dbFile = context.getDatabasePath(dbName);
+
         if (!dbFile.exists()) {
             try (InputStream is = context.getAssets().open(dbName);
                  OutputStream os = new FileOutputStream(dbFile)) {
@@ -51,6 +62,22 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Database " + dbName + " already exists in internal storage.");
         }
     }
+
+    public void logAllDatabases(Context context) {
+        // Get the internal storage path for databases
+        String[] databaseList = context.databaseList();
+
+        // Log each database
+        if (databaseList.length > 0) {
+            Log.d("DatabaseList", "Databases in internal storage:");
+            for (String dbName : databaseList) {
+                Log.d("DatabaseList", dbName);
+            }
+        } else {
+            Log.d("DatabaseList", "No databases found in internal storage.");
+        }
+    }
+
 
     public Cursor getFavouriteCities() {
         SQLiteDatabase database = this.getReadableDatabase();
@@ -82,6 +109,65 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
+    public synchronized SQLiteDatabase getReadableDatabase() {
+        if ("WeatherWiseApp_stub1.db".equals(dbName)) {
+            if (inMemoryDb == null || !inMemoryDb.isOpen()) {
+                inMemoryDb = SQLiteDatabase.create(null);
+                Log.d(TAG, "In-memory readable database created.");
+                populateInMemoryDatabase(context, inMemoryDb);
+            }
+            return inMemoryDb;
+        } else {
+            SQLiteDatabase db = super.getReadableDatabase();
+            Log.d(TAG, "Readable database path: " + db.getPath());
+            return db;
+        }
+    }
+
+    @Override
+    public synchronized SQLiteDatabase getWritableDatabase() {
+        if ("WeatherWiseApp_stub1.db".equals(dbName)) {
+            if (inMemoryDb == null || !inMemoryDb.isOpen()) {
+                inMemoryDb = SQLiteDatabase.create(null);
+                Log.d(TAG, "In-memory writable database created.");
+                populateInMemoryDatabase(context, inMemoryDb);
+            }
+            return inMemoryDb;
+        } else {
+            SQLiteDatabase db = super.getWritableDatabase();
+            Log.d(TAG, "Writable database path: " + db.getPath());
+            return db;
+        }
+    }
+
+    private void populateInMemoryDatabase(Context context, SQLiteDatabase db) {
+        try (InputStream is = context.getAssets().open("WeatherWiseApp_stub1.sql")) {
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            String sqlScript = new String(buffer);
+            is.close();
+
+            String[] sqlStatements = sqlScript.split(";");
+            db.beginTransaction();
+            try {
+                for (String statement : sqlStatements) {
+                    statement = statement.trim();
+                    if (!statement.isEmpty()) {
+                        db.execSQL(statement);
+                    }
+                }
+                db.setTransactionSuccessful();
+                Log.d(TAG, "In-memory database populated from SQL script.");
+            } finally {
+                db.endTransaction();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error populating in-memory database", e);
+        }
+    }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
 
     }
@@ -89,5 +175,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    @Override
+    public synchronized void close() {
+        super.close();
+        if (inMemoryDb != null && inMemoryDb.isOpen()) {
+            inMemoryDb.close();
+            inMemoryDb = null;
+        }
     }
 }

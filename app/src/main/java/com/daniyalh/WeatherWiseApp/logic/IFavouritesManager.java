@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IFavouritesManager {
 
-    void toggleFavourite(City city, boolean isFavourite);
+    void toggleFavourite(int cityID, boolean isFavourite);
     void getFavourites(IFavouritesManager.FavouritesCallback callback);
     void clearFavourites(IFavouritesManager.ClearFavouritesCallback callback);
     String[] getFavouriteDetails(String displayName);

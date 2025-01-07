@@ -1,8 +1,6 @@
 package com.daniyalh.WeatherWiseApp;
 
-import com.daniyalh.WeatherWiseApp.logic.CityManagerTest;
-import com.daniyalh.WeatherWiseApp.logic.WeatherJsonAdapterTest;
-import com.daniyalh.WeatherWiseApp.logic.WeatherManagerTest;
+import com.daniyalh.WeatherWiseApp.logic.*;
 import com.daniyalh.WeatherWiseApp.objects.CityTest;
 
 import org.junit.runner.RunWith;
@@ -13,7 +11,8 @@ import org.junit.runners.Suite;
         CityTest.class,
         CityManagerTest.class,
         WeatherManagerTest.class,
-        WeatherJsonAdapterTest.class
+        WeatherJsonAdapterTest.class,
+        SearchManagerTest.class
 })
 
 public class AllUnitTests {

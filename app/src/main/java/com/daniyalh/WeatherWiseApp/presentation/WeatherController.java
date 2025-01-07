@@ -60,6 +60,6 @@ public class WeatherController {
     }
 
     public void toggleFavourite(boolean isFavourite) {
-        favouritesManager.toggleFavourite(city, isFavourite);
+        favouritesManager.toggleFavourite(city.getCityID(), isFavourite);
     }
 }
