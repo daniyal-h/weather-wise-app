@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/clear_favourites_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Clear Favourites"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/favourites_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/favourites_recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/favourites_recycler_view" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autocomplete_city_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:singleLine="true"
+        android:inputType="text"
+        android:ellipsize="none"
+        android:maxLines="1"
+        android:hint="Enter City..."
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/favourite_selection_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Choose from Favourites:"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/autocomplete_city_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/autocomplete_city_text_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favourites_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="64dp"
+        android:background="?attr/selectableItemBackground"
+        android:fadeScrollbars="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/autocomplete_city_text_view"
+        app:layout_constraintStart_toStartOf="@+id/favourite_selection_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/favourite_selection_text_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
