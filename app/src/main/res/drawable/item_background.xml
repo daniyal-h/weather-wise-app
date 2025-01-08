@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Hovered State -->
+    <item android:state_hovered="true" android:drawable="@color/hover_color" />
+
+    <!-- Pressed State -->
+    <item android:state_pressed="true" android:drawable="@color/pressed_color" />
+
+    <!-- Default State with Faint Outline -->
+    <item android:drawable="@drawable/item_default_background" />
+
+</selector>

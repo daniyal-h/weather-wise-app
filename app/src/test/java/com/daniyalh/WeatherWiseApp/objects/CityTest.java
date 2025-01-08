@@ -10,14 +10,15 @@ public class CityTest {
 
         System.out.println("\n----- Starting CityTest -----");
 
-        city = new City("Winnipeg");
+        city = new City(1);
 
-        String[] fixedDetails = {"273.15", "373.15", "raining cats and dogs", "100", "27.7778", "-21600", "1734877486", "1734906604", "d"};
+        String[] fixedDetails = {"EX", "0", "100", "raining cats and dogs", "100", "27.7778", "-21600", "1734877486", "1734906604", "d"};
 
         city.updateWeather(fixedDetails);
 
         String[] details = city.getWeather();
 
+        assertEquals("EX", city.getCountryCode());
         assertEquals("0°C", details[0]);
         assertEquals("Feels Like 100", details[1]);
         assertEquals("raining cats and dogs", details[2]);
