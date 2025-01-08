@@ -80,6 +80,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 
     public Cursor getFavouriteCities() {
+        // return a cursor with all favourite cities
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "SELECT cityID, name || ', ' || country_code AS display_name, country "
                    + "FROM cities WHERE is_favourite = 1 "
@@ -88,6 +89,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getCitiesByQuery(String query) {
+        // return a cursor with top 10 cities through a following wild card search
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "SELECT cityID AS _id, country_code, name || ', ' || country AS display_name, is_favourite"
                   +  " FROM CITIES WHERE name LIKE ? LIMIT 10";
@@ -95,6 +97,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateFavouriteStatus(int cityID, boolean isFavourite) {
+        // toggle the favourite status based on the given boolean
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "UPDATE cities SET is_favourite = ? WHERE cityID = ?";
         database.execSQL(sql, new Object[]{isFavourite ? 1 : 0, cityID});
@@ -102,6 +105,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void clearFavourites() {
+        // clear all favourite cities by setting them to 0
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "UPDATE cities SET is_favourite = 0 WHERE is_favourite = 1";
         database.execSQL(sql, new Object[]{});
@@ -110,6 +114,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public synchronized SQLiteDatabase getReadableDatabase() {
+        // return in memory DB for tests
         if ("WeatherWiseApp_stub1.db".equals(dbName)) {
             if (inMemoryDb == null || !inMemoryDb.isOpen()) {
                 inMemoryDb = SQLiteDatabase.create(null);
@@ -117,6 +122,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 populateInMemoryDatabase(context, inMemoryDb);
             }
             return inMemoryDb;
+        // return main DB from internal storage for general use
         } else {
             SQLiteDatabase db = super.getReadableDatabase();
             Log.d(TAG, "Readable database path: " + db.getPath());
@@ -126,6 +132,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public synchronized SQLiteDatabase getWritableDatabase() {
+        // return in memory DB for tests
         if ("WeatherWiseApp_stub1.db".equals(dbName)) {
             if (inMemoryDb == null || !inMemoryDb.isOpen()) {
                 inMemoryDb = SQLiteDatabase.create(null);
@@ -133,6 +140,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 populateInMemoryDatabase(context, inMemoryDb);
             }
             return inMemoryDb;
+        // return main DB from internal storage for general use
         } else {
             SQLiteDatabase db = super.getWritableDatabase();
             Log.d(TAG, "Writable database path: " + db.getPath());
@@ -141,6 +149,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void populateInMemoryDatabase(Context context, SQLiteDatabase db) {
+        // populate from stub into memory
         try (InputStream is = context.getAssets().open("WeatherWiseApp_stub1.sql")) {
             int size = is.available();
             byte[] buffer = new byte[size];
