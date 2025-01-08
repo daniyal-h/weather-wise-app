@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import android.content.Context;
@@ -21,8 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,13 +27,11 @@ import java.util.Map;
 public class MyDatabaseHelperInstrumentedTest {
 
     private MyDatabaseHelper dbHelper;
-    private Context context;
-    private File testDbFile;
 
     @Before
     public void setUp() {
         // Obtain the test context (to access test-specific assets)
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertNotNull("Context should not be null", context);
 
         dbHelper = MyDatabaseHelper.getInstance(context, "WeatherWiseApp_stub1.db");
@@ -57,19 +52,11 @@ public class MyDatabaseHelperInstrumentedTest {
         if (dbHelper != null) {
             dbHelper.close();
         }
-
-        // Delete the temporary database file
-        if (testDbFile != null && testDbFile.exists()) {
-            boolean deleted = testDbFile.delete();
-            Log.d("MyDatabaseHelperTest", "Temporary DB File Deleted: " + deleted);
-        }
     }
 
     @Test
     public void testFavouriting() {
-        dbHelper.logAllDatabases(context);
         dbHelper.clearFavourites(); // reset
-        dbHelper.logAllDatabases(context);
 
         Cursor cursor = dbHelper.getFavouriteCities();
         assertFalse("Favourites should be cleared", cursor.moveToFirst());
@@ -81,23 +68,19 @@ public class MyDatabaseHelperInstrumentedTest {
 
         // Clear favourites
         dbHelper.clearFavourites();
-        dbHelper.logAllDatabases(context);
 
         // Verify favourites are cleared
         cursor = dbHelper.getFavouriteCities();
-        dbHelper.logAllDatabases(context);
         assertFalse("Favourites should be cleared", cursor.moveToFirst());
         cursor.close();
 
         dbHelper.updateFavouriteStatus(1, true);
         dbHelper.updateFavouriteStatus(82, true);
-        dbHelper.logAllDatabases(context);
 
         String[] expectedCity1 = new String[]{"New York City, US", "United States"};
         String[] expectedCity2 = new String[]{"Winnipeg, CA", "Canada"};
 
         cursor = dbHelper.getFavouriteCities();
-        dbHelper.logAllDatabases(context);
         Map<Integer, String[]> favouriteCities = new HashMap<>();
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -117,15 +100,12 @@ public class MyDatabaseHelperInstrumentedTest {
 
         cursor.close();
         dbHelper.clearFavourites(); // reset
-        dbHelper.logAllDatabases(context);
     }
 
     @Test
     public void testGetCitiesByQuery() {
-        dbHelper.logAllDatabases(context);
         dbHelper.clearFavourites();
         dbHelper.updateFavouriteStatus(89, true);
-        dbHelper.logAllDatabases(context);
         Map<Integer, Object[]> cities = new HashMap<>();
 
         Object[] expectedCity1 = new Object[]{"CA", "Winnipeg, Canada", 0};
@@ -151,7 +131,6 @@ public class MyDatabaseHelperInstrumentedTest {
         assertArrayEquals(expectedCity1, cities.get(82));
         assertArrayEquals(expectedCity2, cities.get(89));
 
-        dbHelper.logAllDatabases(context);
 
         // edge case: empty space
         cursor = dbHelper.getCitiesByQuery(" ");
@@ -167,7 +146,5 @@ public class MyDatabaseHelperInstrumentedTest {
         cursor = dbHelper.getCitiesByQuery("");
         assertEquals(10, cursor.getCount());
         cursor.close();
-
-        dbHelper.logAllDatabases(context);
     }
 }

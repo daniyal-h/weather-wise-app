@@ -23,8 +23,6 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
 
             String icon = root.getJSONArray("weather").getJSONObject(0).getString("icon"); // e.g., "02d" or "02n"
             weatherDetails[9] = icon.substring(icon.length() - 1);                         // Get the last character ('d' or 'n')
-
-
         }
         catch (Exception e) {
             throw new InvalidJsonParsingException(e);

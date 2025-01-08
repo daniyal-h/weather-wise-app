@@ -9,7 +9,6 @@ import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class WeatherManager implements IWeatherManager {
-
     private static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 

@@ -25,7 +25,6 @@ import com.daniyalh.WeatherWiseApp.logic.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 
-import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -79,12 +78,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayFavourites() {
+        /*
+        Display the favourites within the recycler view when called
+        The query should propagated through the logic layer to data
+        Handle clicking of a favourite to forecast weather
+         */
         favouritesManager.getFavourites(new IFavouritesManager.FavouritesCallback() {
             @Override
             public void onFavouritesFetched(List<String> favourites) {
-                Log.d("MainActivity", "Fetched Favourites: " + favourites);
-
-
                 favouritesAdapter = new FavouritesAdapter(MainActivity.this, favourites, displayName -> {
                     String[] favouriteDetails = favouritesManager.getFavouriteDetails(displayName);
                     int cityID = Integer.parseInt(favouriteDetails[0]);
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     String countryCode = favouriteDetails[3];
                     int isFavourite = 1; // always a favourite
 
+                    // forecast the entry
                     forecastDetails(cityID, cityName, countryName, countryCode, isFavourite);
                 });
                 favouritesRecyclerView.setAdapter(favouritesAdapter);
@@ -108,23 +110,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners() {
         autoCompleteCityTextView.addTextChangedListener(new TextWatcher() {
+            // update the drop down as user types in letters
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // update the drop down when useful change is detected
+                // update when useful change is detected
                 if (!isSelecting && !s.toString().trim().equals("")
                         && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
                     handleSearching(s);
                 }
             }
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         autoCompleteCityTextView.setOnItemClickListener((parent, view, position, id) -> {
@@ -137,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleSearching(CharSequence s) {
+        // update results based on the callback
         searchManager.searchCities(s.toString(), new ISearchManager.SearchCallback() {
             @Override
             public void onResults(Cursor cursor) {
@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleCitySelection(Cursor cursor) {
+        // set variables
         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
         String cityName = pair.substring(0, pair.indexOf(","));
@@ -166,11 +167,10 @@ public class MainActivity extends AppCompatActivity {
         // close the old cursor so it doesn't remain active while viewing forecast
         Cursor oldCursor = cityCursorAdapter.swapCursor(null);
         if (oldCursor != null) {
-            //oldCursor.close();
+            oldCursor.close();
         }
         autoCompleteCityTextView.setText("");
         autoCompleteCityTextView.clearFocus();
-
 
         forecastDetails(cityID, cityName, countryName, countryCode, isFavourite);
     }
@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleClearing() {
+        // use an alert to double-check clearing
         if (favouritesAdapter != null && favouritesAdapter.getItemCount() > 0) {
             new AlertDialog.Builder(this)
                     .setTitle("Confirm")
@@ -200,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clearFavourites() {
+        /*
+        Clear the favourites and update the favourites display (should be empty)
+         */
         favouritesManager.clearFavourites(new IFavouritesManager.ClearFavouritesCallback() {
             @Override
             public void onClearSuccess() {
@@ -215,13 +219,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
     public void showToast(String message, int duration) {
         Toast.makeText(this, message, duration).show();
     }
@@ -230,10 +227,10 @@ public class MainActivity extends AppCompatActivity {
         favouritesManager.shutdown();
 
         if (cityCursorAdapter != null)
-            cityCursorAdapter.changeCursor(null); // Close the cursor when done
+            cityCursorAdapter.changeCursor(null); // close the cursor when done
 
         if (myDatabase != null)
-            myDatabase.close();
+            myDatabase.close(); // close DB when done
     }
 
     @Override

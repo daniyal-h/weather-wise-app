@@ -3,7 +3,6 @@ package com.daniyalh.WeatherWiseApp.presentation;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.daniyalh.WeatherWiseApp.logic.CityManager;
 import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.IWeatherCallback;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;

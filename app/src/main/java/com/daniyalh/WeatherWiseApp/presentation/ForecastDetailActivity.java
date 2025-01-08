@@ -14,12 +14,9 @@ import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.logic.CityManager;
 import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
-
-import java.io.Serializable;
 
 public class ForecastDetailActivity extends AppCompatActivity {
     private WeatherController weatherController;
@@ -42,6 +39,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
 
         initializeUI();
 
+        // get all parameters
         Intent intent = getIntent();
         int cityID = intent.getIntExtra(UIConstants.EXTRA_CITY_ID, 0);
         String cityName = intent.getStringExtra(UIConstants.EXTRA_CITY_NAME);
@@ -53,7 +51,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
 
         // display the loading icon while fetching weather asynchronously
         showLoadingIcon(true);
-        weatherController.fetchWeather(cityID, cityName, countryName, countryCode);
+        weatherController.fetchWeather(cityID, cityName, countryName, countryCode); // forecast
 
         setButtonListeners();
     }
@@ -96,7 +94,6 @@ public class ForecastDetailActivity extends AppCompatActivity {
     private void initializeClasses() {
         FavouritesManager favouritesManager = FavouritesManager.getInstance(null);
         WeatherManager weatherManager = new WeatherManager(this);
-        CityManager cityManager = new CityManager();
         weatherController = new WeatherController(weatherManager, favouritesManager, this);
     }
 
@@ -119,8 +116,10 @@ public class ForecastDetailActivity extends AppCompatActivity {
 
     private void setButtonListeners() {
         favouritingAnimation.setOnClickListener(v -> {
+            // toggle favourite depending on isFavourite
+            // play proper icon
             if (isFavourite) {
-                favouritingAnimation.setSpeed(-1f);
+                favouritingAnimation.setSpeed(-1f); // reverse animation
                 favouritingAnimation.playAnimation();
                 showToast("Unfavourited city", Toast.LENGTH_SHORT);
                 isFavourite = false;
@@ -169,6 +168,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
     }
 
     public void updateWeatherDetails(String[] details) {
+        // set the weather details to their corresponding UI elements
         tempTextView.setText(details[0]);
         feelsLikeTextView.setText(details[1]);
         descriptionTextView.setText(details[2]);

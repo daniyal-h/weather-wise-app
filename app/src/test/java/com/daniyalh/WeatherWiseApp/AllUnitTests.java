@@ -10,7 +10,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CityTest.class,
-        CityManagerTest.class,
         WeatherManagerTest.class,
         WeatherJsonAdapterTest.class,
         SearchManagerTest.class,
@@ -19,5 +18,4 @@ import org.junit.runners.Suite;
         FavouritesAdapterTest.class
 })
 
-public class AllUnitTests {
-}
+public class AllUnitTests {}

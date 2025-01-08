@@ -54,6 +54,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
         }
 
         void bind(final String displayName, final OnItemClickListener listener) {
+            // button click for a specific favourite
             itemView.setOnClickListener(v -> listener.onItemClick(displayName));
         }
     }

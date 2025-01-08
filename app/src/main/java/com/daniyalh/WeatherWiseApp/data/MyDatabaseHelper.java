@@ -20,12 +20,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "MyDatabase";
     private SQLiteDatabase inMemoryDb;
 
-    /*private MyDatabaseHelper(Context context, String dbName) {
-        super(context, dbName, null, DB_VERSION);
-        this.dbName = dbName;
-        copyDatabaseToInternalStorage(context);
-    }*/
-
     private MyDatabaseHelper(Context context, String dbName) {
         super(context, dbName, null, DB_VERSION);
         this.dbName = dbName;
@@ -36,6 +30,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static synchronized MyDatabaseHelper getInstance(Context context, String dbName) {
+        // singleton
         if (instance == null || !instance.dbName.equals(dbName)) {
             instance = new MyDatabaseHelper(context.getApplicationContext(), dbName);
         }
@@ -43,6 +38,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void copyDatabaseToInternalStorage(Context context) {
+        /*
+        Copy the file to internal storage
+        If it already exists, do not copy
+         */
         File dbFile = context.getDatabasePath(dbName);
 
         if (!dbFile.exists()) {
@@ -62,22 +61,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Database " + dbName + " already exists in internal storage.");
         }
     }
-
-    public void logAllDatabases(Context context) {
-        // Get the internal storage path for databases
-        String[] databaseList = context.databaseList();
-
-        // Log each database
-        if (databaseList.length > 0) {
-            Log.d("DatabaseList", "Databases in internal storage:");
-            for (String dbName : databaseList) {
-                Log.d("DatabaseList", dbName);
-            }
-        } else {
-            Log.d("DatabaseList", "No databases found in internal storage.");
-        }
-    }
-
 
     public Cursor getFavouriteCities() {
         // return a cursor with all favourite cities
@@ -101,7 +84,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "UPDATE cities SET is_favourite = ? WHERE cityID = ?";
         database.execSQL(sql, new Object[]{isFavourite ? 1 : 0, cityID});
-        Log.d(TAG, "Updated favourite status for cityID: " + cityID);
     }
 
     public void clearFavourites() {
@@ -109,7 +91,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "UPDATE cities SET is_favourite = 0 WHERE is_favourite = 1";
         database.execSQL(sql, new Object[]{});
-        Log.d(TAG, "Removed all favourites");
     }
 
     @Override
@@ -177,14 +158,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-
-    }
+    public void onCreate(SQLiteDatabase db) {}
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
     @Override
     public synchronized void close() {
