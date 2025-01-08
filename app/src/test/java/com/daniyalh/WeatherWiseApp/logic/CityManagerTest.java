@@ -3,8 +3,6 @@ package com.daniyalh.WeatherWiseApp.logic;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.daniyalh.WeatherWiseApp.objects.City;
-
 public class CityManagerTest {
     CityManager cityManager = new CityManager();
 

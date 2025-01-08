@@ -1,7 +1,5 @@
 package com.daniyalh.WeatherWiseApp.logic;
 
-import com.daniyalh.WeatherWiseApp.objects.City;
-
 import java.util.HashMap;
 import java.util.Map;
 
