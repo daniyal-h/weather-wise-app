@@ -17,7 +17,6 @@
         <activity
             android:name="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.WeatherWiseApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

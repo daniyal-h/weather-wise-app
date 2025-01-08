@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.daniyalh.WeatherWiseApp"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -18,6 +18,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        testInstrumentationRunnerArguments["clearPackageData"] = "false"
     }
 
     buildTypes {
@@ -44,6 +46,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -63,14 +70,20 @@ dependencies {
     implementation("com.airbnb.android:lottie:5.2.0")
     implementation("org.json:json:20230618")
     implementation("com.android.volley:volley:1.2.1")
+    implementation("androidx.test:core:1.6.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.5.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.robolectric:robolectric:4.10.3")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    implementation("androidx.test.ext:junit:1.2.1")
+    implementation("androidx.test:runner:1.6.2")
+    implementation("androidx.test.espresso:espresso-core:3.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
 
+tasks.register("runAllTests") {
+    dependsOn("test", "connectedAndroidTest")
 }

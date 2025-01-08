@@ -33,7 +33,7 @@ public class WeatherManager implements IWeatherManager {
 
         // Create a StringRequest
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
-                response -> callback.onSuccess(response),
+                callback::onSuccess,
                 error -> callback.onError(error.toString()));
 
         // Add the request to the RequestQueue
@@ -49,13 +49,5 @@ public class WeatherManager implements IWeatherManager {
         catch (InvalidJsonParsingException e) {
             throw new InvalidJsonParsingException(e); // throw to layer that can handle it
         }
-    }
-
-    public RequestQueue getRequestQueue() {
-        return requestQueue;
-    }
-
-    public WeatherJsonAdapter getJsonAdapter() {
-        return jsonAdapter;
     }
 }

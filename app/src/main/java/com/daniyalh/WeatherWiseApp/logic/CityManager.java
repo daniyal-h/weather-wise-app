@@ -44,8 +44,8 @@ public class CityManager implements ICityManager {
     //@Override
     public void favouriteCity(City city, boolean isFavourite) {
         //favouriteCities.put(city.getCityID(), city);
-        db = MyDatabaseHelper.getInstance(null);
-        db.updateFavouriteStatus(city.getCityID(), isFavourite);
+        //db = MyDatabaseHelper.getInstance(null);
+        //db.updateFavouriteStatus(city.getCityID(), isFavourite);
     }
 
     @Override

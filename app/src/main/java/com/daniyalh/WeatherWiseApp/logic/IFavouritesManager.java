@@ -1,8 +1,12 @@
 package com.daniyalh.WeatherWiseApp.logic;
 
+import com.daniyalh.WeatherWiseApp.objects.City;
+
 import java.util.List;
 
 public interface IFavouritesManager {
+
+    void toggleFavourite(int cityID, boolean isFavourite);
     void getFavourites(IFavouritesManager.FavouritesCallback callback);
     void clearFavourites(IFavouritesManager.ClearFavouritesCallback callback);
     String[] getFavouriteDetails(String displayName);
