@@ -15,14 +15,34 @@ import java.util.concurrent.Executors;
 
 public class FavouritesManager implements IFavouritesManager {
     private final MyDatabaseHelper myDatabase;
-    private final ExecutorService executorService;
-    private final Handler mainHandler;
+    private ExecutorService executorService;
+    private Handler mainHandler;
     private final Map<String, String[]> favouriteCities = new HashMap<>();
-    public FavouritesManager(MyDatabaseHelper myDatabase) {
+    private static FavouritesManager instance;
+    private FavouritesManager(MyDatabaseHelper myDatabase) {
         this.myDatabase = myDatabase;
         this.executorService = Executors.newSingleThreadExecutor();
         this.mainHandler = new Handler(Looper.getMainLooper());
     }
+
+    public static FavouritesManager getInstance(MyDatabaseHelper myDatabase) {
+        if (instance == null) {
+            instance = new FavouritesManager(myDatabase);
+        }
+        return instance;
+    }
+
+    public void setAsynchronicity(ExecutorService executorService, Handler mainHandler) {
+        this.executorService = executorService;
+        this.mainHandler = mainHandler;
+    }
+
+    @Override
+    public void toggleFavourite(int cityID, boolean isFavourite) {
+        // favourite or unfavourite a given city
+        myDatabase.updateFavouriteStatus(cityID, isFavourite);
+    }
+
     @Override
     public void getFavourites(IFavouritesManager.FavouritesCallback callback) {
         /*

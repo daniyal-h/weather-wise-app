@@ -15,4 +15,3 @@ public class CityCursorAdapter extends SimpleCursorAdapter {
         return UIConstants.SELECTION_FLAG;
     }
 }
-

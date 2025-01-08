@@ -15,8 +15,11 @@ import androidx.core.content.ContextCompat;
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.logic.CityManager;
+import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
+
+import java.io.Serializable;
 
 public class ForecastDetailActivity extends AppCompatActivity {
     private WeatherController weatherController;
@@ -91,9 +94,10 @@ public class ForecastDetailActivity extends AppCompatActivity {
     }
 
     private void initializeClasses() {
+        FavouritesManager favouritesManager = FavouritesManager.getInstance(null);
         WeatherManager weatherManager = new WeatherManager(this);
         CityManager cityManager = new CityManager();
-        weatherController = new WeatherController(weatherManager, cityManager, this);
+        weatherController = new WeatherController(weatherManager, favouritesManager, this);
     }
 
     public void setCityLabel(City city) {
@@ -126,7 +130,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
                 showToast("Favourited city", Toast.LENGTH_SHORT);
                 isFavourite = true;
             }
-            weatherController.favouriteCity(isFavourite); // toggle favourite
+            weatherController.toggleFavourite(isFavourite); // toggle favourite
         });
 
         goBackButton.setOnClickListener(v -> finish()); // home page
