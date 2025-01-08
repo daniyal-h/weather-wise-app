@@ -45,7 +45,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
         return favouriteCities.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView cityName;
 
         ViewHolder(View itemView) {

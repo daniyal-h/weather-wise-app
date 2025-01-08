@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.daniyalh.WeatherWiseApp"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -44,6 +44,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
         }
     }
 }

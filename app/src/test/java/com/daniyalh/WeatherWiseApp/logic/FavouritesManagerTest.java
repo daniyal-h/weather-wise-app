@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
+@SuppressWarnings("unchecked")
 public class FavouritesManagerTest {
 
     private MyDatabaseHelper mockDbHelper;
@@ -83,24 +84,30 @@ public class FavouritesManagerTest {
 
     @Test
     public void testFavouritesFlow() {
-        // Step 1: Clear all favourites.
+        System.out.println("----- Starting WeatherManagerTest -----\n");
+        System.out.println("Starting testFavouritesFlow...\n");
+
+        // Step 1: Clear all favourites
         IFavouritesManager.ClearFavouritesCallback clearCallback = Mockito.mock(IFavouritesManager.ClearFavouritesCallback.class);
         favouritesManager.clearFavourites(clearCallback);
         Robolectric.flushForegroundThreadScheduler();
         verify(mockDbHelper).clearFavourites();
         verify(clearCallback).onClearSuccess();
+        System.out.println("Step 1 of 5 complete...");
 
-        // Step 2: Set 5 favourites.
+        // Step 2: Set 5 favourites
         int[] cityIDs = {1, 2, 3, 4, 5};
         for (int id : cityIDs) {
             favouritesManager.toggleFavourite(id, true);
             verify(mockDbHelper).updateFavouriteStatus(id, true);
         }
+        System.out.println("Step 2 of 5 complete...");
 
         // Step 3: Remove 1 favourite
         int removeCityID = 3;
         favouritesManager.toggleFavourite(removeCityID, false);
         verify(mockDbHelper).updateFavouriteStatus(removeCityID, false);
+        System.out.println("Step 3 of 5 complete...");
 
         // Step 4: Prepare a dummy Cursor simulating 4 remaining favourites
         Cursor dummyCursor = Mockito.mock(Cursor.class);
@@ -119,6 +126,7 @@ public class FavouritesManagerTest {
                 .thenReturn("CountryName", "CountryName", "CountryName", "CountryName");
         Mockito.when(dummyCursor.isClosed()).thenReturn(true);
         Mockito.when(mockDbHelper.getFavouriteCities()).thenReturn(dummyCursor);
+        System.out.println("Step 4 of 5 complete...");
 
         // Step 5: Get all favourites
         IFavouritesManager.FavouritesCallback getCallback = Mockito.mock(IFavouritesManager.FavouritesCallback.class);
@@ -137,5 +145,9 @@ public class FavouritesManagerTest {
         assertTrue(favourites.contains("City2, CC"));
         assertTrue(favourites.contains("City4, CC"));
         assertTrue(favourites.contains("City5, CC"));
+        System.out.println("Step 5 of 5 complete...\n");
+
+        System.out.println("Finished testFavouritesFlow successfully.\n");
+        System.out.println("----- Finished WeatherManagerTest -----\n");
     }
 }
