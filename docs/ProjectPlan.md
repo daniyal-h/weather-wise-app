@@ -83,16 +83,26 @@ Our Weather App aims to provide users with quick, reliable, and visually appeali
 #### Dev Tasks:
 - Create probable exceptions (2 hours)
 
+### Additions needed based on Iteration 2 completion:
+### User Stories
+- **"As a user, I want to be able to see more than just the immediate weather and for a few more days so I can plan better."**
+
+#### Dev Tasks:
+- Use OpenWeatherAPI to get 5 day / 3 hourly forecast for each city, parsing and storing them accordingly (3 hours)
+- Create UI to showcase the detailed viewing in a new page (3 hours)
+- Add more cities to select from (2 hours)
+
+
 #### Total Estimate for Iteration 3:
-8 hours  
-**Duration**: 0.67 weeks (8 hours ÷ 12 hours/week)
+14 hours (8 before additions)  
+**Duration**: 1.33 weeks (16 hours ÷ 12 hours/week)
 
 ---
 
 ## Version Control Summary
 - **Iteration 1 duration**: ~1 week + 3 days of testing = ~1.5 weeks
 - **Iteration 2 duration**: ~1.5 weeks + 3 days of testing = ~2 weeks
-- **Iteration 3 duration**: ~0.67 weeks + 3 days of testing = ~1 week
+- **Iteration 3 duration**: ~1.33 weeks + 3 days of testing = ~2 week
 
 ---
 
