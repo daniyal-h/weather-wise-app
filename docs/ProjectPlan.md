@@ -80,7 +80,7 @@ Our Weather App aims to provide users with quick, reliable, and visually appeali
 - **"As a user, I want to know if any offline data is unavailable."**
 
 #### Dev Tasks:
-- Create probable exceptions and writ tests (2 hours)
+- Create probable exceptions and write tests (5 hours)
 
 ### Additions needed based on Iteration 2 completion:
 ### User Stories
@@ -94,14 +94,14 @@ Our Weather App aims to provide users with quick, reliable, and visually appeali
 
 #### Total Estimate for Iteration 3:
 14 hours (8 before additions)  
-**Duration**: 1.25 weeks (15 hours ÷ 12 hours/week)
+**Duration**: 1.5 weeks (18 hours ÷ 12 hours/week)
 
 ---
 
 ## Version Control Summary
 - **Iteration 1 duration**: ~1 week + 3 days of testing = ~1.5 weeks
 - **Iteration 2 duration**: ~1.5 weeks + 3 days of testing = ~2 weeks
-- **Iteration 3 duration**: ~1.25 weeks + 3 days of testing = ~2 week
+- **Iteration 3 duration**: ~1.5 weeks (testing included in dev task)
 
 ---
 
