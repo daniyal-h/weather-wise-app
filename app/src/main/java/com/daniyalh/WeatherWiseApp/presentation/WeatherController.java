@@ -13,7 +13,6 @@ public class WeatherController {
     private static final String TAG = "WeatherController";
 
     private final WeatherManager weatherManager;
-    //private final CityManager cityManager;
     private final FavouritesManager favouritesManager;
     private final ForecastDetailActivity context;
 

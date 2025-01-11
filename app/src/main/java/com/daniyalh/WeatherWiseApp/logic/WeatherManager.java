@@ -49,4 +49,13 @@ public class WeatherManager implements IWeatherManager {
             throw new InvalidJsonParsingException(e); // throw to layer that can handle it
         }
     }
+
+    private String[] getWeatherFromDB(City city) {
+        String[] weatherDetails = new String[10];
+
+        int cityID = city.getCityID();
+
+
+        return weatherDetails;
+    }
 }

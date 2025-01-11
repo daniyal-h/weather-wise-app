@@ -79,6 +79,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return database.rawQuery(sql, new String[]{query + "%"});
     }
 
+
+
     public void updateFavouriteStatus(int cityID, boolean isFavourite) {
         // toggle the favourite status based on the given boolean
         SQLiteDatabase database = this.getReadableDatabase();
