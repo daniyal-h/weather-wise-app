@@ -2,6 +2,7 @@ package com.daniyalh.WeatherWiseApp.presentation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,15 +15,16 @@ import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class ForecastDetailActivity extends AppCompatActivity {
     private WeatherController weatherController;
+    private final Handler handler = new Handler();
+    private Runnable updateTimeRunnable;
 
-    private TextView cityTextView, descriptionTextView,
+    private TextView cityTextView, descriptionTextView, forecastUpdateTextView,
             sunriseLabelTextView, sunsetLabelTextView, windLabelTextView, humidityLabelTextView,
             tempTextView, feelsLikeTextView, sunriseTextView, sunsetTextView, windTextView, humidityTextView;
 
@@ -69,6 +71,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
     private void initializeUI() {
         cityTextView = findViewById(R.id.city_text_view);
         descriptionTextView = findViewById(R.id.description_text_view);
+        forecastUpdateTextView = findViewById(R.id.forecast_update_text_view);
 
         sunriseLabelTextView = findViewById(R.id.sunrise_label_text_view);
         sunsetLabelTextView = findViewById(R.id.sunset_label_text_view);
@@ -99,8 +102,10 @@ public class ForecastDetailActivity extends AppCompatActivity {
     }
 
     public void setCityLabel(City city) {
-        // set as "city, countryCode"
-        cityTextView.setText(city.getCity().toUpperCase() + ", " + city.getCountryCode());
+        // set as "city, countryCode" and time as update time
+        String displayName = city.getCity().toUpperCase() + ", " + city.getCountryCode();
+        cityTextView.setText(displayName);
+
     }
 
     public void showLoadingIcon(boolean visible) {
@@ -140,6 +145,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         // make the static UI elements invisible or visible
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
 
+        forecastUpdateTextView.setVisibility(visibility);
         sunriseLabelTextView.setVisibility(visibility);
         sunsetLabelTextView.setVisibility(visibility);
         windLabelTextView.setVisibility(visibility);
@@ -170,14 +176,25 @@ public class ForecastDetailActivity extends AppCompatActivity {
 
     public void updateWeatherDetails(String[] details) {
         // set the weather details to their corresponding UI elements
-        tempTextView.setText(details[0]);
-        feelsLikeTextView.setText(details[1]);
-        descriptionTextView.setText(details[2]);
-        humidityTextView.setText(details[3]);
-        windTextView.setText(details[4]);
-        sunriseTextView.setText(details[5]);
-        sunsetTextView.setText(details[6]);
-        setTimeOfDay(details[7].charAt(0));
+        Long lastUpdatedTime = Long.parseLong(details[0]);
+        tempTextView.setText(details[1]);
+        feelsLikeTextView.setText(details[2]);
+        descriptionTextView.setText(details[3]);
+        humidityTextView.setText(details[4]);
+        windTextView.setText(details[5]);
+        sunriseTextView.setText(details[6]);
+        sunsetTextView.setText(details[7]);
+        setTimeOfDay(details[8].charAt(0));
+
+        // update the last updated time through a thread every minute
+        updateTimeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateForecastTime(lastUpdatedTime);
+                handler.postDelayed(this, 60000); // Update every 60 seconds
+            }
+        };
+        handler.post(updateTimeRunnable); // Start the runnable
     }
 
     private void setTimeOfDay(char timeOfDay) {
@@ -191,9 +208,36 @@ public class ForecastDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void updateForecastTime(Long lastUpdatedTime) {
+        // update the update text view with minutes since update
+        long currentTime = System.currentTimeMillis();
+        int minutesAgo = (int) (currentTime - lastUpdatedTime) / (60 * 1000); // Convert milliseconds to minutes
+        String updateTime = (minutesAgo == 0) ? "Updated just now" : "Updated " + minutesAgo + " minutes ago";
+        forecastUpdateTextView.setText(updateTime);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(updateTimeRunnable); // Stop updates when the activity is not visible
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.post(updateTimeRunnable); // Resume updates when the activity comes back to the foreground
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(updateTimeRunnable); // Clean up the runnable
+    }
+
     public void resetUI() {
         setStaticUIVisibility(false);
         cityTextView.setText("");
+        forecastUpdateTextView.setText("");
         tempTextView.setText("");
         feelsLikeTextView.setText("");
         descriptionTextView.setText("");

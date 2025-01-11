@@ -136,6 +136,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private String[] extractWeatherDetailsFromCursor(Cursor cursor) {
         // convert the cursor to an array of strings for the forecast
         return new String[] {
+                cursor.getString(cursor.getColumnIndexOrThrow("lastUpdated")),
                 cursor.getString(cursor.getColumnIndexOrThrow("temp")),
                 cursor.getString(cursor.getColumnIndexOrThrow("feels_like")),
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
@@ -165,15 +166,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     ContentValues values = new ContentValues();
                     values.put("cityID", city.getCityID());
                     values.put("lastUpdated", System.currentTimeMillis());
-                    values.put("temp", newWeatherData[0]);
-                    values.put("feels_like", newWeatherData[1]);
-                    values.put("description", newWeatherData[2]);
-                    values.put("humidity", newWeatherData[3]);
-                    values.put("wind_speed", newWeatherData[4]);
-                    values.put("offset", newWeatherData[5]);
-                    values.put("sunrise", newWeatherData[6]);
-                    values.put("sunset", newWeatherData[7]);
-                    values.put("tod", newWeatherData[8]);
+                    values.put("temp", newWeatherData[1]);
+                    values.put("feels_like", newWeatherData[2]);
+                    values.put("description", newWeatherData[3]);
+                    values.put("humidity", newWeatherData[4]);
+                    values.put("wind_speed", newWeatherData[5]);
+                    values.put("offset", newWeatherData[6]);
+                    values.put("sunrise", newWeatherData[7]);
+                    values.put("sunset", newWeatherData[8]);
+                    values.put("tod", newWeatherData[9]);
+
+                    newWeatherData[0] = values.getAsString("lastUpdated");
 
                     // insert or update existing cache (outdated)
                     database.insertWithOnConflict("Weather", null, values, SQLiteDatabase.CONFLICT_REPLACE);

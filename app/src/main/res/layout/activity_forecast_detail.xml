@@ -36,6 +36,16 @@
         tools:text="Winnipeg, CA" />
 
     <TextView
+        android:id="@+id/forecast_update_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Updated 7 minutes ago"
+        app:layout_constraintEnd_toEndOf="@+id/description_text_view"
+        app:layout_constraintStart_toStartOf="@+id/description_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/description_text_view" />
+
+    <TextView
         android:id="@+id/temperature_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +58,7 @@
         android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_update_text_view"
         tools:text="-23°C" />
 
     <TextView
@@ -268,6 +278,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/humidity_icon_lottie"
         app:layout_constraintStart_toStartOf="@+id/wind_icon_lottie" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ public class City {
     private final int cityID;
     private String city, country, countryCode, description, sunrise, sunset;
     private int humidity, timezoneOffset;
+    Long lastUpdated;
     private double temp, feelsLike, windSpeed;
     private char timeOfDay;
 
@@ -20,16 +21,16 @@ public class City {
 
     public void updateWeather(String[] weatherDetails) {
         // atomically update each weather attribute when called
-        //countryCode = weatherDetails[0];
-        temp = Math.round(Double.parseDouble(weatherDetails[0]));
-        feelsLike = Math.round(Double.parseDouble(weatherDetails[1]));
-        description = weatherDetails[2];
-        humidity = Integer.parseInt(weatherDetails[3]);
-        windSpeed = Math.round(Double.parseDouble(weatherDetails[4]) * MPS_TO_KMPH);
-        timezoneOffset = Integer.parseInt(weatherDetails[5]);
-        sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
-        sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
-        timeOfDay = weatherDetails[8].charAt(0); // is either 'd' or 'n'
+        lastUpdated = Long.parseLong(weatherDetails[0]);
+        temp = Math.round(Double.parseDouble(weatherDetails[1]));
+        feelsLike = Math.round(Double.parseDouble(weatherDetails[2]));
+        description = weatherDetails[3];
+        humidity = Integer.parseInt(weatherDetails[4]);
+        windSpeed = Math.round(Double.parseDouble(weatherDetails[5]) * MPS_TO_KMPH);
+        timezoneOffset = Integer.parseInt(weatherDetails[6]);
+        sunrise = timeStampToTime(Long.parseLong(weatherDetails[7]));
+        sunset = timeStampToTime(Long.parseLong(weatherDetails[8]));
+        timeOfDay = weatherDetails[9].charAt(0); // is either 'd' or 'n'
     }
 
     private String timeStampToTime(long timestamp) {
@@ -67,18 +68,22 @@ public class City {
         return countryCode;
     }
 
+    public Long getLastUpdated() {return lastUpdated; }
+
     public String[] getWeather() {
         // return an array of strings that cover the weather details of the city
-        String[] weather = new String[8];
+        String[] weather = new String[9];
 
-        weather[0] = (int) temp + "°C";
-        weather[1] = "Feels Like " + (int) feelsLike;
-        weather[2] = description;
-        weather[3] = humidity + "%";
-        weather[4] = (int) windSpeed + " km/h";
-        weather[5] = sunrise.toLowerCase();
-        weather[6] = sunset.toLowerCase();
-        weather[7] = String.valueOf(timeOfDay);
+        //weather[0] = String.valueOf((int) ((System.currentTimeMillis() - lastUpdated) / 60000));
+        weather[0] = String.valueOf(lastUpdated);
+        weather[1] = (int) temp + "°C";
+        weather[2] = "Feels Like " + (int) feelsLike;
+        weather[3] = description;
+        weather[4] = humidity + "%";
+        weather[5] = (int) windSpeed + " km/h";
+        weather[6] = sunrise.toLowerCase();
+        weather[7] = sunset.toLowerCase();
+        weather[8] = String.valueOf(timeOfDay);
 
         return weather;
     }
