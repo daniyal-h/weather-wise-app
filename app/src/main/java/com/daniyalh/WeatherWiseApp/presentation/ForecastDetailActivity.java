@@ -212,7 +212,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         // update the update text view with minutes since update
         long currentTime = System.currentTimeMillis();
         int minutesAgo = (int) (currentTime - lastUpdatedTime) / (60 * 1000); // Convert milliseconds to minutes
-        String updateTime = (minutesAgo == 0) ? "Updated just now" : "Updated " + minutesAgo + " minutes ago";
+        String updateTime = (minutesAgo <= 1) ? "Updated just now" : "Updated " + minutesAgo + " minutes ago";
         forecastUpdateTextView.setText(updateTime);
     }
 

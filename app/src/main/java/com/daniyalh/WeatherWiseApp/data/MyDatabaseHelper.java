@@ -99,8 +99,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         Otherwise, update the value and return the new one
          */
         SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "SELECT lastUpdated, temp, feels_like, description, humidity, wind_speed, offset, sunrise, sunset, tod " +
-                "FROM Weather WHERE cityID = ? AND lastUpdated != -1;";
+        String sql = "SELECT last_updated, temp, feels_like, description, humidity, wind_speed, offset, sunrise, sunset, tod " +
+                "FROM Weather WHERE cityID = ? AND last_updated != -1;";
 
         Cursor cursor = database.rawQuery(sql, new String[]{String.valueOf(city.getCityID())});
         long currentTime = System.currentTimeMillis();
@@ -108,7 +108,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // check if the result is empty
         if (cursor.moveToFirst()) {
             // check if the result is viable (<= 10 minutes)
-            long lastUpdated = cursor.getLong(cursor.getColumnIndexOrThrow("lastUpdated"));
+            long lastUpdated = cursor.getLong(cursor.getColumnIndexOrThrow("last_updated"));
 
             if (currentTime - lastUpdated <= OUTDATED_LIMIT) {
                 String[] weatherDetails = extractWeatherDetailsFromCursor(cursor); // return cached forecast
@@ -136,7 +136,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private String[] extractWeatherDetailsFromCursor(Cursor cursor) {
         // convert the cursor to an array of strings for the forecast
         return new String[] {
-                cursor.getString(cursor.getColumnIndexOrThrow("lastUpdated")),
+                cursor.getString(cursor.getColumnIndexOrThrow("last_updated")),
                 cursor.getString(cursor.getColumnIndexOrThrow("temp")),
                 cursor.getString(cursor.getColumnIndexOrThrow("feels_like")),
                 cursor.getString(cursor.getColumnIndexOrThrow("description")),
@@ -165,7 +165,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     SQLiteDatabase database = getWritableDatabase();
                     ContentValues values = new ContentValues();
                     values.put("cityID", city.getCityID());
-                    values.put("lastUpdated", System.currentTimeMillis());
+                    values.put("last_updated", System.currentTimeMillis());
                     values.put("temp", newWeatherData[1]);
                     values.put("feels_like", newWeatherData[2]);
                     values.put("description", newWeatherData[3]);
@@ -176,7 +176,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     values.put("sunset", newWeatherData[8]);
                     values.put("tod", newWeatherData[9]);
 
-                    newWeatherData[0] = values.getAsString("lastUpdated");
+                    newWeatherData[0] = values.getAsString("last_updated");
 
                     // insert or update existing cache (outdated)
                     database.insertWithOnConflict("Weather", null, values, SQLiteDatabase.CONFLICT_REPLACE);
