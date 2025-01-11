@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.IWeatherCallback;
+import com.daniyalh.WeatherWiseApp.logic.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
@@ -29,7 +30,28 @@ public class WeatherController {
         city = new City(cityID);
         city.setCountry(cityName, country, country_code);
 
-        weatherManager.getWeatherJSON(city, new IWeatherCallback() {
+        weatherManager.getWeatherFromDB(city, new IWeatherManager.IWeatherDetailsCallback() {
+            @Override
+            public void onSuccess(String[] weatherDetails) {
+                context.showLoadingIcon(false);
+                city.updateWeather(weatherDetails);
+                context.setCityLabel(city);
+
+                context.setStaticUIVisibility(true);
+                context.updateWeatherDetails(city.getWeather());
+            }
+
+            @Override
+            public void onError(String error) {
+                context.showLoadingIcon(false);
+                context.showAlertDialog("Error", "Unable to fetch weather data." +
+                        " Please check the city name and try again.");
+                Log.e(TAG, "Error fetching weather for city " + city.getCity() + " - " + error);
+                context.resetUI();
+            }
+        });
+        /*
+        weatherManager.getWeatherJSON(city, new IWeatherManager.IWeatherCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
@@ -55,6 +77,7 @@ public class WeatherController {
                 context.resetUI();
             }
         });
+         */
     }
 
     public void toggleFavourite(boolean isFavourite) {

@@ -1,10 +1,16 @@
 package com.daniyalh.WeatherWiseApp.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.daniyalh.WeatherWiseApp.logic.IWeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.objects.City;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +21,8 @@ import java.io.OutputStream;
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     public final String dbName;
     private final Context context;
+    private WeatherManager weatherManager;
+    private static final int OUTDATED_LIMIT = 10 * 60 * 1000; // ten minutes in milliseconds
     private static final int DB_VERSION = 1;
     private static MyDatabaseHelper instance;
     private static final String TAG = "MyDatabase";
@@ -62,6 +70,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void setWeatherManager(WeatherManager weatherManager) {
+        this.weatherManager = weatherManager;
+    }
+
     public Cursor getFavouriteCities() {
         // return a cursor with all favourite cities
         SQLiteDatabase database = this.getReadableDatabase();
@@ -79,7 +91,107 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return database.rawQuery(sql, new String[]{query + "%"});
     }
 
+    public void getWeatherDetails(City city, IWeatherManager.IWeatherDetailsCallback callback) {
+        /*
+        Asynchronously acquire weather details for given city
+        Weather Table stores cached immediate weather
+        If the forecast stored is updated (<= 10 minutes), return that
+        Otherwise, update the value and return the new one
+         */
+        SQLiteDatabase database = this.getReadableDatabase();
+        String sql = "SELECT lastUpdated, temp, feels_like, description, humidity, wind_speed, offset, sunrise, sunset, tod " +
+                "FROM Weather WHERE cityID = ? AND lastUpdated != -1;";
 
+        Cursor cursor = database.rawQuery(sql, new String[]{String.valueOf(city.getCityID())});
+        long currentTime = System.currentTimeMillis();
+
+        // check if the result is empty
+        if (cursor.moveToFirst()) {
+            // check if the result is viable (<= 10 minutes)
+            long lastUpdated = cursor.getLong(cursor.getColumnIndexOrThrow("lastUpdated"));
+
+            if (currentTime - lastUpdated <= OUTDATED_LIMIT) {
+                String[] weatherDetails = extractWeatherDetailsFromCursor(cursor); // return cached forecast
+                cursor.close();
+                callback.onSuccess(weatherDetails);
+                return;
+            }
+        }
+        cursor.close();
+
+        // cache is outdated or empty; fetch new data
+        updateCache(city, new ICacheUpdateCallback() {
+            @Override
+            public void onCacheUpdated(String[] newWeatherData) {
+                callback.onSuccess(newWeatherData);
+            }
+
+            @Override
+            public void onError(String error) {
+                callback.onError(error);
+            }
+        });
+    }
+
+    private String[] extractWeatherDetailsFromCursor(Cursor cursor) {
+        // convert the cursor to an array of strings for the forecast
+        return new String[] {
+                cursor.getString(cursor.getColumnIndexOrThrow("temp")),
+                cursor.getString(cursor.getColumnIndexOrThrow("feels_like")),
+                cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                cursor.getString(cursor.getColumnIndexOrThrow("humidity")),
+                cursor.getString(cursor.getColumnIndexOrThrow("wind_speed")),
+                cursor.getString(cursor.getColumnIndexOrThrow("offset")),
+                cursor.getString(cursor.getColumnIndexOrThrow("sunrise")),
+                cursor.getString(cursor.getColumnIndexOrThrow("sunset")),
+                cursor.getString(cursor.getColumnIndexOrThrow("tod"))
+        };
+    }
+
+    private void updateCache(City city, ICacheUpdateCallback callback) {
+        /*
+        Update Weather Table with the new weather forecast
+        Fetch weather from WeatherManager and insert or update
+        Should be done asynchronously
+         */
+        weatherManager.getWeatherJSON(city, new IWeatherManager.IWeatherCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    String[] newWeatherData = weatherManager.fetchImmediateWeather(response);
+
+                    // Update the Weather table with the new data
+                    SQLiteDatabase database = getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put("cityID", city.getCityID());
+                    values.put("lastUpdated", System.currentTimeMillis());
+                    values.put("temp", newWeatherData[0]);
+                    values.put("feels_like", newWeatherData[1]);
+                    values.put("description", newWeatherData[2]);
+                    values.put("humidity", newWeatherData[3]);
+                    values.put("wind_speed", newWeatherData[4]);
+                    values.put("offset", newWeatherData[5]);
+                    values.put("sunrise", newWeatherData[6]);
+                    values.put("sunset", newWeatherData[7]);
+                    values.put("tod", newWeatherData[8]);
+
+                    // insert or update existing cache (outdated)
+                    database.insertWithOnConflict("Weather", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+                    // Notify success
+                    callback.onCacheUpdated(newWeatherData);
+                }
+                catch (InvalidJsonParsingException e) {
+                    callback.onError(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                callback.onError(error);
+            }
+        });
+    }
 
     public void updateFavouriteStatus(int cityID, boolean isFavourite) {
         // toggle the favourite status based on the given boolean

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
@@ -14,6 +15,7 @@ public class WeatherManager implements IWeatherManager {
 
     private final RequestQueue requestQueue;
     private final WeatherJsonAdapter jsonAdapter;
+    private final MyDatabaseHelper database;
 
     // inject context which indirectly injects the volley through overloading
     public WeatherManager(Context context) {
@@ -24,10 +26,12 @@ public class WeatherManager implements IWeatherManager {
     public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter jsonAdapter) {
         this.requestQueue = requestQueue;
         this.jsonAdapter = jsonAdapter;
+        database = MyDatabaseHelper.getInstance(null, "WeatherWiseApp.db");
+        database.setWeatherManager(this); // DBHelper always has latest WeatherManager
     }
 
     @Override
-    public void getWeatherJSON(City city, final IWeatherCallback callback) {
+    public void getWeatherJSON(City city, IWeatherManager.IWeatherCallback callback) {
         String url = BASE_URL + "?q=" + city.getCity() + "," + city.getCountryCode() + "&units=metric&appid=" + API_KEY;
 
         // Create a StringRequest
@@ -50,12 +54,24 @@ public class WeatherManager implements IWeatherManager {
         }
     }
 
-    private String[] getWeatherFromDB(City city) {
-        String[] weatherDetails = new String[10];
+    @Override
+    public void getWeatherFromDB(City city, IWeatherDetailsCallback callback) {
+        database.getWeatherDetails(city, new IWeatherDetailsCallback() {
+            @Override
+            public void onSuccess(String[] weatherDetails) {
+                callback.onSuccess(weatherDetails);
+            }
 
-        int cityID = city.getCityID();
+            @Override
+            public void onError(String error) {
+                // Pass the error back to the UI layer via the callback
+                callback.onError(error);
+            }
+        });
+    }
 
-
-        return weatherDetails;
+    @Override
+    public String[] fetchImmediateWeather(String weatherJSON) {
+        return jsonAdapter.parseWeather(weatherJSON);
     }
 }

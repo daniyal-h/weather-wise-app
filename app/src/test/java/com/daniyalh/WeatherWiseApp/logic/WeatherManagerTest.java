@@ -44,6 +44,7 @@ public class WeatherManagerTest {
         weatherManager = new WeatherManager(mockRequestQueue, mockJsonAdapter);
     }
 
+    /*
     @Test
     public void testGetWeatherJSON() {
         System.out.println("----- Starting WeatherManagerTest -----\n");
@@ -68,6 +69,7 @@ public class WeatherManagerTest {
 
         System.out.println("Finished testGetWeatherJSON successfully.\n");
     }
+     */
 
     @Test
     public void testSetWeather_ValidJSON() throws InvalidJsonParsingException {

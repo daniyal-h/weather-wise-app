@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class City {
     private final int cityID;
-    private String city, country, countryCode,description, sunrise, sunset;
+    private String city, country, countryCode, description, sunrise, sunset;
     private int humidity, timezoneOffset;
     private double temp, feelsLike, windSpeed;
     private char timeOfDay;
@@ -20,16 +20,16 @@ public class City {
 
     public void updateWeather(String[] weatherDetails) {
         // atomically update each weather attribute when called
-        countryCode = weatherDetails[0];
-        temp = Math.round(Double.parseDouble(weatherDetails[1]));
-        feelsLike = Math.round(Double.parseDouble(weatherDetails[2]));
-        description = weatherDetails[3];
-        humidity = Integer.parseInt(weatherDetails[4]);
-        windSpeed = Math.round(Double.parseDouble(weatherDetails[5]) * MPS_TO_KMPH);
-        timezoneOffset = Integer.parseInt(weatherDetails[6]);
-        sunrise = timeStampToTime(Long.parseLong(weatherDetails[7]));
-        sunset = timeStampToTime(Long.parseLong(weatherDetails[8]));
-        timeOfDay = weatherDetails[9].charAt(0); // is either 'd' or 'n'
+        //countryCode = weatherDetails[0];
+        temp = Math.round(Double.parseDouble(weatherDetails[0]));
+        feelsLike = Math.round(Double.parseDouble(weatherDetails[1]));
+        description = weatherDetails[2];
+        humidity = Integer.parseInt(weatherDetails[3]);
+        windSpeed = Math.round(Double.parseDouble(weatherDetails[4]) * MPS_TO_KMPH);
+        timezoneOffset = Integer.parseInt(weatherDetails[5]);
+        sunrise = timeStampToTime(Long.parseLong(weatherDetails[6]));
+        sunset = timeStampToTime(Long.parseLong(weatherDetails[7]));
+        timeOfDay = weatherDetails[8].charAt(0); // is either 'd' or 'n'
     }
 
     private String timeStampToTime(long timestamp) {
