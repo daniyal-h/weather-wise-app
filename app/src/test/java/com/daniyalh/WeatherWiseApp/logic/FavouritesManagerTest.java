@@ -76,9 +76,10 @@ public class FavouritesManagerTest {
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
         mockDbHelper = Mockito.mock(MyDatabaseHelper.class);
-        favouritesManager = FavouritesManager.getInstance(mockDbHelper);
+        favouritesManager = FavouritesManager.getInstance();
 
         // Inject synchronous executor and handler.
+        favouritesManager.injectDatabase(mockDbHelper);
         favouritesManager.setAsynchronicity(immediateExecutor, mainHandler);
     }
 

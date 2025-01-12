@@ -3,10 +3,11 @@ package com.daniyalh.WeatherWiseApp.logic;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 
 import com.daniyalh.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 public interface IWeatherManager {
     void getWeatherJSON(City city, final IWeatherCallback callback);
-    void setWeather(City city, String weatherJSON) throws InvalidJsonParsingException;
+    void setWeather(CityWeather city, String weatherJSON) throws InvalidJsonParsingException;
     void getWeatherFromDB(City city, IWeatherDetailsCallback callback);
     String[] fetchImmediateWeather(String weatherJSON);
 

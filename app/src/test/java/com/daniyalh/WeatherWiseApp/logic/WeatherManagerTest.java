@@ -4,7 +4,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.daniyalh.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -76,7 +76,7 @@ public class WeatherManagerTest {
         System.out.println("Starting testSetWeather_ValidJSON...");
 
         // Arrange
-        City city = new City(2);
+        CityWeather city = new CityWeather(2);
         String sampleJson = "{"
                 + "\"main\":{"
                 +     "\"temp\":20.44,"
@@ -138,7 +138,7 @@ public class WeatherManagerTest {
         System.out.println("Starting testSetWeather_InvalidJSON...");
         System.out.println("Expecting 1 error to be thrown...");
 
-        City city = new City(3);
+        CityWeather city = new CityWeather(3);
 
         // Example of malformed JSON (missing closing brace)
         String malformedJson = "{"

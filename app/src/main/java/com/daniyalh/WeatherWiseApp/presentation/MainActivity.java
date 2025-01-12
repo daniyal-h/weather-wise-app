@@ -1,14 +1,11 @@
 package com.daniyalh.WeatherWiseApp.presentation;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -53,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        displayFavourites(); // updates favourites when returning from forecast
+        displayFavourites(); // updates favourites when returning from weather
     }
 
     private void initializeDatabase() {
@@ -62,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeLogicClasses() {
         searchManager = new SearchManager(myDatabase);
-        favouritesManager = FavouritesManager.getInstance(myDatabase);
+        favouritesManager = FavouritesManager.getInstance();
+        favouritesManager.injectDatabase(myDatabase);
     }
 
     private void initializeUI() {
@@ -176,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void forecastDetails(int cityID, String cityName, String countryName, String countryCode, int isFavourite) {
-        Intent intent = new Intent(MainActivity.this, ForecastDetailActivity.class);
+        Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
         intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
         intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
         intent.putExtra(UIConstants.EXTRA_COUNTRY_NAME, countryName);

@@ -8,6 +8,7 @@ import com.android.volley.toolbox.Volley;
 import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 public class WeatherManager implements IWeatherManager {
     private static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
@@ -32,7 +33,7 @@ public class WeatherManager implements IWeatherManager {
 
     @Override
     public void getWeatherJSON(City city, IWeatherManager.IWeatherCallback callback) {
-        String url = BASE_URL + "?q=" + city.getCity() + "," + city.getCountryCode() + "&units=metric&appid=" + API_KEY;
+        String url = BASE_URL + "?q=" + city.getCityName() + "," + city.getCountryCode() + "&units=metric&appid=" + API_KEY;
 
         // Create a StringRequest
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
@@ -44,7 +45,7 @@ public class WeatherManager implements IWeatherManager {
     }
 
     @Override
-    public void setWeather(City city, String weatherJSON) {
+    public void setWeather(CityWeather city, String weatherJSON) {
         try {
             String[] weatherDetails = jsonAdapter.parseWeather(weatherJSON);
             city.updateWeather(weatherDetails);

@@ -11,6 +11,7 @@ import com.daniyalh.WeatherWiseApp.logic.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 import java.io.File;
 import java.io.FileOutputStream;

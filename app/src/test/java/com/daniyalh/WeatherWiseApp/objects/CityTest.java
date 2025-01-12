@@ -6,11 +6,11 @@ import static org.junit.Assert.*;
 public class CityTest {
     @Test
     public void testCity() {
-        City city;
+        CityWeather city;
 
         System.out.println("\n----- Starting CityTest -----");
 
-        city = new City(1);
+        city = new CityWeather(1);
 
         String[] fixedDetails = {"EX", "0", "100", "raining cats and dogs", "100", "27.7778", "-21600", "1734877486", "1734906604", "d"};
 
