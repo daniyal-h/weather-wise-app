@@ -8,7 +8,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
-import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Forecast;
 
@@ -21,6 +20,7 @@ public class ForecastManager implements IForecastManager {
     public ForecastManager(Context context) {
         this(Volley.newRequestQueue(context), new ForecastJsonAdapter());
     }
+
     public ForecastManager(RequestQueue requestQueue, ForecastJsonAdapter forecastJsonAdapter) {
         this.requestQueue = requestQueue;
         this.forecastJsonAdapter = forecastJsonAdapter;
@@ -36,6 +36,7 @@ public class ForecastManager implements IForecastManager {
 
     @Override
     public void getForecastJSON(City city, IForecastCallback callback) {
+        // return the API call through a callback
         String url = BASE_URL + city.getCityName() + "," + city.getCountryCode() + "&units=metric&appid=" + API_KEY;
 
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,

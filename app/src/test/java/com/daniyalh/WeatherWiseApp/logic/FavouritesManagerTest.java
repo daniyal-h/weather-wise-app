@@ -9,6 +9,8 @@ import android.os.Looper;
 
 
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.IFavouritesManager;
 
 import org.junit.Before;
 import org.junit.Test;

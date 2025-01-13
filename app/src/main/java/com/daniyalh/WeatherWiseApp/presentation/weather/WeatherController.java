@@ -1,6 +1,6 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
-import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;

@@ -2,6 +2,7 @@ package com.daniyalh.WeatherWiseApp.logic.weather;
 
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WeatherJsonAdapter implements IWeatherJsonAdapter {
@@ -24,7 +25,7 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
             String icon = root.getJSONArray("weather").getJSONObject(0).getString("icon"); // e.g., "02d" or "02n"
             weatherDetails[9] = icon.substring(icon.length() - 1);                         // Get the last character ('d' or 'n')
         }
-        catch (Exception e) {
+        catch (JSONException e) {
             throw new InvalidJsonParsingException(e);
         }
 

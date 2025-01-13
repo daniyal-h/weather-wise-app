@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
-import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
-import com.daniyalh.WeatherWiseApp.logic.IFavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 import com.daniyalh.WeatherWiseApp.presentation.UIConstants;

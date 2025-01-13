@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.weather;
 
 import android.database.Cursor;
 import android.os.Handler;
@@ -19,6 +19,7 @@ public class FavouritesManager implements IFavouritesManager {
     private Handler mainHandler;
     private final Map<String, String[]> favouriteCities = new HashMap<>();
     private static FavouritesManager instance;
+
     private FavouritesManager() {
         this.executorService = Executors.newSingleThreadExecutor();
         this.mainHandler = new Handler(Looper.getMainLooper());
@@ -31,10 +32,12 @@ public class FavouritesManager implements IFavouritesManager {
         return instance;
     }
 
+    @Override
     public void injectDatabase(DatabaseHelper dhHelper) {
         this.dhHelper = dhHelper;
     }
 
+    @Override
     public void setAsynchronicity(ExecutorService executorService, Handler mainHandler) {
         this.executorService = executorService;
         this.mainHandler = mainHandler;
@@ -109,10 +112,12 @@ public class FavouritesManager implements IFavouritesManager {
                 new String[]{String.valueOf(cityID), cityName, country, countryCode});
     }
 
+    @Override
     public String[] getFavouriteDetails(String displayName) {
         return favouriteCities.get(displayName);
     }
 
+    @Override
     public void shutdown() {
         executorService.shutdown();
     }

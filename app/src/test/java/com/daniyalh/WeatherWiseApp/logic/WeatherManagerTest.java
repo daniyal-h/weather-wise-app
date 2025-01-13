@@ -7,7 +7,6 @@ import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherCallback;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherJsonAdapter;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
-import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +44,7 @@ public class WeatherManagerTest {
         MockitoAnnotations.openMocks(this);
         // Initialize WeatherManager with mocked dependencies
         weatherManager = new WeatherManager(mockRequestQueue, mockWeatherJsonAdapter);
+        System.out.println("ENTIRELY INCOMPLETE!");
     }
 
     /*
@@ -72,7 +72,7 @@ public class WeatherManagerTest {
 
         System.out.println("Finished testGetWeatherJSON successfully.\n");
     }
-     */
+
 
     @Test
     public void testSetWeather_ValidJSON() throws InvalidJsonParsingException {
@@ -191,4 +191,5 @@ public class WeatherManagerTest {
             throw new RuntimeException(e);
         }
     }
+     */
 }

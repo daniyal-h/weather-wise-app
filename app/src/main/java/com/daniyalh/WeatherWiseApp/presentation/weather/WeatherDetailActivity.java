@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
