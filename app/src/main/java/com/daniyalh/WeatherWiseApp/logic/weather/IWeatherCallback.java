@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.weather;
 
 public interface IWeatherCallback {
     void onSuccess(String response);

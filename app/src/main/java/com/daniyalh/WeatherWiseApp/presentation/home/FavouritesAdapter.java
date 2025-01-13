@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;

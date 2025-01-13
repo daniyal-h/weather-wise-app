@@ -1,7 +1,6 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.weather;
 
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.daniyalh.WeatherWiseApp.objects.Forecast;
 
 import org.json.JSONObject;
 
@@ -30,14 +29,5 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
         }
 
         return weatherDetails;
-    }
-
-    @Override
-    public Forecast[] parseForecast(String response) {
-        //String[]
-
-
-
-        return new Forecast[0];
     }
 }

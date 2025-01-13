@@ -1,11 +1,13 @@
-package com.daniyalh.WeatherWiseApp.data;
+package com.daniyalh.WeatherWiseApp.data.repositories;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.daniyalh.WeatherWiseApp.logic.IWeatherManager;
-import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.callbacks.IWeatherCacheUpdateCallback;
+import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
@@ -26,10 +28,10 @@ public class WeatherRepository {
     public void getWeatherDetails(City city, IWeatherManager.IWeatherDetailsCallback callback) {
         /*
         Asynchronously acquire weather details for given city
-        Weather Table stores cached immediate weather
+        Weather Table caches immediate weather
         If the forecast stored is updated (<= 10 minutes), return that
-        Otherwise, update the value and return the new one
-         */
+        Otherwise, update the cache and return the new one
+        */
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         String sql = "SELECT last_updated, temp, feels_like, description, humidity, wind_speed, offset, sunrise, sunset, tod" +
                 " FROM Weather WHERE cityID = ? AND last_updated != -1";
@@ -52,7 +54,7 @@ public class WeatherRepository {
         cursor.close();
 
         // cache is outdated or empty; fetch new data
-        cacheWeather(city, new ICacheUpdateCallback() {
+        cacheWeather(city, new IWeatherCacheUpdateCallback() {
             @Override
             public void onCacheUpdated(String[] newWeatherData) {
                 callback.onSuccess(newWeatherData);
@@ -81,7 +83,7 @@ public class WeatherRepository {
         };
     }
 
-    private void cacheWeather(City city, ICacheUpdateCallback callback) {
+    private void cacheWeather(City city, IWeatherCacheUpdateCallback callback) {
         /*
         Update Weather Table with the new weather forecast
         Fetch weather from WeatherManager and insert or update
@@ -96,6 +98,7 @@ public class WeatherRepository {
                     // Update the Weather table with the new data
                     SQLiteDatabase database = dbHelper.getWritableDatabase();
                     ContentValues values = new ContentValues();
+
                     values.put("cityID", city.getCityID());
                     values.put("last_updated", System.currentTimeMillis());
                     values.put("temp", newWeatherData[1]);

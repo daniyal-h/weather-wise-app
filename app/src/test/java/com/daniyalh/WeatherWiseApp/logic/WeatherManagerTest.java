@@ -4,6 +4,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherCallback;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherJsonAdapter;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 import org.junit.Before;
@@ -29,7 +32,7 @@ public class WeatherManagerTest {
     @Mock
     private RequestQueue mockRequestQueue;
     @Mock
-    private WeatherJsonAdapter mockJsonAdapter;
+    private WeatherJsonAdapter mockWeatherJsonAdapter;
     @Mock
     private IWeatherCallback mockCallback;
     @Captor
@@ -41,7 +44,7 @@ public class WeatherManagerTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         // Initialize WeatherManager with mocked dependencies
-        weatherManager = new WeatherManager(mockRequestQueue, mockJsonAdapter);
+        weatherManager = new WeatherManager(mockRequestQueue, mockWeatherJsonAdapter);
     }
 
     /*
@@ -111,13 +114,13 @@ public class WeatherManagerTest {
         };
 
         // Mock the parseWeather to return all 8 elements
-        when(mockJsonAdapter.parseWeather(sampleJson)).thenReturn(expectedWeatherDetails);
+        when(mockWeatherJsonAdapter.parseWeather(sampleJson)).thenReturn(expectedWeatherDetails);
 
         // Act
         weatherManager.setWeather(city, sampleJson);
 
         // Assert
-        verify(mockJsonAdapter).parseWeather(sampleJson);
+        verify(mockWeatherJsonAdapter).parseWeather(sampleJson);
 
         String[] weather = city.getWeather();
 
@@ -161,7 +164,7 @@ public class WeatherManagerTest {
                 ;
 
         // Mock parseWeather to throw exception for malformed JSON
-        when(mockJsonAdapter.parseWeather(malformedJson))
+        when(mockWeatherJsonAdapter.parseWeather(malformedJson))
                 .thenThrow(new InvalidJsonParsingException(new Throwable()));
 
         // Act & Assert

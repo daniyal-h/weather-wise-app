@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.util.Log;
 
+import com.daniyalh.WeatherWiseApp.data.repositories.CityRepository;
+import com.daniyalh.WeatherWiseApp.data.repositories.ForecastRepository;
+import com.daniyalh.WeatherWiseApp.data.repositories.WeatherRepository;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,9 +24,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private SQLiteDatabase inMemoryDb;
     private CityRepository cityRepository;
     private WeatherRepository weatherRepository;
+    private ForecastRepository forecastRepository;
 
     private DatabaseHelper(Context context, String dbName) {
-        super(context, dbName, null, DB_VERSION);
+        super(context.getApplicationContext(), dbName, null, DB_VERSION);
         this.dbName = dbName;
         this.context = context;
         if ("WeatherWiseApp.db".equals(dbName)) {
@@ -30,11 +35,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static synchronized DatabaseHelper getInstance(Context context, String dbName) {
-        // singleton
-        if (instance == null || !instance.dbName.equals(dbName)) {
-            instance = new DatabaseHelper(context.getApplicationContext(), dbName);
+    // Initialization method
+    public static synchronized void initialize(Context context, String dbName) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context, dbName);
         }
+    }
+
+    public static synchronized DatabaseHelper getInstance() {
         return instance;
     }
 
@@ -53,7 +61,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return weatherRepository;
     }
 
-
+    public ForecastRepository getForecastRepository() {
+        if (forecastRepository == null) {
+            forecastRepository = new ForecastRepository(this);
+        }
+        return forecastRepository;
+    }
 
     private void copyDatabaseToInternalStorage(Context context) {
         /*

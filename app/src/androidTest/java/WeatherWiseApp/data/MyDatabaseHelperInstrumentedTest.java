@@ -34,7 +34,8 @@ public class MyDatabaseHelperInstrumentedTest {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertNotNull("Context should not be null", context);
 
-        dbHelper = DatabaseHelper.getInstance(context, "WeatherWiseApp_stub1.db");
+        DatabaseHelper.initialize(context, "WeatherWiseApp_stub1.db");
+        dbHelper = DatabaseHelper.getInstance();
 
         // Ensure the database is opened
         try {

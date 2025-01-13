@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.home;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +21,8 @@ import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
+import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherDetailActivity;
 
 import java.util.List;
 
@@ -56,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeDatabase() {
         //myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
-        dbHelper = DatabaseHelper.getInstance(this, "WeatherWiseApp.db");
+        DatabaseHelper.initialize(this, "WeatherWiseApp.db");
+        dbHelper = DatabaseHelper.getInstance();
 
     }
 

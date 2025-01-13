@@ -4,11 +4,12 @@ public class City {
     private final int cityID;
     private String cityName, country, countryCode;
     private Weather currentWeather;
-    private Forecast[] extendedForecast; // Array of 40 forecasts
+    private long forecastLastUpdated;
+    private Forecast[] forecasts; // Array of 40 forecasts
 
     public City(int cityID) {
         this.cityID = cityID;
-        this.extendedForecast = new Forecast[40]; // Initialize forecast array
+        this.forecasts = new Forecast[40]; // Initialize forecast array
     }
 
     public void setDetails(String cityName, String country, String countryCode) {
@@ -21,8 +22,12 @@ public class City {
         this.currentWeather = weather;
     }
 
-    public void setForecast(Forecast[] forecast) {
-        this.extendedForecast = forecast;
+    public void setForecast(Forecast[] forecasts) {
+        this.forecasts = forecasts;
+    }
+
+    public void setForecastLastUpdate(Long forecastLastUpdated) {
+        this.forecastLastUpdated = forecastLastUpdated;
     }
 
     public int getCityID() {
@@ -41,12 +46,16 @@ public class City {
         return countryCode;
     }
 
+    public Long getForecastLastUpdate() {
+        return forecastLastUpdated;
+    }
+
     public Weather getCurrentWeather() {
         return currentWeather;
     }
 
-    public Forecast[] getExtendedForecast() {
-        return extendedForecast;
+    public Forecast[] getForecasts() {
+        return forecasts;
     }
 }
 

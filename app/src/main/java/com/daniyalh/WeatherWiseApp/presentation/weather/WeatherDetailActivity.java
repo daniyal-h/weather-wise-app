@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.weather;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +16,11 @@ import androidx.core.content.ContextCompat;
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
-import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
+import com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastDetailActivity;
 
 public class WeatherDetailActivity extends AppCompatActivity {
     private WeatherController weatherController;
@@ -90,7 +92,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
         windTextView = findViewById(R.id.wind_text_view);
         humidityTextView = findViewById(R.id.humidity_text_view);
 
-        loadingIconLottie = findViewById(R.id.loading_icon_lottie);
+        loadingIconLottie = findViewById(R.id.loading_weather_icon_lottie);
         sunIconLottie = findViewById(R.id.sun_icon_lottie);
         moonIconLottie = findViewById(R.id.moon_icon_lottie);
         windIconLottie = findViewById(R.id.wind_icon_lottie);
@@ -101,7 +103,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
         FavouritesManager favouritesManager = FavouritesManager.getInstance();
         WeatherManager weatherManager = new WeatherManager(this);
         weatherController = WeatherController.getInstance();
-        weatherController.injectDependencies(weatherManager, favouritesManager, this);
+        weatherController.injectDependencies(this, weatherManager, favouritesManager);
     }
 
     public void setCityLabel(City city) {

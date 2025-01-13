@@ -1,7 +1,9 @@
-package com.daniyalh.WeatherWiseApp.data;
+package com.daniyalh.WeatherWiseApp.data.repositories;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 
 public class CityRepository {
     private final DatabaseHelper dbHelper;

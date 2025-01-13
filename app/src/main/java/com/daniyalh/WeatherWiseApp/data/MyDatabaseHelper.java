@@ -7,8 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.daniyalh.WeatherWiseApp.logic.IWeatherManager;
-import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.data.callbacks.IWeatherCacheUpdateCallback;
+import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
@@ -120,7 +121,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         // cache is outdated or empty; fetch new data
-        updateCache(city, new ICacheUpdateCallback() {
+        updateCache(city, new IWeatherCacheUpdateCallback() {
             @Override
             public void onCacheUpdated(String[] newWeatherData) {
                 callback.onSuccess(newWeatherData);
@@ -149,7 +150,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         };
     }
 
-    private void updateCache(City city, ICacheUpdateCallback callback) {
+    private void updateCache(City city, IWeatherCacheUpdateCallback callback) {
         /*
         Update Weather Table with the new weather forecast
         Fetch weather from WeatherManager and insert or update
