@@ -1,10 +1,13 @@
 package com.daniyalh.WeatherWiseApp.data;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
 import android.util.Log;
+
+import com.daniyalh.WeatherWiseApp.data.repositories.CityRepository;
+import com.daniyalh.WeatherWiseApp.data.repositories.ForecastRepository;
+import com.daniyalh.WeatherWiseApp.data.repositories.WeatherRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,16 +15,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class MyDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     public final String dbName;
     private final Context context;
     private static final int DB_VERSION = 1;
-    private static MyDatabaseHelper instance;
+    private static DatabaseHelper instance;
     private static final String TAG = "MyDatabase";
     private SQLiteDatabase inMemoryDb;
+    private CityRepository cityRepository;
+    private WeatherRepository weatherRepository;
+    private ForecastRepository forecastRepository;
 
-    private MyDatabaseHelper(Context context, String dbName) {
-        super(context, dbName, null, DB_VERSION);
+    private DatabaseHelper(Context context, String dbName) {
+        super(context.getApplicationContext(), dbName, null, DB_VERSION);
         this.dbName = dbName;
         this.context = context;
         if ("WeatherWiseApp.db".equals(dbName)) {
@@ -29,12 +35,37 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static synchronized MyDatabaseHelper getInstance(Context context, String dbName) {
-        // singleton
-        if (instance == null || !instance.dbName.equals(dbName)) {
-            instance = new MyDatabaseHelper(context.getApplicationContext(), dbName);
+    // Initialization method
+    public static synchronized void initialize(Context context, String dbName) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context, dbName);
         }
+    }
+
+    public static synchronized DatabaseHelper getInstance() {
         return instance;
+    }
+
+    // Singletons for repositories
+    public CityRepository getCityRepository() {
+        if (cityRepository == null) {
+            cityRepository = new CityRepository(this);
+        }
+        return cityRepository;
+    }
+
+    public WeatherRepository getWeatherRepository() {
+        if (weatherRepository == null) {
+            weatherRepository = new WeatherRepository(this);
+        }
+        return weatherRepository;
+    }
+
+    public ForecastRepository getForecastRepository() {
+        if (forecastRepository == null) {
+            forecastRepository = new ForecastRepository(this);
+        }
+        return forecastRepository;
     }
 
     private void copyDatabaseToInternalStorage(Context context) {
@@ -62,39 +93,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getFavouriteCities() {
-        // return a cursor with all favourite cities
-        SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "SELECT cityID, name || ', ' || country_code AS display_name, country "
-                   + "FROM cities WHERE is_favourite = 1 "
-                   + "ORDER BY display_name";
-        return database.rawQuery(sql, null);
-    }
-
-    public Cursor getCitiesByQuery(String query) {
-        // return a cursor with top 10 cities through a following wild card search
-        SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "SELECT cityID AS _id, country_code, name || ', ' || country AS display_name, is_favourite"
-                  +  " FROM CITIES WHERE name LIKE ? LIMIT 10";
-        return database.rawQuery(sql, new String[]{query + "%"});
-    }
-
-
-
-    public void updateFavouriteStatus(int cityID, boolean isFavourite) {
-        // toggle the favourite status based on the given boolean
-        SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "UPDATE cities SET is_favourite = ? WHERE cityID = ?";
-        database.execSQL(sql, new Object[]{isFavourite ? 1 : 0, cityID});
-    }
-
-    public void clearFavourites() {
-        // clear all favourite cities by setting them to 0
-        SQLiteDatabase database = this.getReadableDatabase();
-        String sql = "UPDATE cities SET is_favourite = 0 WHERE is_favourite = 1";
-        database.execSQL(sql, new Object[]{});
-    }
-
     @Override
     public synchronized SQLiteDatabase getReadableDatabase() {
         // return in memory DB for tests
@@ -105,7 +103,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 populateInMemoryDatabase(context, inMemoryDb);
             }
             return inMemoryDb;
-        // return main DB from internal storage for general use
+            // return main DB from internal storage for general use
         } else {
             SQLiteDatabase db = super.getReadableDatabase();
             Log.d(TAG, "Readable database path: " + db.getPath());
@@ -123,7 +121,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 populateInMemoryDatabase(context, inMemoryDb);
             }
             return inMemoryDb;
-        // return main DB from internal storage for general use
+            // return main DB from internal storage for general use
         } else {
             SQLiteDatabase db = super.getWritableDatabase();
             Log.d(TAG, "Writable database path: " + db.getPath());
@@ -172,5 +170,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             inMemoryDb.close();
             inMemoryDb = null;
         }
+
+        // nullify repository references
+        cityRepository = null;
+        weatherRepository = null;
     }
 }

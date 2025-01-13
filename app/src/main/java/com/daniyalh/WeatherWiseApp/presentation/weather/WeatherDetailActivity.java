@@ -1,7 +1,8 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.weather;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,19 +15,24 @@ import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
-import com.daniyalh.WeatherWiseApp.logic.WeatherManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
+import com.daniyalh.WeatherWiseApp.objects.Weather;
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
+import com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastDetailActivity;
 
-public class ForecastDetailActivity extends AppCompatActivity {
+public class WeatherDetailActivity extends AppCompatActivity {
     private WeatherController weatherController;
+    private final Handler handler = new Handler();
+    private Runnable updateTimeRunnable;
 
-    private TextView cityTextView, descriptionTextView,
+    private TextView cityTextView, descriptionTextView, forecastUpdateTextView,
             sunriseLabelTextView, sunsetLabelTextView, windLabelTextView, humidityLabelTextView,
             tempTextView, feelsLikeTextView, sunriseTextView, sunsetTextView, windTextView, humidityTextView;
 
     private LottieAnimationView loadingIconLottie, sunIconLottie, moonIconLottie, windIconLottie, humidityIconLottie,
-    favouritingAnimation;
+            favouritingAnimationButton, extendedForecastAnimationButton;
 
     private Button goBackButton;
 
@@ -35,7 +41,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forecast_detail);
+        setContentView(R.layout.activity_weather_detail);
 
         initializeUI();
 
@@ -68,14 +74,16 @@ public class ForecastDetailActivity extends AppCompatActivity {
     private void initializeUI() {
         cityTextView = findViewById(R.id.city_text_view);
         descriptionTextView = findViewById(R.id.description_text_view);
+        forecastUpdateTextView = findViewById(R.id.forecast_update_text_view);
 
         sunriseLabelTextView = findViewById(R.id.sunrise_label_text_view);
         sunsetLabelTextView = findViewById(R.id.sunset_label_text_view);
         windLabelTextView = findViewById(R.id.wind_label_text_view);
         humidityLabelTextView = findViewById(R.id.humidity_label_text_view);
 
-        goBackButton = findViewById(R.id.clear_favourites_button);
-        favouritingAnimation = findViewById(R.id.favourite_icon_lottie);
+        goBackButton = findViewById(R.id.back_home_button);
+        favouritingAnimationButton = findViewById(R.id.favourite_icon_lottie);
+        extendedForecastAnimationButton = findViewById(R.id.extended_forecast_icon_lottie);
 
         tempTextView = findViewById(R.id.temperature_text_view);
         feelsLikeTextView = findViewById(R.id.feels_like_text_view);
@@ -84,7 +92,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         windTextView = findViewById(R.id.wind_text_view);
         humidityTextView = findViewById(R.id.humidity_text_view);
 
-        loadingIconLottie = findViewById(R.id.loading_icon_lottie);
+        loadingIconLottie = findViewById(R.id.loading_weather_icon_lottie);
         sunIconLottie = findViewById(R.id.sun_icon_lottie);
         moonIconLottie = findViewById(R.id.moon_icon_lottie);
         windIconLottie = findViewById(R.id.wind_icon_lottie);
@@ -92,14 +100,16 @@ public class ForecastDetailActivity extends AppCompatActivity {
     }
 
     private void initializeClasses() {
-        FavouritesManager favouritesManager = FavouritesManager.getInstance(null);
+        FavouritesManager favouritesManager = FavouritesManager.getInstance();
         WeatherManager weatherManager = new WeatherManager(this);
-        weatherController = new WeatherController(weatherManager, favouritesManager, this);
+        weatherController = WeatherController.getInstance();
+        weatherController.injectDependencies(this, weatherManager, favouritesManager);
     }
 
     public void setCityLabel(City city) {
-        // set as "city, countryCode"
-        cityTextView.setText(city.getCity().toUpperCase() + ", " + city.getCountryCode());
+        // set as "city, countryCode" and time as update time
+        String displayName = city.getCityName().toUpperCase() + ", " + city.getCountryCode();
+        cityTextView.setText(displayName);
     }
 
     public void showLoadingIcon(boolean visible) {
@@ -115,22 +125,26 @@ public class ForecastDetailActivity extends AppCompatActivity {
     }
 
     private void setButtonListeners() {
-        favouritingAnimation.setOnClickListener(v -> {
+        favouritingAnimationButton.setOnClickListener(v -> {
             // toggle favourite depending on isFavourite
             // play proper icon
             if (isFavourite) {
-                favouritingAnimation.setSpeed(-1f); // reverse animation
-                favouritingAnimation.playAnimation();
+                favouritingAnimationButton.setSpeed(-1f); // reverse animation
+                favouritingAnimationButton.playAnimation();
                 showToast("Unfavourited city", Toast.LENGTH_SHORT);
                 isFavourite = false;
             }
             else {
-                favouritingAnimation.playAnimation();
+                favouritingAnimationButton.playAnimation();
                 showToast("Favourited city", Toast.LENGTH_SHORT);
                 isFavourite = true;
             }
             weatherController.toggleFavourite(isFavourite); // toggle favourite
         });
+
+        extendedForecastAnimationButton.setOnClickListener(v ->
+                // make an extended forecast page
+                startActivity(new Intent(WeatherDetailActivity.this, ForecastDetailActivity.class)));
 
         goBackButton.setOnClickListener(v -> finish()); // home page
     }
@@ -139,6 +153,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         // make the static UI elements invisible or visible
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
 
+        forecastUpdateTextView.setVisibility(visibility);
         sunriseLabelTextView.setVisibility(visibility);
         sunsetLabelTextView.setVisibility(visibility);
         windLabelTextView.setVisibility(visibility);
@@ -148,8 +163,9 @@ public class ForecastDetailActivity extends AppCompatActivity {
         moonIconLottie.setVisibility(visibility);
         windIconLottie.setVisibility(visibility);
         humidityIconLottie.setVisibility(visibility);
-        favouritingAnimation.setVisibility(visibility);
-        if (isFavourite) favouritingAnimation.playAnimation();
+        favouritingAnimationButton.setVisibility(visibility);
+        extendedForecastAnimationButton.setVisibility(visibility);
+        if (isFavourite) favouritingAnimationButton.playAnimation();
 
         // stop or play the animations to reduce memory usage
         if (visible) {
@@ -157,26 +173,47 @@ public class ForecastDetailActivity extends AppCompatActivity {
             moonIconLottie.playAnimation();
             windIconLottie.playAnimation();
             humidityIconLottie.playAnimation();
+            extendedForecastAnimationButton.playAnimation();
         }
         else { // invisible icons shouldn't be playing
             sunIconLottie.cancelAnimation();
             moonIconLottie.cancelAnimation();
             windIconLottie.cancelAnimation();
             humidityIconLottie.cancelAnimation();
-            favouritingAnimation.cancelAnimation();
+            favouritingAnimationButton.cancelAnimation();
+            extendedForecastAnimationButton.cancelAnimation();
         }
     }
 
-    public void updateWeatherDetails(String[] details) {
+    public void updateWeatherDetails(Weather weather) {
         // set the weather details to their corresponding UI elements
-        tempTextView.setText(details[0]);
-        feelsLikeTextView.setText(details[1]);
-        descriptionTextView.setText(details[2]);
-        humidityTextView.setText(details[3]);
-        windTextView.setText(details[4]);
-        sunriseTextView.setText(details[5]);
-        sunsetTextView.setText(details[6]);
-        setTimeOfDay(details[7].charAt(0));
+        Long lastUpdatedTime = weather.getLastUpdated();
+        String temp = (int) weather.getTemp() + "°C";
+        String feelsLike = "Feels Like " + (int) weather.getFeelsLike();
+        String description = weather.getDescription();
+        String humidity = weather.getHumidity() + "%";
+        String windSpeed = (int) weather.getWindSpeed() + " km/h";
+        String sunrise = weather.getSunrise().toLowerCase();
+        String sunset = weather.getSunset().toUpperCase();
+
+        tempTextView.setText(temp);
+        feelsLikeTextView.setText(feelsLike);
+        descriptionTextView.setText(description);
+        humidityTextView.setText(humidity);
+        windTextView.setText(windSpeed);
+        sunriseTextView.setText(sunrise);
+        sunsetTextView.setText(sunset);
+        setTimeOfDay(weather.getTimeOfDay());
+
+        // update the last updated time through a thread every minute
+        updateTimeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateForecastTime(lastUpdatedTime);
+                handler.postDelayed(this, 60000); // Update every 60 seconds
+            }
+        };
+        handler.post(updateTimeRunnable); // Start the runnable
     }
 
     private void setTimeOfDay(char timeOfDay) {
@@ -190,9 +227,37 @@ public class ForecastDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void updateForecastTime(Long lastUpdatedTime) {
+        // update the update text view with minutes since update
+        long currentTime = System.currentTimeMillis();
+        int minutesAgo = (int) (currentTime - lastUpdatedTime) / (60 * 1000); // Convert milliseconds to minutes
+        String updateTime = (minutesAgo <= 1) ? "Updated just now" : "Updated " + minutesAgo + " minutes ago";
+        forecastUpdateTextView.setText(updateTime);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(updateTimeRunnable); // Stop updates when the activity is not visible
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.post(updateTimeRunnable); // Resume updates when the activity comes back to the foreground
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        resetUI();
+        handler.removeCallbacks(updateTimeRunnable); // Clean up the runnable
+    }
+
     public void resetUI() {
         setStaticUIVisibility(false);
         cityTextView.setText("");
+        forecastUpdateTextView.setText("");
         tempTextView.setText("");
         feelsLikeTextView.setText("");
         descriptionTextView.setText("");

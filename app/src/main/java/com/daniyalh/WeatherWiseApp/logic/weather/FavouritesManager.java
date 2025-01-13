@@ -1,10 +1,10 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.weather;
 
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,24 +14,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FavouritesManager implements IFavouritesManager {
-    private final MyDatabaseHelper myDatabase;
+    private DatabaseHelper dhHelper;
     private ExecutorService executorService;
     private Handler mainHandler;
     private final Map<String, String[]> favouriteCities = new HashMap<>();
     private static FavouritesManager instance;
-    private FavouritesManager(MyDatabaseHelper myDatabase) {
-        this.myDatabase = myDatabase;
+
+    private FavouritesManager() {
         this.executorService = Executors.newSingleThreadExecutor();
         this.mainHandler = new Handler(Looper.getMainLooper());
     }
 
-    public static FavouritesManager getInstance(MyDatabaseHelper myDatabase) {
+    public static FavouritesManager getInstance() {
         if (instance == null) {
-            instance = new FavouritesManager(myDatabase);
+            instance = new FavouritesManager();
         }
         return instance;
     }
 
+    @Override
+    public void injectDatabase(DatabaseHelper dhHelper) {
+        this.dhHelper = dhHelper;
+    }
+
+    @Override
     public void setAsynchronicity(ExecutorService executorService, Handler mainHandler) {
         this.executorService = executorService;
         this.mainHandler = mainHandler;
@@ -40,7 +46,7 @@ public class FavouritesManager implements IFavouritesManager {
     @Override
     public void toggleFavourite(int cityID, boolean isFavourite) {
         // favourite or unfavourite a given city
-        myDatabase.updateFavouriteStatus(cityID, isFavourite);
+        dhHelper.getCityRepository().updateFavouriteStatus(cityID, isFavourite);
     }
 
     @Override
@@ -55,7 +61,7 @@ public class FavouritesManager implements IFavouritesManager {
             Cursor cursor = null;
 
             try {
-                cursor = myDatabase.getFavouriteCities();
+                cursor = dhHelper.getCityRepository().getFavouriteCities();
                 if (cursor != null && cursor.moveToFirst()) {
                     do {
                         // get all necessary parameters
@@ -89,7 +95,7 @@ public class FavouritesManager implements IFavouritesManager {
          */
         executorService.execute(() -> {
             try {
-                myDatabase.clearFavourites();
+                dhHelper.getCityRepository().clearFavourites();
                 mainHandler.post(callback::onClearSuccess);
             } catch (Exception e) {
                 mainHandler.post(() -> callback.onClearFailure(e));
@@ -106,10 +112,12 @@ public class FavouritesManager implements IFavouritesManager {
                 new String[]{String.valueOf(cityID), cityName, country, countryCode});
     }
 
+    @Override
     public String[] getFavouriteDetails(String displayName) {
         return favouriteCities.get(displayName);
     }
 
+    @Override
     public void shutdown() {
         executorService.shutdown();
     }

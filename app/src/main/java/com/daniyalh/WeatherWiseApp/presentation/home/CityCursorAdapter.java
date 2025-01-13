@@ -1,8 +1,10 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.home;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.widget.SimpleCursorAdapter;
+
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
 
 public class CityCursorAdapter extends SimpleCursorAdapter {
     public CityCursorAdapter(Context context, Cursor cursor) {

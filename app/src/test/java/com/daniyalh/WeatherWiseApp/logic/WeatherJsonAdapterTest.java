@@ -4,9 +4,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.logic.weather.WeatherJsonAdapter;
 
 public class WeatherJsonAdapterTest {
-    WeatherJsonAdapter jsonAdapter = new WeatherJsonAdapter();
+    WeatherJsonAdapter weatherJsonAdapter = new WeatherJsonAdapter();
     String[] weatherDetails;
     @Test
     public void testWeatherJsonAdapter() {
@@ -27,11 +28,11 @@ public class WeatherJsonAdapterTest {
         String[] expectedResponse1 = new String[] {"US", "265.05", "258.05", "clear sky", "52", "5.81", "-18000", "1734869839", "1734903140", "n"};
         String[] expectedResponse2 = new String[] {"MX", "285.43", "284.75", "light rain", "78", "3.09", "-21600", "1734872799", "1734912243", "d"};
 
-        weatherDetails = jsonAdapter.parseWeather(validJSON1);
+        weatherDetails = weatherJsonAdapter.parseWeather(validJSON1);
 
         assertArrayEquals(expectedResponse1, weatherDetails);
 
-        weatherDetails = jsonAdapter.parseWeather(validJSON2);
+        weatherDetails = weatherJsonAdapter.parseWeather(validJSON2);
         assertArrayEquals(expectedResponse2, weatherDetails);
 
         System.out.println("Finished validJSONParsing successfully.");
@@ -51,7 +52,7 @@ public class WeatherJsonAdapterTest {
 
         for (String BROKEN_JSON : brokenJSONs) {
             try {
-                jsonAdapter.parseWeather(BROKEN_JSON);
+                weatherJsonAdapter.parseWeather(BROKEN_JSON);
             } catch (InvalidJsonParsingException e) {
                 System.out.println("Exception thrown!");
                 errorCounter++;

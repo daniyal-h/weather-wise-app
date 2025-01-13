@@ -7,7 +7,10 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.IFavouritesManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unchecked")
 public class FavouritesManagerTest {
 
-    private MyDatabaseHelper mockDbHelper;
+    private DatabaseHelper mockDbHelper;
     private FavouritesManager favouritesManager;
 
     @Before
@@ -75,10 +78,11 @@ public class FavouritesManagerTest {
 
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        mockDbHelper = Mockito.mock(MyDatabaseHelper.class);
-        favouritesManager = FavouritesManager.getInstance(mockDbHelper);
+        mockDbHelper = Mockito.mock(DatabaseHelper.class);
+        favouritesManager = FavouritesManager.getInstance();
 
         // Inject synchronous executor and handler.
+        favouritesManager.injectDatabase(mockDbHelper);
         favouritesManager.setAsynchronicity(immediateExecutor, mainHandler);
     }
 
@@ -91,7 +95,7 @@ public class FavouritesManagerTest {
         IFavouritesManager.ClearFavouritesCallback clearCallback = Mockito.mock(IFavouritesManager.ClearFavouritesCallback.class);
         favouritesManager.clearFavourites(clearCallback);
         Robolectric.flushForegroundThreadScheduler();
-        verify(mockDbHelper).clearFavourites();
+        verify(mockDbHelper).getCityRepository().clearFavourites();
         verify(clearCallback).onClearSuccess();
         System.out.println("Step 1 of 5 complete...");
 
@@ -99,14 +103,14 @@ public class FavouritesManagerTest {
         int[] cityIDs = {1, 2, 3, 4, 5};
         for (int id : cityIDs) {
             favouritesManager.toggleFavourite(id, true);
-            verify(mockDbHelper).updateFavouriteStatus(id, true);
+            verify(mockDbHelper).getCityRepository().updateFavouriteStatus(id, true);
         }
         System.out.println("Step 2 of 5 complete...");
 
         // Step 3: Remove 1 favourite
         int removeCityID = 3;
         favouritesManager.toggleFavourite(removeCityID, false);
-        verify(mockDbHelper).updateFavouriteStatus(removeCityID, false);
+        verify(mockDbHelper).getCityRepository().updateFavouriteStatus(removeCityID, false);
         System.out.println("Step 3 of 5 complete...");
 
         // Step 4: Prepare a dummy Cursor simulating 4 remaining favourites
@@ -125,7 +129,7 @@ public class FavouritesManagerTest {
         Mockito.when(dummyCursor.getString(2))
                 .thenReturn("CountryName", "CountryName", "CountryName", "CountryName");
         Mockito.when(dummyCursor.isClosed()).thenReturn(true);
-        Mockito.when(mockDbHelper.getFavouriteCities()).thenReturn(dummyCursor);
+        Mockito.when(mockDbHelper.getCityRepository().getFavouriteCities()).thenReturn(dummyCursor);
         System.out.println("Step 4 of 5 complete...");
 
         // Step 5: Get all favourites

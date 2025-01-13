@@ -6,67 +6,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/city_input_edit_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:padding="12dp"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-        android:fontFamily="sans-serif"
-        android:hint="Enter City..."
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColor="@color/text_dark"
-        app:layout_constraintBottom_toTopOf="@+id/get_weather_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/get_weather_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Get Weather"
-        android:textColor="@color/text_dark"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/city_text_view"
-        app:layout_constraintEnd_toEndOf="@+id/city_input_edit_text"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/city_input_edit_text"
-        app:layout_constraintTop_toBottomOf="@+id/city_input_edit_text" />
-
     <TextView
         android:id="@+id/city_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="8dp"
         android:autoLink="none"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="sans-serif-black"
-        android:inputType="textNoSuggestions"
+        android:focusable="false"
+        android:longClickable="false"
+        android:clickable="false"
+        android:inputType="none"
+        android:maxLines="1"
         android:padding="8dp"
         android:textAlignment="center"
         android:textColor="@color/text_dark"
+        android:textIsSelectable="true"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/get_weather_button"
-        app:layout_constraintStart_toStartOf="@+id/get_weather_button"
-        app:layout_constraintTop_toBottomOf="@+id/get_weather_button"
-        tools:text="WINNIPEG, CA" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Winnipeg, CA" />
+
+    <TextView
+        android:id="@+id/forecast_update_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Updated 7 minutes ago"
+        app:layout_constraintEnd_toEndOf="@+id/description_text_view"
+        app:layout_constraintStart_toStartOf="@+id/description_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/description_text_view" />
 
     <TextView
         android:id="@+id/temperature_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="128dp"
         android:fontFamily="sans-serif-black"
         android:textAlignment="center"
@@ -74,14 +58,14 @@
         android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_update_text_view"
         tools:text="-23°C" />
 
     <TextView
         android:id="@+id/feels_like_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="sans-serif-medium"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -208,6 +192,31 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/humidity_icon" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/favourite_icon_lottie"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
+        app:layout_constraintStart_toEndOf="@+id/back_home_button"
+        app:layout_constraintTop_toTopOf="@+id/back_home_button"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/favourite_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/extended_forecast_icon_lottie"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
+        app:layout_constraintEnd_toStartOf="@+id/back_home_button"
+        app:layout_constraintTop_toTopOf="@+id/back_home_button"
+        app:layout_constraintVertical_bias="0.0"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/extended_forecast_icon" />
+
     <TextView
         android:id="@+id/wind_label_text_view"
         android:layout_width="wrap_content"
@@ -271,5 +280,16 @@
         app:layout_constraintTop_toBottomOf="@+id/city_text_view"
         tools:text="overcast clouds" />
 
+    <Button
+        android:id="@+id/back_home_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Go Back Home"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/humidity_icon_lottie"
+        app:layout_constraintStart_toStartOf="@+id/wind_icon_lottie" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

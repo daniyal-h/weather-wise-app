@@ -1,14 +1,11 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -19,16 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
-import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
-import com.daniyalh.WeatherWiseApp.logic.IFavouritesManager;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
+import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
+import com.daniyalh.WeatherWiseApp.logic.weather.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
+import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherDetailActivity;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private MyDatabaseHelper myDatabase;
+    //private MyDatabaseHelper myDatabase;
+    private DatabaseHelper dbHelper;
     private SearchManager searchManager;
     private FavouritesManager favouritesManager;
 
@@ -53,16 +53,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        displayFavourites(); // updates favourites when returning from forecast
+        displayFavourites(); // updates favourites when returning from weather
     }
 
     private void initializeDatabase() {
-        myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
+        //myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
+        DatabaseHelper.initialize(this, "WeatherWiseApp.db");
+        dbHelper = DatabaseHelper.getInstance();
+
     }
 
     private void initializeLogicClasses() {
-        searchManager = new SearchManager(myDatabase);
-        favouritesManager = FavouritesManager.getInstance(myDatabase);
+        searchManager = new SearchManager(dbHelper);
+        favouritesManager = FavouritesManager.getInstance();
+        favouritesManager.injectDatabase(dbHelper);
     }
 
     private void initializeUI() {
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         favouritesRecyclerView = findViewById(R.id.favourites_recycler_view);
         favouritesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        clearFavouritesButton = findViewById(R.id.clear_favourites_button);
+        clearFavouritesButton = findViewById(R.id.back_home_button);
     }
 
     private void displayFavourites() {
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void forecastDetails(int cityID, String cityName, String countryName, String countryCode, int isFavourite) {
-        Intent intent = new Intent(MainActivity.this, ForecastDetailActivity.class);
+        Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
         intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
         intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
         intent.putExtra(UIConstants.EXTRA_COUNTRY_NAME, countryName);
@@ -229,8 +233,8 @@ public class MainActivity extends AppCompatActivity {
         if (cityCursorAdapter != null)
             cityCursorAdapter.changeCursor(null); // close the cursor when done
 
-        if (myDatabase != null)
-            myDatabase.close(); // close DB when done
+        if (dbHelper != null)
+            dbHelper.close(); // close DB when done
     }
 
     @Override

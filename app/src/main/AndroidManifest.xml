@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherWiseApp"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <activity
-            android:name="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
+            android:name="com.daniyalh.WeatherWiseApp.presentation.home.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.WeatherWiseApp">
             <intent-filter>
@@ -24,10 +24,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.daniyalh.WeatherWiseApp.presentation.ForecastDetailActivity"
-            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
+        <activity android:name="com.daniyalh.WeatherWiseApp.presentation.weather.WeatherDetailActivity"
+            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.home.MainActivity"
             android:theme="@style/Theme.WeatherWiseApp"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity
+            android:name="com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastDetailActivity"
+            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.weather.WeatherDetailActivity"
+            android:theme="@style/Theme.WeatherWiseApp"
+            android:exported="false" />
     </application>
 
 </manifest>
