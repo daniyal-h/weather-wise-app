@@ -1,6 +1,8 @@
 package com.daniyalh.WeatherWiseApp.logic;
 
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
+import com.daniyalh.WeatherWiseApp.objects.Forecast;
+
 import org.json.JSONObject;
 
 public class WeatherJsonAdapter implements IWeatherJsonAdapter {
@@ -11,7 +13,6 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
             // Parse the JSON data
             JSONObject root = new JSONObject(JSON);
 
-            //weatherDetails[0] = root.getJSONObject("sys").getString("country");                     // Country
             weatherDetails[1] = String.valueOf(root.getJSONObject("main").getDouble("temp"));       // Temperature
             weatherDetails[2] = String.valueOf(root.getJSONObject("main").getDouble("feels_like")); // Feels Like
             weatherDetails[3] = root.getJSONArray("weather").getJSONObject(0).getString("description"); // Description
@@ -29,5 +30,14 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
         }
 
         return weatherDetails;
+    }
+
+    @Override
+    public Forecast[] parseForecast(String response) {
+        //String[]
+
+
+
+        return new Forecast[0];
     }
 }

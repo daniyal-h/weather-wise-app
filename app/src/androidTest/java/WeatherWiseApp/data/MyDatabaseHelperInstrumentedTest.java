@@ -13,7 +13,7 @@ import android.util.Log;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import java.util.Map;
 @RunWith(AndroidJUnit4.class)
 public class MyDatabaseHelperInstrumentedTest {
 
-    private MyDatabaseHelper dbHelper;
+    private DatabaseHelper dbHelper;
 
     @Before
     public void setUp() {
@@ -34,7 +34,7 @@ public class MyDatabaseHelperInstrumentedTest {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertNotNull("Context should not be null", context);
 
-        dbHelper = MyDatabaseHelper.getInstance(context, "WeatherWiseApp_stub1.db");
+        dbHelper = DatabaseHelper.getInstance(context, "WeatherWiseApp_stub1.db");
 
         // Ensure the database is opened
         try {
@@ -56,31 +56,31 @@ public class MyDatabaseHelperInstrumentedTest {
 
     @Test
     public void testFavouriting() {
-        dbHelper.clearFavourites(); // reset
+        dbHelper.getCityRepository().clearFavourites(); // reset
 
-        Cursor cursor = dbHelper.getFavouriteCities();
+        Cursor cursor = dbHelper.getCityRepository().getFavouriteCities();
         assertFalse("Favourites should be cleared", cursor.moveToFirst());
         cursor.close();
 
         // Insert test data
-        dbHelper.updateFavouriteStatus(1, true);
-        dbHelper.updateFavouriteStatus(2, true);
+        dbHelper.getCityRepository().updateFavouriteStatus(1, true);
+        dbHelper.getCityRepository().updateFavouriteStatus(2, true);
 
         // Clear favourites
-        dbHelper.clearFavourites();
+        dbHelper.getCityRepository().clearFavourites();
 
         // Verify favourites are cleared
-        cursor = dbHelper.getFavouriteCities();
+        cursor = dbHelper.getCityRepository().getFavouriteCities();
         assertFalse("Favourites should be cleared", cursor.moveToFirst());
         cursor.close();
 
-        dbHelper.updateFavouriteStatus(1, true);
-        dbHelper.updateFavouriteStatus(82, true);
+        dbHelper.getCityRepository().updateFavouriteStatus(1, true);
+        dbHelper.getCityRepository().updateFavouriteStatus(82, true);
 
         String[] expectedCity1 = new String[]{"New York City, US", "United States"};
         String[] expectedCity2 = new String[]{"Winnipeg, CA", "Canada"};
 
-        cursor = dbHelper.getFavouriteCities();
+        cursor = dbHelper.getCityRepository().getFavouriteCities();
         Map<Integer, String[]> favouriteCities = new HashMap<>();
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -99,19 +99,19 @@ public class MyDatabaseHelperInstrumentedTest {
         assertArrayEquals(expectedCity2, favouriteCities.get(82));
 
         cursor.close();
-        dbHelper.clearFavourites(); // reset
+        dbHelper.getCityRepository().clearFavourites(); // reset
     }
 
     @Test
     public void testGetCitiesByQuery() {
-        dbHelper.clearFavourites();
-        dbHelper.updateFavouriteStatus(89, true);
+        dbHelper.getCityRepository().clearFavourites();
+        dbHelper.getCityRepository().updateFavouriteStatus(89, true);
         Map<Integer, Object[]> cities = new HashMap<>();
 
         Object[] expectedCity1 = new Object[]{"CA", "Winnipeg, Canada", 0};
         Object[] expectedCity2 = new Object[]{"CA", "Windsor, Canada", 1};
 
-        Cursor cursor = dbHelper.getCitiesByQuery("win");
+        Cursor cursor = dbHelper.getCityRepository().getCitiesByQuery("win");
         assertEquals(2, cursor.getCount());
 
         if (cursor.moveToFirst()) {
@@ -133,17 +133,17 @@ public class MyDatabaseHelperInstrumentedTest {
 
 
         // edge case: empty space
-        cursor = dbHelper.getCitiesByQuery(" ");
+        cursor = dbHelper.getCityRepository().getCitiesByQuery(" ");
         assertEquals(0, cursor.getCount());
         cursor.close();
 
         // edge case: many empty space
-        cursor = dbHelper.getCitiesByQuery("                       ");
+        cursor = dbHelper.getCityRepository().getCitiesByQuery("                       ");
         assertEquals(0, cursor.getCount());
         cursor.close();
 
         // edge case: no input (logic layer would account for this but since we test only data, it returns the limit)
-        cursor = dbHelper.getCitiesByQuery("");
+        cursor = dbHelper.getCityRepository().getCitiesByQuery("");
         assertEquals(10, cursor.getCount());
         cursor.close();
     }

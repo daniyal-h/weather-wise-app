@@ -3,7 +3,7 @@ package com.daniyalh.WeatherWiseApp.logic;
 import static org.junit.Assert.assertEquals;
 import android.database.Cursor;
 
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,7 +15,7 @@ public class SearchManagerTest {
     public void testSearchCitiesWithInvalidInput() {
         System.out.println("Starting testSearchCitiesWithInvalidInput...");
         // Create mocks
-        MyDatabaseHelper mockDb = Mockito.mock(MyDatabaseHelper.class);
+        DatabaseHelper mockDb = Mockito.mock(DatabaseHelper.class);
         ISearchManager.SearchCallback callback = Mockito.mock(ISearchManager.SearchCallback.class);
 
         SearchManager manager = new SearchManager(mockDb);
@@ -37,13 +37,13 @@ public class SearchManagerTest {
         System.out.println("----- Starting SearchManagerTest -----\n");
         System.out.println("Starting testSearchCitiesWithValidInput...");
         // Create mocks
-        MyDatabaseHelper mockDb = Mockito.mock(MyDatabaseHelper.class);
+        DatabaseHelper mockDb = Mockito.mock(DatabaseHelper.class);
         ISearchManager.SearchCallback callback = Mockito.mock(ISearchManager.SearchCallback.class);
 
         Cursor dummyCursor = Mockito.mock(Cursor.class);
         Mockito.when(dummyCursor.getCount()).thenReturn(4);  // Simulate 4 results
 
-        Mockito.when(mockDb.getCitiesByQuery("New")).thenReturn(dummyCursor);
+        Mockito.when(mockDb.getCityRepository().getCitiesByQuery("New")).thenReturn(dummyCursor);
 
         SearchManager manager = new SearchManager(mockDb);
 

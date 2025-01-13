@@ -198,9 +198,9 @@
         android:layout_height="44dp"
         android:layout_marginStart="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/clear_favourites_button"
-        app:layout_constraintStart_toEndOf="@+id/clear_favourites_button"
-        app:layout_constraintTop_toTopOf="@+id/clear_favourites_button"
+        app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
+        app:layout_constraintStart_toEndOf="@+id/back_home_button"
+        app:layout_constraintTop_toTopOf="@+id/back_home_button"
         app:lottie_loop="false"
         app:lottie_rawRes="@raw/favourite_icon" />
 
@@ -210,9 +210,9 @@
         android:layout_height="44dp"
         android:layout_marginEnd="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/clear_favourites_button"
-        app:layout_constraintEnd_toStartOf="@+id/clear_favourites_button"
-        app:layout_constraintTop_toTopOf="@+id/clear_favourites_button"
+        app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
+        app:layout_constraintEnd_toStartOf="@+id/back_home_button"
+        app:layout_constraintTop_toTopOf="@+id/back_home_button"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/extended_forecast_icon" />
@@ -281,12 +281,12 @@
         tools:text="overcast clouds" />
 
     <Button
-        android:id="@+id/clear_favourites_button"
+        android:id="@+id/back_home_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
-        android:text="Go Back"
+        android:text="Go Back Home"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/humidity_icon_lottie"

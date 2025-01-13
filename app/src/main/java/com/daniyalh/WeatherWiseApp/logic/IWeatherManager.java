@@ -6,7 +6,7 @@ import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 public interface IWeatherManager {
-    void getWeatherJSON(City city, final IWeatherCallback callback);
+    void getWeatherJSON(City city, IWeatherCallback callback);
     void setWeather(CityWeather city, String weatherJSON) throws InvalidJsonParsingException;
     void getWeatherFromDB(City city, IWeatherDetailsCallback callback);
     String[] fetchImmediateWeather(String weatherJSON);

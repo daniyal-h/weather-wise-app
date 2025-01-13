@@ -5,18 +5,18 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.CityWeather;
 
 public class WeatherManager implements IWeatherManager {
-    private static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
+    public static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     private final RequestQueue requestQueue;
     private final WeatherJsonAdapter jsonAdapter;
-    private final MyDatabaseHelper database;
+    private final DatabaseHelper dbHelper;
 
     // inject context which indirectly injects the volley through overloading
     public WeatherManager(Context context) {
@@ -27,8 +27,8 @@ public class WeatherManager implements IWeatherManager {
     public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter jsonAdapter) {
         this.requestQueue = requestQueue;
         this.jsonAdapter = jsonAdapter;
-        database = MyDatabaseHelper.getInstance(null, "WeatherWiseApp.db");
-        database.setWeatherManager(this); // DBHelper always has latest WeatherManager
+        dbHelper = DatabaseHelper.getInstance(null, "WeatherWiseApp.db");
+        dbHelper.getWeatherRepository().setWeatherManager(this); // DBHelper always has latest WeatherManager
     }
 
     @Override
@@ -57,7 +57,7 @@ public class WeatherManager implements IWeatherManager {
 
     @Override
     public void getWeatherFromDB(City city, IWeatherDetailsCallback callback) {
-        database.getWeatherDetails(city, new IWeatherDetailsCallback() {
+        dbHelper.getWeatherRepository().getWeatherDetails(city, new IWeatherDetailsCallback() {
             @Override
             public void onSuccess(String[] weatherDetails) {
                 callback.onSuccess(weatherDetails);

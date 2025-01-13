@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FavouritesManager implements IFavouritesManager {
-    private MyDatabaseHelper myDatabase;
+    private DatabaseHelper dhHelper;
     private ExecutorService executorService;
     private Handler mainHandler;
     private final Map<String, String[]> favouriteCities = new HashMap<>();
@@ -31,8 +31,8 @@ public class FavouritesManager implements IFavouritesManager {
         return instance;
     }
 
-    public void injectDatabase(MyDatabaseHelper myDatabase) {
-        this.myDatabase = myDatabase;
+    public void injectDatabase(DatabaseHelper dhHelper) {
+        this.dhHelper = dhHelper;
     }
 
     public void setAsynchronicity(ExecutorService executorService, Handler mainHandler) {
@@ -43,7 +43,7 @@ public class FavouritesManager implements IFavouritesManager {
     @Override
     public void toggleFavourite(int cityID, boolean isFavourite) {
         // favourite or unfavourite a given city
-        myDatabase.updateFavouriteStatus(cityID, isFavourite);
+        dhHelper.getCityRepository().updateFavouriteStatus(cityID, isFavourite);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FavouritesManager implements IFavouritesManager {
             Cursor cursor = null;
 
             try {
-                cursor = myDatabase.getFavouriteCities();
+                cursor = dhHelper.getCityRepository().getFavouriteCities();
                 if (cursor != null && cursor.moveToFirst()) {
                     do {
                         // get all necessary parameters
@@ -92,7 +92,7 @@ public class FavouritesManager implements IFavouritesManager {
          */
         executorService.execute(() -> {
             try {
-                myDatabase.clearFavourites();
+                dhHelper.getCityRepository().clearFavourites();
                 mainHandler.post(callback::onClearSuccess);
             } catch (Exception e) {
                 mainHandler.post(() -> callback.onClearFailure(e));

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
@@ -25,7 +25,8 @@ import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private MyDatabaseHelper myDatabase;
+    //private MyDatabaseHelper myDatabase;
+    private DatabaseHelper dbHelper;
     private SearchManager searchManager;
     private FavouritesManager favouritesManager;
 
@@ -54,13 +55,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeDatabase() {
-        myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
+        //myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
+        dbHelper = DatabaseHelper.getInstance(this, "WeatherWiseApp.db");
+
     }
 
     private void initializeLogicClasses() {
-        searchManager = new SearchManager(myDatabase);
+        searchManager = new SearchManager(dbHelper);
         favouritesManager = FavouritesManager.getInstance();
-        favouritesManager.injectDatabase(myDatabase);
+        favouritesManager.injectDatabase(dbHelper);
     }
 
     private void initializeUI() {
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         favouritesRecyclerView = findViewById(R.id.favourites_recycler_view);
         favouritesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        clearFavouritesButton = findViewById(R.id.clear_favourites_button);
+        clearFavouritesButton = findViewById(R.id.back_home_button);
     }
 
     private void displayFavourites() {
@@ -227,8 +230,8 @@ public class MainActivity extends AppCompatActivity {
         if (cityCursorAdapter != null)
             cityCursorAdapter.changeCursor(null); // close the cursor when done
 
-        if (myDatabase != null)
-            myDatabase.close(); // close DB when done
+        if (dbHelper != null)
+            dbHelper.close(); // close DB when done
     }
 
     @Override
