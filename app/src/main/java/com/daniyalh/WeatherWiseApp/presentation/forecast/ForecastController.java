@@ -27,11 +27,9 @@ public class ForecastController {
 
                 Forecast[] tests = city.getForecasts();
 
-                for (Forecast test : tests) {
-                    Log.d("ForecastController", test.getDate() + " " + test.getTime() + " Feels Like: " + test.getFeelsLike());
-                }
-                Long currentTime = System.currentTimeMillis();
-                Log.d("ForecastController", "Last Updated: " + ((currentTime - city.getForecastLastUpdate()) / 60000) + " minutes ago");
+                String displayName = city.getCityName() + ", " + city.getCountryCode();
+                context.setDisplayName(displayName);
+                context.displayForecasts(forecasts);
             }
 
             @Override
