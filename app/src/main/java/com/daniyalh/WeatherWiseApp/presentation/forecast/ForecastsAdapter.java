@@ -35,7 +35,7 @@ public class ForecastsAdapter extends RecyclerView.Adapter<ForecastsAdapter.fore
         String dateAndTime = forecast.getDateTime();
         String description = forecast.getDescription();
         String temp = (int) forecast.getTemp() + "°C";
-        String feelsLike = "Feels " + (int) forecast.getFeelsLike();
+        String feelsLike = "Feels Like " + (int) forecast.getFeelsLike();
         String wind = "Wind: " + (int) forecast.getWindSpeed() + " km/h";
 
         holder.dateAndTimeTextView.setText(dateAndTime);
