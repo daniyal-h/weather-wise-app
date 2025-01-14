@@ -22,12 +22,12 @@ public class ForecastController {
         forecastManager.getForecastFromDB(city, new IForecastManager.IForecastDetailsCallback() {
             @Override
             public void onSuccess(Forecast[] forecasts) {
+                // set the forecasts to the city and display appropriately
                 context.showLoadingIcon(false);
                 city.setForecast(forecasts);
 
-                Forecast[] tests = city.getForecasts();
-
                 String displayName = city.getCityName() + ", " + city.getCountryCode();
+
                 context.setDisplayName(displayName);
                 context.displayForecasts(forecasts);
             }

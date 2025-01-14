@@ -75,4 +75,14 @@ public class ForecastDetailActivity extends AppCompatActivity {
     public void displayForecasts(Forecast[] forecasts) {
         forecastsRecyclerView.setAdapter(new ForecastsAdapter(this, forecasts));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        resetUI();
+    }
+
+    public void resetUI() {
+        displayNameTextView.setText("");
+    }
 }
