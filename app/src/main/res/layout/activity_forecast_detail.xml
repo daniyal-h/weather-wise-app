@@ -20,7 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading_icon" />
+        app:lottie_rawRes="@raw/loading_icon"
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/back_to_weather_button"
@@ -28,11 +29,53 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:text="Go Back"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/forecasts_recycler_view"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/forecasts_recycler_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/forecasts_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fadeScrollbars="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:background="@drawable/default_background"
+        app:layout_constraintBottom_toTopOf="@+id/back_to_weather_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_display_name_text_view" />
+
+    <TextView
+        android:id="@+id/forecast_display_name_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:clickable="false"
+        android:focusable="false"
+        android:fontFamily="sans-serif-black"
+        android:inputType="none"
+        android:longClickable="false"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/text_dark"
+        android:textIsSelectable="true"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Winnipeg, CA" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

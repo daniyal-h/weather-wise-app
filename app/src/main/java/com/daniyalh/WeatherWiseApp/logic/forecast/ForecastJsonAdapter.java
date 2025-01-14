@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class ForecastJsonAdapter implements IForecastJsonAdapter {
     @Override
@@ -34,7 +35,8 @@ public class ForecastJsonAdapter implements IForecastJsonAdapter {
                 JSONObject forecastObj = forecastList.getJSONObject(i);
 
                 // Extract required details
-                String[] forecastDetails = extractForecastDetails(timezoneOffset, formatter, forecastObj);
+                String[] forecastDetails =
+                        extractForecastDetails(timezoneOffset, formatter, forecastObj);
 
                 // Create and update Forecast object
                 forecasts[i] = new Forecast();
@@ -51,26 +53,36 @@ public class ForecastJsonAdapter implements IForecastJsonAdapter {
     private static String[] extractForecastDetails(int timezoneOffset, DateTimeFormatter formatter, JSONObject forecastObj) throws JSONException {
         double temp = forecastObj.getJSONObject("main").getDouble("temp");
         double feelsLike = forecastObj.getJSONObject("main").getDouble("feels_like");
-        String description = forecastObj.getJSONArray("weather").getJSONObject(0).getString("description");
+        String mainDescription = forecastObj.getJSONArray("weather").getJSONObject(0).getString("main");
+        String detailedDescription = forecastObj.getJSONArray("weather").getJSONObject(0).getString("description");
         double windSpeed = forecastObj.getJSONObject("wind").getDouble("speed");
 
         // Extract UTC time and convert to local time
         String dateTime = forecastObj.getString("dt_txt"); // UTC time as string
         LocalDateTime utcDateTime = LocalDateTime.parse(dateTime, formatter);
-        ZonedDateTime localDateTime = utcDateTime.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneOffset.ofTotalSeconds(timezoneOffset));
+        ZonedDateTime localDateTime = utcDateTime.atZone(ZoneOffset.UTC)
+                .withZoneSameInstant(ZoneOffset.ofTotalSeconds(timezoneOffset));
 
-        String localDate = localDateTime.toLocalDate().toString(); // Extract local date
-        String localTime = localDateTime.toLocalTime().toString(); // Extract local time
+        // Format the local date-time as "Mon at 12 pm"
+        DateTimeFormatter simplifiedFormatter = DateTimeFormatter.ofPattern("EEE', 'h a", Locale.ENGLISH);
+        String formattedDateTime = localDateTime.format(simplifiedFormatter).toLowerCase(); // Ensure lowercase "am/pm"
+
+        // Capitalize the first letter of the day
+        formattedDateTime = formattedDateTime.substring(0, 1).toUpperCase() + formattedDateTime.substring(1);
+
+        // Use the "pod" field to determine if it's day or night
+        String pod = forecastObj.getJSONObject("sys").getString("pod");
+        boolean isDay = "d".equals(pod);
 
         // Fill forecast details array
-        String[] forecastDetails = {
+        return new String[]{
                 String.valueOf(temp),
                 String.valueOf(feelsLike),
-                description,
+                mainDescription,
+                detailedDescription,
                 String.valueOf(windSpeed),
-                localDate,
-                localTime
+                formattedDateTime,
+                String.valueOf(isDay)
         };
-        return forecastDetails;
     }
 }

@@ -34,6 +34,10 @@
             android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.weather.WeatherDetailActivity"
             android:theme="@style/Theme.WeatherWiseApp"
             android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
