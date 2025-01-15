@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         If it already exists, do not copy
          */
         File dbFile = context.getDatabasePath(dbName);
-
+        dbFile.delete();
         if (!dbFile.exists()) {
             try (InputStream is = context.getAssets().open(dbName);
                  OutputStream os = new FileOutputStream(dbFile)) {
