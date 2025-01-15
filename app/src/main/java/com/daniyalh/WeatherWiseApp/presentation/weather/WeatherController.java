@@ -34,9 +34,9 @@ public class WeatherController {
         this.context = context;
     }
 
-    public void fetchWeather(int cityID, String cityName, String country, String countryCode) {
+    public void fetchWeather(int cityID, String cityName, String countryCode) {
         city = new City(cityID);
-        city.setDetails(cityName, country, countryCode);
+        city.setDetails(cityName, countryCode);
 
         weatherManager.getWeatherFromDB(city, new IWeatherManager.IWeatherDetailsCallback() {
             @Override

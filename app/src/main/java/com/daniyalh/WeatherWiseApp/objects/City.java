@@ -2,7 +2,7 @@ package com.daniyalh.WeatherWiseApp.objects;
 
 public class City {
     private final int cityID;
-    private String cityName, country, countryCode;
+    private String cityName, countryCode;
     private Weather currentWeather;
     private long forecastLastUpdated;
     private Forecast[] forecasts; // Array of 40 forecasts
@@ -12,9 +12,8 @@ public class City {
         this.forecasts = new Forecast[40]; // Initialize forecast array
     }
 
-    public void setDetails(String cityName, String country, String countryCode) {
+    public void setDetails(String cityName, String countryCode) {
         this.cityName = cityName;
-        this.country = country;
         this.countryCode = countryCode;
     }
 
@@ -36,10 +35,6 @@ public class City {
 
     public String getCityName() {
         return cityName;
-    }
-
-    public String getCountry() {
-        return country;
     }
 
     public String getCountryCode() {

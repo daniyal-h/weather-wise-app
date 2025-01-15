@@ -49,7 +49,6 @@ public class WeatherDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int cityID = intent.getIntExtra(UIConstants.EXTRA_CITY_ID, 0);
         String cityName = intent.getStringExtra(UIConstants.EXTRA_CITY_NAME);
-        String countryName = intent.getStringExtra(UIConstants.EXTRA_COUNTRY_NAME);
         String countryCode = intent.getStringExtra(UIConstants.EXTRA_COUNTRY_CODE);
         isFavourite = intent.getIntExtra(UIConstants.EXTRA_IS_FAVOURITE, 0) == 1;
 
@@ -57,7 +56,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
 
         // display the loading icon while fetching weather asynchronously
         showLoadingIcon(true);
-        weatherController.fetchWeather(cityID, cityName, countryName, countryCode); // forecast
+        weatherController.fetchWeather(cityID, cityName, countryCode); // forecast
 
         setButtonListeners();
     }
