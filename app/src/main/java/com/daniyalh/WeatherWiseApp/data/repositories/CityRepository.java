@@ -15,7 +15,7 @@ public class CityRepository {
     public Cursor getFavouriteCities() {
         // return a cursor with all favourite cities
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String sql = "SELECT cityID, name || ', ' || country_code AS display_name, country "
+        String sql = "SELECT cityID, name || ', ' || country_code AS display_name "
                 + "FROM cities WHERE is_favourite = 1 "
                 + "ORDER BY display_name";
         return db.rawQuery(sql, null);
@@ -29,11 +29,27 @@ public class CityRepository {
     }
 
     public Cursor getCitiesByQuery(String query) {
-        // return a cursor with top 10 cities through a following wild card search
+        /*
+        Mimics a wildcard search with stronger optimization
+        Utilizes index of (name, population (desc))
+         */
+        // Get the next character for the range query
+        query = query.substring(0, 1).toUpperCase() + query.substring(1);
+
+        // Get the next character for the range query
+        char lastChar = query.charAt(query.length() - 1);
+        String nextQuery = query.substring(0, query.length() - 1) + (char) (lastChar + 1);
+
         SQLiteDatabase database = dbHelper.getReadableDatabase();
-        String sql = "SELECT cityID AS _id, country_code, name || ', ' || country AS display_name, is_favourite"
-                +  " FROM CITIES WHERE name LIKE ? LIMIT 10";
-        return database.rawQuery(sql, new String[]{query + "%"});
+        // Construct the SQL query
+        String sql = "SELECT cityID AS _id, name || ', ' || country_code AS display_name, is_favourite " +
+                "FROM CITIES " +
+                "WHERE name >= ? AND name < ? " +
+                "ORDER BY population DESC " +
+                "LIMIT 10";
+
+        // Execute the query and return the cursor
+        return database.rawQuery(sql, new String[]{query, nextQuery});
     }
 
     public void clearFavourites() {

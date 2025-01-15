@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeDatabase() {
-        //myDatabase = MyDatabaseHelper.getInstance(this, "WeatherWiseApp.db");
         DatabaseHelper.initialize(this, "WeatherWiseApp.db");
         dbHelper = DatabaseHelper.getInstance();
 
@@ -94,12 +93,11 @@ public class MainActivity extends AppCompatActivity {
                     String[] favouriteDetails = favouritesManager.getFavouriteDetails(displayName);
                     int cityID = Integer.parseInt(favouriteDetails[0]);
                     String cityName = favouriteDetails[1];
-                    String countryName = favouriteDetails[2];
-                    String countryCode = favouriteDetails[3];
+                    String countryCode = favouriteDetails[2];
                     int isFavourite = 1; // always a favourite
 
                     // forecast the entry
-                    forecastDetails(cityID, cityName, countryName, countryCode, isFavourite);
+                    forecastDetails(cityID, cityName, countryCode, isFavourite);
                 });
                 favouritesRecyclerView.setAdapter(favouritesAdapter);
             }
@@ -164,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
         String cityName = pair.substring(0, pair.indexOf(","));
-        String countryName = pair.substring(pair.indexOf(",")+2); // Winnipeg, *Canada* (comma+2)
-        String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("country_code"));
+        String countryCode = pair.substring(pair.indexOf(",")+2); // Winnipeg, *CA* (comma+2)
         int isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("is_favourite")); // 0 or 1
 
         // close the old cursor so it doesn't remain active while viewing forecast
@@ -176,14 +173,13 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteCityTextView.setText("");
         autoCompleteCityTextView.clearFocus();
 
-        forecastDetails(cityID, cityName, countryName, countryCode, isFavourite);
+        forecastDetails(cityID, cityName, countryCode, isFavourite);
     }
 
-    private void forecastDetails(int cityID, String cityName, String countryName, String countryCode, int isFavourite) {
+    private void forecastDetails(int cityID, String cityName, String countryCode, int isFavourite) {
         Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
         intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
         intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
-        intent.putExtra(UIConstants.EXTRA_COUNTRY_NAME, countryName);
         intent.putExtra(UIConstants.EXTRA_COUNTRY_CODE, countryCode);
         intent.putExtra(UIConstants.EXTRA_IS_FAVOURITE, isFavourite);
 

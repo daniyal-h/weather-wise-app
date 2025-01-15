@@ -67,10 +67,9 @@ public class FavouritesManager implements IFavouritesManager {
                         // get all necessary parameters
                         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("cityID"));
                         String displayName = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
-                        String country = cursor.getString(cursor.getColumnIndexOrThrow("country"));
 
                         // track favourites details and prepare list with display names
-                        trackFavourites(displayName, cityID, country);
+                        trackFavourites(displayName, cityID);
                         favourites.add(displayName);
                     } while (cursor.moveToNext());
                 }
@@ -103,13 +102,13 @@ public class FavouritesManager implements IFavouritesManager {
         });
     }
 
-    private void trackFavourites(String displayName, int cityID, String country) {
+    private void trackFavourites(String displayName, int cityID) {
         // track each favourite in a Map
         String cityName = displayName.substring(0, displayName.indexOf(","));
         String countryCode = displayName.substring(displayName.indexOf(",")+2);
 
         favouriteCities.put(displayName,
-                new String[]{String.valueOf(cityID), cityName, country, countryCode});
+                new String[]{String.valueOf(cityID), cityName, countryCode});
     }
 
     @Override
