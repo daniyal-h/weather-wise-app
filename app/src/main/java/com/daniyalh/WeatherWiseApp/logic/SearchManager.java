@@ -1,12 +1,12 @@
 package com.daniyalh.WeatherWiseApp.logic;
 
-import com.daniyalh.WeatherWiseApp.data.MyDatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 
 public class SearchManager implements ISearchManager {
-    private final MyDatabaseHelper myDatabase;
+    private final DatabaseHelper dhHelper;
 
-    public SearchManager(MyDatabaseHelper myDatabase) {
-        this.myDatabase = myDatabase;
+    public SearchManager(DatabaseHelper dhHelper) {
+        this.dhHelper = dhHelper;
     }
     @Override
     public void searchCities(String query, SearchCallback callback) {
@@ -17,6 +17,6 @@ public class SearchManager implements ISearchManager {
         }
 
         // pass the cursor to the callback
-        callback.onResults(myDatabase.getCitiesByQuery(query));
+        callback.onResults(dhHelper.getCityRepository().getCitiesByQuery(query));
     }
 }

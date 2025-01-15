@@ -4,6 +4,9 @@ import static org.mockito.Mockito.mock;
 
 import android.content.Context;
 import android.database.Cursor;
+
+import com.daniyalh.WeatherWiseApp.presentation.home.CityCursorAdapter;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.RobolectricTestRunner;

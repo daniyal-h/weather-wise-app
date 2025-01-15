@@ -143,7 +143,7 @@
         tools:text="04:30 p.m." />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/loading_icon_lottie"
+        android:id="@+id/loading_weather_icon_lottie"
         android:layout_width="700px"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
