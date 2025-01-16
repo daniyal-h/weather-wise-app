@@ -3,6 +3,7 @@ package com.daniyalh.WeatherWiseApp.presentation.home;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView favouritesRecyclerView;
     private FavouritesAdapter favouritesAdapter;
     private Button clearFavouritesButton;
-    boolean isSelecting = false;
+    private final Handler queryHandler = new Handler();
+    private Runnable queryRunnable;
+    private static final int DEBOUNCE_DELAY = 300; // Delay in ms
+    private boolean isSelecting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 // update when useful change is detected
                 if (!isSelecting && !s.toString().trim().equals("")
                         && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
-                    handleSearching(s);
+                    debounceSearch(s.toString());
                 }
             }
             @Override
@@ -137,9 +141,21 @@ public class MainActivity extends AppCompatActivity {
         clearFavouritesButton.setOnClickListener(v -> handleClearing());
     }
 
-    private void handleSearching(CharSequence s) {
+    private void debounceSearch(String query) {
+        // Cancel any previously scheduled tasks
+        if (queryRunnable != null) {
+            queryHandler.removeCallbacks(queryRunnable);
+        }
+
+        // Schedule a new query
+        queryRunnable = () -> handleSearching(query);
+        queryHandler.postDelayed(queryRunnable, DEBOUNCE_DELAY);
+    }
+
+
+    private void handleSearching(String query) {
         // update results based on the callback
-        searchManager.searchCities(s.toString(), new ISearchManager.SearchCallback() {
+        searchManager.searchCities(query, new ISearchManager.SearchCallback() {
             @Override
             public void onResults(Cursor cursor) {
                 if (cursor == null || cursor.getCount() == 0)
