@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
 import com.daniyalh.WeatherWiseApp.logic.forecast.ForecastManager;
-import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Forecast;
-import com.daniyalh.WeatherWiseApp.presentation.home.FavouritesAdapter;
 
 
-public class ForecastDetailActivity extends AppCompatActivity {
+public class ForecastPage extends AppCompatActivity {
     private ForecastManager forecastManager;
     private ForecastController forecastController;
 

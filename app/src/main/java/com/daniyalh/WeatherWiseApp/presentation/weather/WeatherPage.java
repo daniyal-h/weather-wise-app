@@ -20,9 +20,9 @@ import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
 import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
-import com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastDetailActivity;
+import com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastPage;
 
-public class WeatherDetailActivity extends AppCompatActivity {
+public class WeatherPage extends AppCompatActivity {
     private WeatherController weatherController;
     private final Handler handler = new Handler();
     private Runnable updateTimeRunnable;
@@ -143,7 +143,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
 
         extendedForecastAnimationButton.setOnClickListener(v ->
                 // make an extended forecast page
-                startActivity(new Intent(WeatherDetailActivity.this, ForecastDetailActivity.class)));
+                startActivity(new Intent(WeatherPage.this, ForecastPage.class)));
 
         goBackButton.setOnClickListener(v -> finish()); // home page
     }

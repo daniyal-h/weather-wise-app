@@ -1,5 +1,7 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
+import android.util.Log;
+
 import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
@@ -12,7 +14,7 @@ public class WeatherController {
 
     private WeatherManager weatherManager;
     private FavouritesManager favouritesManager;
-    private WeatherDetailActivity context;
+    private WeatherPage context;
     private City city;
     private Weather weather;
 
@@ -26,7 +28,7 @@ public class WeatherController {
         return instance;
     }
 
-    public void injectDependencies(WeatherDetailActivity context,
+    public void injectDependencies(WeatherPage context,
                                    WeatherManager weatherManager,
                                    FavouritesManager favouritesManager) {
         this.weatherManager = weatherManager;
@@ -52,6 +54,7 @@ public class WeatherController {
             @Override
             public void onError(String error) {
                 // TODO
+                Log.d("WeatherController", "Failed to fetch weather, error: " + error);
             }
         });
     }

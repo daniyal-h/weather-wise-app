@@ -1,7 +1,5 @@
 package com.daniyalh.WeatherWiseApp.presentation.forecast;
 
-import android.util.Log;
-
 import com.daniyalh.WeatherWiseApp.logic.forecast.ForecastManager;
 import com.daniyalh.WeatherWiseApp.logic.forecast.IForecastManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
@@ -9,10 +7,10 @@ import com.daniyalh.WeatherWiseApp.objects.Forecast;
 import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherController;
 
 public class ForecastController {
-    private final ForecastDetailActivity context;
+    private final ForecastPage context;
     private final ForecastManager forecastManager;
 
-    public ForecastController(ForecastDetailActivity context, ForecastManager forecastManager) {
+    public ForecastController(ForecastPage context, ForecastManager forecastManager) {
         this.context = context;
         this.forecastManager = forecastManager;
     }

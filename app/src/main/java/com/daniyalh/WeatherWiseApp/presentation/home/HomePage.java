@@ -23,15 +23,17 @@ import com.daniyalh.WeatherWiseApp.logic.weather.IFavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
 import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
-import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherDetailActivity;
+import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherPage;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    //private MyDatabaseHelper myDatabase;
+public class HomePage extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private SearchManager searchManager;
     private FavouritesManager favouritesManager;
+    private SearchHelper searchHelper;
+    private FavouritesCoordinator favouritesCoordinator;
+    private HomeUIManager homeUIManager;
 
     private AutoCompleteTextView autoCompleteCityTextView;
     private CityCursorAdapter cityCursorAdapter;
@@ -49,15 +51,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         initializeDatabase();
-        initializeLogicClasses();
-        initializeUI();
-        setListeners();
+        initializeClasses();
+        //initializeUI();
+        //setListeners();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        displayFavourites(); // updates favourites when returning from weather
+        favouritesCoordinator.displayFavourites(); // updates favourites when returning from weather
     }
 
     private void initializeDatabase() {
@@ -66,11 +68,70 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initializeLogicClasses() {
+    private void initializeClasses() {
+        searchHelper = new SearchHelper(this);
+        favouritesCoordinator = new FavouritesCoordinator(this);
+        homeUIManager = new HomeUIManager(this);
+
         searchManager = new SearchManager(dbHelper);
         favouritesManager = FavouritesManager.getInstance();
         favouritesManager.injectDatabase(dbHelper);
     }
+
+    // bridging methods to connect helpers of Home Page
+    // TODO ORDER BRIDGER METHODS BETTER
+
+    public void debounceSearch(String query) {
+        searchHelper.debounceSearch(query);
+    }
+
+    public CityCursorAdapter getCityCursorAdapter() {
+        return searchHelper.getCityCursorAdapter();
+    }
+
+    public FavouritesAdapter getFavouritesAdapter() {
+        return favouritesCoordinator.getFavouritesAdapter();
+    }
+
+    public void setFavouritesAdapter(FavouritesAdapter favouritesAdapter) {
+        homeUIManager.setFavouritesAdapter(favouritesAdapter);
+    }
+
+    public void minimizeAutocomplete() {
+        homeUIManager.minimizeAutocomplete();
+    }
+
+    public void showToast(String message, int duration) {
+        homeUIManager.showToast(message, duration);
+    }
+
+    public void handleCitySelection(Cursor cursor) {
+        searchHelper.handleCitySelection(cursor);
+    }
+
+    public void clearFavourites() {
+        favouritesCoordinator.clearFavourites();
+    }
+
+    public void forecastDetails(int cityID, String cityName, String countryCode, int isFavourite) {
+        Intent intent = new Intent(HomePage.this, WeatherPage.class);
+        intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
+        intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
+        intent.putExtra(UIConstants.EXTRA_COUNTRY_CODE, countryCode);
+        intent.putExtra(UIConstants.EXTRA_IS_FAVOURITE, isFavourite);
+
+        // start forecastDetailActivity for selected city
+        startActivity(intent);
+    }
+
+
+
+
+
+
+
+
+
 
     private void initializeUI() {
         cityCursorAdapter = new CityCursorAdapter(this, null);
@@ -93,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         favouritesManager.getFavourites(new IFavouritesManager.FavouritesCallback() {
             @Override
             public void onFavouritesFetched(List<String> favourites) {
-                favouritesAdapter = new FavouritesAdapter(MainActivity.this, favourites, displayName -> {
+                favouritesAdapter = new FavouritesAdapter(HomePage.this, favourites, displayName -> {
                     String[] favouriteDetails = favouritesManager.getFavouriteDetails(displayName);
                     int cityID = Integer.parseInt(favouriteDetails[0]);
                     String cityName = favouriteDetails[1];
@@ -125,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 // update when useful change is detected
                 if (!isSelecting && !s.toString().trim().equals("")
                         && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
-                    debounceSearch(s.toString());
+                    debounceSearchOG(s.toString());
                 }
             }
             @Override
@@ -134,14 +195,14 @@ public class MainActivity extends AppCompatActivity {
 
         autoCompleteCityTextView.setOnItemClickListener((parent, view, position, id) -> {
             isSelecting = true; // prevents TextWatcher after selection
-            handleCitySelection((Cursor) parent.getItemAtPosition(position));
+            handleCitySelectionOG((Cursor) parent.getItemAtPosition(position));
             isSelecting = false; // reset flag after handling
         });
 
         clearFavouritesButton.setOnClickListener(v -> handleClearing());
     }
 
-    private void debounceSearch(String query) {
+    private void debounceSearchOG(String query) {
         // Cancel any previously scheduled tasks
         if (queryRunnable != null) {
             queryHandler.removeCallbacks(queryRunnable);
@@ -151,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
         queryRunnable = () -> handleSearching(query);
         queryHandler.postDelayed(queryRunnable, DEBOUNCE_DELAY);
     }
-
 
     private void handleSearching(String query) {
         // update results based on the callback
@@ -173,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void handleCitySelection(Cursor cursor) {
+    private void handleCitySelectionOG(Cursor cursor) {
         // set variables
         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
@@ -192,31 +252,22 @@ public class MainActivity extends AppCompatActivity {
         forecastDetails(cityID, cityName, countryCode, isFavourite);
     }
 
-    private void forecastDetails(int cityID, String cityName, String countryCode, int isFavourite) {
-        Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
-        intent.putExtra(UIConstants.EXTRA_CITY_ID, cityID);
-        intent.putExtra(UIConstants.EXTRA_CITY_NAME, cityName);
-        intent.putExtra(UIConstants.EXTRA_COUNTRY_CODE, countryCode);
-        intent.putExtra(UIConstants.EXTRA_IS_FAVOURITE, isFavourite);
-
-        // start forecastDetailActivity for selected city
-        startActivity(intent);
-    }
-
     private void handleClearing() {
         // use an alert to double-check clearing
+
+
         if (favouritesAdapter != null && favouritesAdapter.getItemCount() > 0) {
             new AlertDialog.Builder(this)
                     .setTitle("Confirm")
                     .setMessage("Are you sure you want to clear all favourites?")
-                    .setPositiveButton("Yes", (dialog, which) -> clearFavourites())
+                    .setPositiveButton("Yes", (dialog, which) -> clearFavouritesOG())
                     .setNegativeButton("No", null) // Dismisses the dialog
                     .show();
         }
         else showToast("No favourites to clear", Toast.LENGTH_SHORT);
     }
 
-    private void clearFavourites() {
+    private void clearFavouritesOG() {
         /*
         Clear the favourites and update the favourites display (should be empty)
          */
@@ -233,10 +284,6 @@ public class MainActivity extends AppCompatActivity {
                 showToast("Error fetching favourites", Toast.LENGTH_SHORT);
             }
         });
-    }
-
-    public void showToast(String message, int duration) {
-        Toast.makeText(this, message, duration).show();
     }
 
     private void cleanup() {
