@@ -3,6 +3,7 @@ package com.daniyalh.WeatherWiseApp.presentation.home;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.IFavouritesManager;
 
@@ -16,6 +17,7 @@ public class FavouritesCoordinator {
     public FavouritesCoordinator(HomePage homePage) {
         this.homePage = homePage;
         favouritesManager = FavouritesManager.getInstance();
+        favouritesManager.injectDatabase(DatabaseHelper.getInstance());
     }
 
     public FavouritesAdapter getFavouritesAdapter() {
@@ -68,5 +70,9 @@ public class FavouritesCoordinator {
                 homePage.showToast("Error fetching favourites", Toast.LENGTH_SHORT);
             }
         });
+    }
+
+    public void cleanUp() {
+        favouritesManager.shutdown();
     }
 }

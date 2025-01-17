@@ -1,6 +1,5 @@
 package com.daniyalh.WeatherWiseApp.presentation.home;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.widget.Toast;
@@ -8,22 +7,17 @@ import android.widget.Toast;
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
 import com.daniyalh.WeatherWiseApp.logic.SearchManager;
-import com.daniyalh.WeatherWiseApp.objects.City;
-import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
-import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherPage;
 
 public class SearchHelper {
     private final HomePage homePage;
     private final SearchManager searchManager;
-    private final DatabaseHelper databaseHelper;
     private final CityCursorAdapter cityCursorAdapter;
     private final Handler queryHandler = new Handler();
     private Runnable queryRunnable;
     private static final int DEBOUNCE_DELAY = 300; // Delay in ms
     public SearchHelper(HomePage homePage) {
         this.homePage = homePage;
-        databaseHelper = DatabaseHelper.getInstance();
-        searchManager = new SearchManager(databaseHelper);
+        searchManager = new SearchManager(DatabaseHelper.getInstance());
         cityCursorAdapter = new CityCursorAdapter(homePage, null);
     }
 
@@ -78,5 +72,10 @@ public class SearchHelper {
 
         homePage.minimizeAutocomplete();
         homePage.forecastDetails(cityID, cityName, countryCode, isFavourite);
+    }
+
+    public void cleanUp() {
+        if (cityCursorAdapter != null)
+            cityCursorAdapter.changeCursor(null); // close the cursor when done
     }
 }
