@@ -44,11 +44,11 @@ public class CityRepository {
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();
 
-        String sql = "SELECT cityID AS _id, name || ', ' || country_code AS display_name, is_favourite " +
-                     "FROM CITIES " +
-                     "WHERE name >= ? AND name < ? " +
-                     "ORDER BY population DESC " +
-                     "LIMIT 10";
+        String sql = "SELECT cityID AS _id, Cities.country_code, name || ', ' || country AS display_name, is_favourite " +
+                "FROM Cities JOIN Countries ON Cities.country_code = Countries.country_code " +
+                "WHERE name >= ? AND name < ? " +
+                "ORDER BY population DESC " +
+                "LIMIT 10";
 
         // Execute the query and return the cursor
         return database.rawQuery(sql, new String[]{query, nextQuery});

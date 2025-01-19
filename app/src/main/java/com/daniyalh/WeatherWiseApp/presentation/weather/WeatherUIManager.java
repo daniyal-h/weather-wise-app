@@ -88,6 +88,7 @@ public class WeatherUIManager {
             }
             else {
                 favouritingAnimationButton.playAnimation();
+                favouritingAnimationButton.cancelAnimation();
                 showToast("Favourited city", Toast.LENGTH_SHORT);
                 isFavourite = true;
             }
@@ -176,11 +177,12 @@ public class WeatherUIManager {
         // set the background colour depending on the time of day
         if (timeOfDay == 'd') {
             weatherPage.findViewById(R.id.root_layout).
-                    setBackground(ContextCompat.getDrawable(weatherPage, R.drawable.day_gradient_background));
-                    //(ContextCompat.getColor(weatherPage, R.color.day_background));
+                    setBackground(ContextCompat.getDrawable(weatherPage,
+                            R.drawable.day_gradient_background));
         } else { // nighttime
-            weatherPage.findViewById(R.id.root_layout).setBackgroundColor
-                    (ContextCompat.getColor(weatherPage, R.color.night_background));
+            weatherPage.findViewById(R.id.root_layout).
+                    setBackground(ContextCompat.getDrawable(weatherPage,
+                            R.drawable.night_gradient_background));
         }
     }
 

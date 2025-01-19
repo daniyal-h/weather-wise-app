@@ -1,17 +1,12 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
-import android.content.Intent;
-import android.util.Log;
-
 import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
-import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
 
 public class WeatherController {
-    private static final String TAG = "WeatherController";
     private static WeatherController instance;
 
     private WeatherManager weatherManager;
@@ -19,7 +14,6 @@ public class WeatherController {
     private WeatherPage context;
     private City city;
     private Weather weather;
-    private boolean isFavourite;
 
     private WeatherController() {}
 
@@ -31,12 +25,12 @@ public class WeatherController {
         return instance;
     }
 
-    public void injectDependencies(WeatherPage context,
+    public void injectDependencies(WeatherPage weatherPage,
                                    WeatherManager weatherManager,
                                    FavouritesManager favouritesManager) {
         this.weatherManager = weatherManager;
         this.favouritesManager = favouritesManager;
-        this.context = context;
+        this.context = weatherPage;
     }
 
     public void fetchWeather(int cityID, String cityName, String countryCode) {
@@ -46,21 +40,15 @@ public class WeatherController {
         weatherManager.getWeatherFromDB(city, new IWeatherManager.IWeatherDetailsCallback() {
             @Override
             public void onSuccess(String[] weatherDetails) {
-                //context.showLoadingIcon(false);
+                // attach a the new Weather and update the UI
                 weather = new Weather(weatherDetails);
                 city.setWeather(weather);
-                /*context.setCityLabel(city);
-                context.setStaticUIVisibility(true);
-                context.updateWeatherDetails(weather);
-                context.updateWeatherDetails(weather);*/
-
                 context.updateWeatherDetails(city);
             }
 
             @Override
             public void onError(String error) {
                 // TODO
-                Log.d("WeatherController", "Failed to fetch weather, error: " + error);
             }
         });
     }
