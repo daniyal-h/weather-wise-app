@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">WW</string>
     <string name="clear_favourites">Clear Favourites</string>
-    <string name="city_search">Enter City</string>
-    <string name="from_favourites">Choose From Favourites:</string>
+    <string name="city_search">Search for a city...</string>
+    <string name="from_favourites">Your Favourites:</string>
     <string name="sunrise_label">Sunrise</string>
     <string name="sunset_label">Sunset</string>
     <string name="wind_label">Wind</string>

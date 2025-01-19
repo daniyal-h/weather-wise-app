@@ -290,6 +290,8 @@
         android:fontFamily="@font/roboto_bold"
         android:text="@string/back_home"
         android:textColor="#FFFFFF"
+        android:drawableLeft="@drawable/ic_home"
+        android:paddingRight="44dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/humidity_icon_lottie"
         app:layout_constraintStart_toStartOf="@+id/wind_icon_lottie" />

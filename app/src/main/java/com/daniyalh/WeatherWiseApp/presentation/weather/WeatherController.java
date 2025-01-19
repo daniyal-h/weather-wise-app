@@ -1,5 +1,6 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
@@ -7,6 +8,7 @@ import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
 
 public class WeatherController {
     private static final String TAG = "WeatherController";
@@ -17,6 +19,7 @@ public class WeatherController {
     private WeatherPage context;
     private City city;
     private Weather weather;
+    private boolean isFavourite;
 
     private WeatherController() {}
 
@@ -43,12 +46,15 @@ public class WeatherController {
         weatherManager.getWeatherFromDB(city, new IWeatherManager.IWeatherDetailsCallback() {
             @Override
             public void onSuccess(String[] weatherDetails) {
-                context.showLoadingIcon(false);
+                //context.showLoadingIcon(false);
                 weather = new Weather(weatherDetails);
                 city.setWeather(weather);
-                context.setCityLabel(city);
+                /*context.setCityLabel(city);
                 context.setStaticUIVisibility(true);
                 context.updateWeatherDetails(weather);
+                context.updateWeatherDetails(weather);*/
+
+                context.updateWeatherDetails(city);
             }
 
             @Override

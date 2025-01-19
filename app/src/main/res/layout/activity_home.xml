@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/home_gradient_background">
 
     <Button
         android:id="@+id/back_home_button"
@@ -12,7 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:drawableLeft="@drawable/ic_delete"
+        android:paddingRight="44dp"
         android:text="@string/clear_favourites"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/favourites_recycler_view"
@@ -26,12 +29,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:singleLine="true"
-        android:inputType="text"
         android:ellipsize="none"
-        android:maxLines="1"
         android:hint="@string/city_search"
-        android:padding="16dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:singleLine="true"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,11 +46,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:fontFamily="sans-serif-black"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/from_favourites"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="@+id/autocomplete_city_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/autocomplete_city_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/autocomplete_city_text_view"
+        app:drawableStartCompat="@drawable/ic_star"
+        android:drawablePadding="8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favourites_recycler_view"

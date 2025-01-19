@@ -12,11 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daniyalh.WeatherWiseApp.R;
 
 import java.util.List;
+import java.util.Random;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.ViewHolder> {
     private final List<String> favouriteCities;
     private final Context context;
     private final OnItemClickListener listener;
+    private final int[] icons = {
+            R.drawable.ic_art1, R.drawable.ic_art2, R.drawable.ic_art3,
+            R.drawable.ic_art4, R.drawable.ic_art5, R.drawable.ic_art6,
+            R.drawable.ic_art7, R.drawable.ic_art8, R.drawable.ic_art9,
+            R.drawable.ic_art10
+    };
+
 
     public interface OnItemClickListener {
         void onItemClick(String city);
@@ -39,6 +47,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         String city = favouriteCities.get(position);
         holder.cityName.setText(city);
+
+        // Randomly assign a drawableStart icon
+        int randomIcon = icons[new Random().nextInt(icons.length)];
+        holder.cityName.setCompoundDrawablesWithIntrinsicBounds(randomIcon, 0, 0, 0);
+
         holder.bind(city, listener);
     }
 

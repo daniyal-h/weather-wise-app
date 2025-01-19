@@ -33,6 +33,8 @@
         android:text="@string/go_back"
         android:textColor="#FFFFFF"
         android:fontFamily="@font/roboto_bold"
+        android:drawableLeft="@drawable/ic_weather"
+        android:paddingRight="44dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/forecasts_recycler_view"
         app:layout_constraintHorizontal_bias="1.0"

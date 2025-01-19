@@ -90,6 +90,7 @@ public class HomePage extends AppCompatActivity {
 
     private void cleanup() {
         searchHelper.cleanUp();
+        favouritesCoordinator.cleanUp();
 
         if (dbHelper != null)
             dbHelper.close(); // close DB when done

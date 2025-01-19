@@ -1,29 +1,20 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
-import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
-import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
-import com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastPage;
 
-public class WeatherPage extends AppCompatActivity {
-    private WeatherController weatherController;
-    private WeatherUIManager weatherUIManager;
+public class WeatherUIManager {
+    private final WeatherPage weatherPage;
     private final Handler handler = new Handler();
     private Runnable updateTimeRunnable;
 
@@ -36,117 +27,41 @@ public class WeatherPage extends AppCompatActivity {
 
     private Button goBackButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_detail);
+    private boolean isFavourite;
 
-        //initializeUI();
-
-        // get all parameters
-        Intent intent = getIntent();
-        int cityID = intent.getIntExtra(UIConstants.EXTRA_CITY_ID, 0);
-        String cityName = intent.getStringExtra(UIConstants.EXTRA_CITY_NAME);
-        String countryCode = intent.getStringExtra(UIConstants.EXTRA_COUNTRY_CODE);
-        boolean isFavourite = intent.getIntExtra(UIConstants.EXTRA_IS_FAVOURITE, 0) == 1;
-
-        initializeClasses(isFavourite);
-
-        // display the loading icon while fetching weather asynchronously
-        showLoadingIcon(true);
-        weatherController.fetchWeather(cityID, cityName, countryCode); // forecast
-
-        //setButtonListeners();
+    public WeatherUIManager(WeatherPage weatherPage, boolean isFavourite) {
+        this.weatherPage = weatherPage;
+        initializeUI();
+        setButtonListeners();
+        this.isFavourite = isFavourite;
     }
 
-    private void initializeClasses(boolean isFavourite) {
-        FavouritesManager favouritesManager = FavouritesManager.getInstance();
-        WeatherManager weatherManager = new WeatherManager(this);
-        weatherController = WeatherController.getInstance();
-        weatherController.injectDependencies(this, weatherManager, favouritesManager);
+    public void initializeUI() {
+        cityTextView = weatherPage.findViewById(R.id.city_text_view);
+        descriptionTextView = weatherPage.findViewById(R.id.description_text_view);
+        forecastUpdateTextView = weatherPage.findViewById(R.id.forecast_update_text_view);
 
-        weatherUIManager = new WeatherUIManager(this, isFavourite);
-    }
+        sunriseLabelTextView = weatherPage.findViewById(R.id.sunrise_label_text_view);
+        sunsetLabelTextView = weatherPage.findViewById(R.id.sunset_label_text_view);
+        windLabelTextView = weatherPage.findViewById(R.id.wind_label_text_view);
+        humidityLabelTextView = weatherPage.findViewById(R.id.humidity_label_text_view);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish(); // Close this activity and return to parent
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+        goBackButton = weatherPage.findViewById(R.id.back_home_button);
+        favouritingAnimationButton = weatherPage.findViewById(R.id.favourite_icon_lottie);
+        extendedForecastAnimationButton = weatherPage.findViewById(R.id.extended_forecast_icon_lottie);
 
-    public void showLoadingIcon(boolean visible) {
-        weatherUIManager.showLoadingIcon(visible);
-    }
+        tempTextView = weatherPage.findViewById(R.id.temperature_text_view);
+        feelsLikeTextView = weatherPage.findViewById(R.id.feels_like_text_view);
+        sunriseTextView = weatherPage.findViewById(R.id.sunrise_text_view);
+        sunsetTextView = weatherPage.findViewById(R.id.sunset_text_view);
+        windTextView = weatherPage.findViewById(R.id.wind_text_view);
+        humidityTextView = weatherPage.findViewById(R.id.humidity_text_view);
 
-    public void updateWeatherDetails(City city) {
-        weatherUIManager.updateWeatherDetails(city);
-    }
-
-    public void toggleFavourite(boolean isFavourite) {
-        weatherController.toggleFavourite(isFavourite);
-    }
-
-    public void startForecast() {
-        startActivity(new Intent(WeatherPage.this, ForecastPage.class));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        weatherUIManager.stopUpdatingTime();
-        //handler.removeCallbacks(updateTimeRunnable); // Stop updates when the activity is not visible
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        weatherUIManager.resumeUpdatingTime();
-        //handler.post(updateTimeRunnable); // Resume updates when the activity comes back to the foreground
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        weatherUIManager.cleanup();
-        //handler.removeCallbacks(updateTimeRunnable); // Clean up the runnable
-    }
-
-    /*
-    private void initializeUI() {
-        cityTextView = findViewById(R.id.city_text_view);
-        descriptionTextView = findViewById(R.id.description_text_view);
-        forecastUpdateTextView = findViewById(R.id.forecast_update_text_view);
-
-        sunriseLabelTextView = findViewById(R.id.sunrise_label_text_view);
-        sunsetLabelTextView = findViewById(R.id.sunset_label_text_view);
-        windLabelTextView = findViewById(R.id.wind_label_text_view);
-        humidityLabelTextView = findViewById(R.id.humidity_label_text_view);
-
-        goBackButton = findViewById(R.id.back_home_button);
-        favouritingAnimationButton = findViewById(R.id.favourite_icon_lottie);
-        extendedForecastAnimationButton = findViewById(R.id.extended_forecast_icon_lottie);
-
-        tempTextView = findViewById(R.id.temperature_text_view);
-        feelsLikeTextView = findViewById(R.id.feels_like_text_view);
-        sunriseTextView = findViewById(R.id.sunrise_text_view);
-        sunsetTextView = findViewById(R.id.sunset_text_view);
-        windTextView = findViewById(R.id.wind_text_view);
-        humidityTextView = findViewById(R.id.humidity_text_view);
-
-        loadingIconLottie = findViewById(R.id.loading_weather_icon_lottie);
-        sunIconLottie = findViewById(R.id.sun_icon_lottie);
-        moonIconLottie = findViewById(R.id.moon_icon_lottie);
-        windIconLottie = findViewById(R.id.wind_icon_lottie);
-        humidityIconLottie = findViewById(R.id.humidity_icon_lottie);
-    }
-
-    public void setCityLabel(City city) {
-        // set as "city, countryCode" and time as update time
-        String displayName = city.getCityName().toUpperCase() + ", " + city.getCountryCode();
-        cityTextView.setText(displayName);
+        loadingIconLottie = weatherPage.findViewById(R.id.loading_weather_icon_lottie);
+        sunIconLottie = weatherPage.findViewById(R.id.sun_icon_lottie);
+        moonIconLottie = weatherPage.findViewById(R.id.moon_icon_lottie);
+        windIconLottie = weatherPage.findViewById(R.id.wind_icon_lottie);
+        humidityIconLottie = weatherPage.findViewById(R.id.humidity_icon_lottie);
     }
 
     public void showLoadingIcon(boolean visible) {
@@ -176,14 +91,12 @@ public class WeatherPage extends AppCompatActivity {
                 showToast("Favourited city", Toast.LENGTH_SHORT);
                 isFavourite = true;
             }
-            weatherController.toggleFavourite(isFavourite); // toggle favourite
+            weatherPage.toggleFavourite(isFavourite); // toggle favourite
         });
 
-        extendedForecastAnimationButton.setOnClickListener(v ->
-                // make an extended forecast page
-                startActivity(new Intent(WeatherPage.this, ForecastPage.class)));
+        extendedForecastAnimationButton.setOnClickListener(v -> weatherPage.startForecast());
 
-        goBackButton.setOnClickListener(v -> finish()); // home page
+        goBackButton.setOnClickListener(v -> weatherPage.finish()); // home page
     }
 
     public void setStaticUIVisibility(boolean visible) {
@@ -222,7 +135,20 @@ public class WeatherPage extends AppCompatActivity {
         }
     }
 
-    public void updateWeatherDetails(Weather weather) {
+    public void updateWeatherDetails(City city) {
+        showLoadingIcon(false);
+        setCityLabel(city);
+        setStaticUIVisibility(true);
+        updateWeatherDetails(city.getCurrentWeather());
+    }
+
+    private void setCityLabel(City city) {
+        // set as "city, countryCode" and time as update time
+        String displayName = city.getCityName().toUpperCase() + ", " + city.getCountryCode();
+        cityTextView.setText(displayName);
+    }
+
+    private void updateWeatherDetails(Weather weather) {
         // set the weather details to their corresponding UI elements
         Long lastUpdatedTime = weather.getLastUpdated();
         String temp = (int) weather.getTemp() + "°C";
@@ -243,6 +169,22 @@ public class WeatherPage extends AppCompatActivity {
         setTimeOfDay(weather.getTimeOfDay());
 
         // update the last updated time through a thread every minute
+        startUpdatingTime(lastUpdatedTime);
+    }
+
+    private void setTimeOfDay(char timeOfDay) {
+        // set the background colour depending on the time of day
+        if (timeOfDay == 'd') {
+            weatherPage.findViewById(R.id.root_layout).
+                    setBackground(ContextCompat.getDrawable(weatherPage, R.drawable.day_gradient_background));
+                    //(ContextCompat.getColor(weatherPage, R.color.day_background));
+        } else { // nighttime
+            weatherPage.findViewById(R.id.root_layout).setBackgroundColor
+                    (ContextCompat.getColor(weatherPage, R.color.night_background));
+        }
+    }
+
+    public void startUpdatingTime(long lastUpdatedTime) {
         updateTimeRunnable = new Runnable() {
             @Override
             public void run() {
@@ -253,14 +195,15 @@ public class WeatherPage extends AppCompatActivity {
         handler.post(updateTimeRunnable); // Start the runnable
     }
 
-    private void setTimeOfDay(char timeOfDay) {
-        // set the background colour depending on the time of day
-        if (timeOfDay == 'd') {
-            findViewById(R.id.root_layout).setBackgroundColor
-                    (ContextCompat.getColor(this, R.color.day_background));
-        } else { // nighttime
-            findViewById(R.id.root_layout).setBackgroundColor
-                    (ContextCompat.getColor(this, R.color.night_background));
+    public void stopUpdatingTime() {
+        if (updateTimeRunnable != null) {
+            handler.removeCallbacks(updateTimeRunnable);
+        }
+    }
+
+    public void resumeUpdatingTime() {
+        if (updateTimeRunnable != null) {
+            handler.post(updateTimeRunnable);
         }
     }
 
@@ -272,8 +215,7 @@ public class WeatherPage extends AppCompatActivity {
         forecastUpdateTextView.setText(updateTime);
     }
 
-
-    public void resetUI() {
+    private void resetUI() {
         setStaticUIVisibility(false);
         cityTextView.setText("");
         forecastUpdateTextView.setText("");
@@ -286,7 +228,12 @@ public class WeatherPage extends AppCompatActivity {
         humidityTextView.setText("");
     }
 
+    public void cleanup() {
+        resetUI();
+        stopUpdatingTime();
+    }
+
     public void showToast(String message, int duration) {
-        Toast.makeText(this, message, duration).show();
-    }*/
+        Toast.makeText(weatherPage, message, duration).show();
+    }
 }
