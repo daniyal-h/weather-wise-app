@@ -1,29 +1,20 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
-import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
-import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
-import com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastDetailActivity;
 
-public class WeatherDetailActivity extends AppCompatActivity {
-    private WeatherController weatherController;
+public class WeatherUIManager {
+    private final WeatherPage weatherPage;
     private final Handler handler = new Handler();
     private Runnable updateTimeRunnable;
 
@@ -38,77 +29,39 @@ public class WeatherDetailActivity extends AppCompatActivity {
 
     private boolean isFavourite;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_detail);
-
+    public WeatherUIManager(WeatherPage weatherPage, boolean isFavourite) {
+        this.weatherPage = weatherPage;
         initializeUI();
-
-        // get all parameters
-        Intent intent = getIntent();
-        int cityID = intent.getIntExtra(UIConstants.EXTRA_CITY_ID, 0);
-        String cityName = intent.getStringExtra(UIConstants.EXTRA_CITY_NAME);
-        String countryCode = intent.getStringExtra(UIConstants.EXTRA_COUNTRY_CODE);
-        isFavourite = intent.getIntExtra(UIConstants.EXTRA_IS_FAVOURITE, 0) == 1;
-
-        initializeClasses();
-
-        // display the loading icon while fetching weather asynchronously
-        showLoadingIcon(true);
-        weatherController.fetchWeather(cityID, cityName, countryCode); // forecast
-
         setButtonListeners();
+        this.isFavourite = isFavourite;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish(); // Close this activity and return to parent
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    public void initializeUI() {
+        cityTextView = weatherPage.findViewById(R.id.city_text_view);
+        descriptionTextView = weatherPage.findViewById(R.id.description_text_view);
+        forecastUpdateTextView = weatherPage.findViewById(R.id.forecast_update_text_view);
 
-    private void initializeUI() {
-        cityTextView = findViewById(R.id.city_text_view);
-        descriptionTextView = findViewById(R.id.description_text_view);
-        forecastUpdateTextView = findViewById(R.id.forecast_update_text_view);
+        sunriseLabelTextView = weatherPage.findViewById(R.id.sunrise_label_text_view);
+        sunsetLabelTextView = weatherPage.findViewById(R.id.sunset_label_text_view);
+        windLabelTextView = weatherPage.findViewById(R.id.wind_label_text_view);
+        humidityLabelTextView = weatherPage.findViewById(R.id.humidity_label_text_view);
 
-        sunriseLabelTextView = findViewById(R.id.sunrise_label_text_view);
-        sunsetLabelTextView = findViewById(R.id.sunset_label_text_view);
-        windLabelTextView = findViewById(R.id.wind_label_text_view);
-        humidityLabelTextView = findViewById(R.id.humidity_label_text_view);
+        goBackButton = weatherPage.findViewById(R.id.back_home_button);
+        favouritingAnimationButton = weatherPage.findViewById(R.id.favourite_icon_lottie);
+        extendedForecastAnimationButton = weatherPage.findViewById(R.id.extended_forecast_icon_lottie);
 
-        goBackButton = findViewById(R.id.back_home_button);
-        favouritingAnimationButton = findViewById(R.id.favourite_icon_lottie);
-        extendedForecastAnimationButton = findViewById(R.id.extended_forecast_icon_lottie);
+        tempTextView = weatherPage.findViewById(R.id.temperature_text_view);
+        feelsLikeTextView = weatherPage.findViewById(R.id.feels_like_text_view);
+        sunriseTextView = weatherPage.findViewById(R.id.sunrise_text_view);
+        sunsetTextView = weatherPage.findViewById(R.id.sunset_text_view);
+        windTextView = weatherPage.findViewById(R.id.wind_text_view);
+        humidityTextView = weatherPage.findViewById(R.id.humidity_text_view);
 
-        tempTextView = findViewById(R.id.temperature_text_view);
-        feelsLikeTextView = findViewById(R.id.feels_like_text_view);
-        sunriseTextView = findViewById(R.id.sunrise_text_view);
-        sunsetTextView = findViewById(R.id.sunset_text_view);
-        windTextView = findViewById(R.id.wind_text_view);
-        humidityTextView = findViewById(R.id.humidity_text_view);
-
-        loadingIconLottie = findViewById(R.id.loading_weather_icon_lottie);
-        sunIconLottie = findViewById(R.id.sun_icon_lottie);
-        moonIconLottie = findViewById(R.id.moon_icon_lottie);
-        windIconLottie = findViewById(R.id.wind_icon_lottie);
-        humidityIconLottie = findViewById(R.id.humidity_icon_lottie);
-    }
-
-    private void initializeClasses() {
-        FavouritesManager favouritesManager = FavouritesManager.getInstance();
-        WeatherManager weatherManager = new WeatherManager(this);
-        weatherController = WeatherController.getInstance();
-        weatherController.injectDependencies(this, weatherManager, favouritesManager);
-    }
-
-    public void setCityLabel(City city) {
-        // set as "city, countryCode" and time as update time
-        String displayName = city.getCityName().toUpperCase() + ", " + city.getCountryCode();
-        cityTextView.setText(displayName);
+        loadingIconLottie = weatherPage.findViewById(R.id.loading_weather_icon_lottie);
+        sunIconLottie = weatherPage.findViewById(R.id.sun_icon_lottie);
+        moonIconLottie = weatherPage.findViewById(R.id.moon_icon_lottie);
+        windIconLottie = weatherPage.findViewById(R.id.wind_icon_lottie);
+        humidityIconLottie = weatherPage.findViewById(R.id.humidity_icon_lottie);
     }
 
     public void showLoadingIcon(boolean visible) {
@@ -135,17 +88,16 @@ public class WeatherDetailActivity extends AppCompatActivity {
             }
             else {
                 favouritingAnimationButton.playAnimation();
+                favouritingAnimationButton.cancelAnimation();
                 showToast("Favourited city", Toast.LENGTH_SHORT);
                 isFavourite = true;
             }
-            weatherController.toggleFavourite(isFavourite); // toggle favourite
+            weatherPage.toggleFavourite(isFavourite); // toggle favourite
         });
 
-        extendedForecastAnimationButton.setOnClickListener(v ->
-                // make an extended forecast page
-                startActivity(new Intent(WeatherDetailActivity.this, ForecastDetailActivity.class)));
+        extendedForecastAnimationButton.setOnClickListener(v -> weatherPage.startForecast());
 
-        goBackButton.setOnClickListener(v -> finish()); // home page
+        goBackButton.setOnClickListener(v -> weatherPage.finish()); // home page
     }
 
     public void setStaticUIVisibility(boolean visible) {
@@ -184,7 +136,20 @@ public class WeatherDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void updateWeatherDetails(Weather weather) {
+    public void updateWeatherDetails(City city) {
+        showLoadingIcon(false);
+        setCityLabel(city);
+        setStaticUIVisibility(true);
+        updateWeatherDetails(city.getCurrentWeather());
+    }
+
+    private void setCityLabel(City city) {
+        // set as "city, countryCode" and time as update time
+        String displayName = city.getCityName().toUpperCase() + ", " + city.getCountryCode();
+        cityTextView.setText(displayName);
+    }
+
+    private void updateWeatherDetails(Weather weather) {
         // set the weather details to their corresponding UI elements
         Long lastUpdatedTime = weather.getLastUpdated();
         String temp = (int) weather.getTemp() + "°C";
@@ -205,6 +170,23 @@ public class WeatherDetailActivity extends AppCompatActivity {
         setTimeOfDay(weather.getTimeOfDay());
 
         // update the last updated time through a thread every minute
+        startUpdatingTime(lastUpdatedTime);
+    }
+
+    private void setTimeOfDay(char timeOfDay) {
+        // set the background colour depending on the time of day
+        if (timeOfDay == 'd') {
+            weatherPage.findViewById(R.id.root_layout).
+                    setBackground(ContextCompat.getDrawable(weatherPage,
+                            R.drawable.day_gradient_background));
+        } else { // nighttime
+            weatherPage.findViewById(R.id.root_layout).
+                    setBackground(ContextCompat.getDrawable(weatherPage,
+                            R.drawable.night_gradient_background));
+        }
+    }
+
+    public void startUpdatingTime(long lastUpdatedTime) {
         updateTimeRunnable = new Runnable() {
             @Override
             public void run() {
@@ -215,14 +197,15 @@ public class WeatherDetailActivity extends AppCompatActivity {
         handler.post(updateTimeRunnable); // Start the runnable
     }
 
-    private void setTimeOfDay(char timeOfDay) {
-        // set the background colour depending on the time of day
-        if (timeOfDay == 'd') {
-            findViewById(R.id.root_layout).setBackgroundColor
-                    (ContextCompat.getColor(this, R.color.day_background));
-        } else { // nighttime
-            findViewById(R.id.root_layout).setBackgroundColor
-                    (ContextCompat.getColor(this, R.color.night_background));
+    public void stopUpdatingTime() {
+        if (updateTimeRunnable != null) {
+            handler.removeCallbacks(updateTimeRunnable);
+        }
+    }
+
+    public void resumeUpdatingTime() {
+        if (updateTimeRunnable != null) {
+            handler.post(updateTimeRunnable);
         }
     }
 
@@ -234,26 +217,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
         forecastUpdateTextView.setText(updateTime);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        handler.removeCallbacks(updateTimeRunnable); // Stop updates when the activity is not visible
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        handler.post(updateTimeRunnable); // Resume updates when the activity comes back to the foreground
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        resetUI();
-        handler.removeCallbacks(updateTimeRunnable); // Clean up the runnable
-    }
-
-    public void resetUI() {
+    private void resetUI() {
         setStaticUIVisibility(false);
         cityTextView.setText("");
         forecastUpdateTextView.setText("");
@@ -266,15 +230,12 @@ public class WeatherDetailActivity extends AppCompatActivity {
         humidityTextView.setText("");
     }
 
-    public void showToast(String message, int duration) {
-        Toast.makeText(this, message, duration).show();
+    public void cleanup() {
+        resetUI();
+        stopUpdatingTime();
     }
 
-    public void showAlertDialog(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK", null)
-                .show();
+    public void showToast(String message, int duration) {
+        Toast.makeText(weatherPage, message, duration).show();
     }
 }

@@ -7,12 +7,11 @@ import com.daniyalh.WeatherWiseApp.objects.City;
 import com.daniyalh.WeatherWiseApp.objects.Weather;
 
 public class WeatherController {
-    private static final String TAG = "WeatherController";
     private static WeatherController instance;
 
     private WeatherManager weatherManager;
     private FavouritesManager favouritesManager;
-    private WeatherDetailActivity context;
+    private WeatherPage context;
     private City city;
     private Weather weather;
 
@@ -26,12 +25,12 @@ public class WeatherController {
         return instance;
     }
 
-    public void injectDependencies(WeatherDetailActivity context,
+    public void injectDependencies(WeatherPage weatherPage,
                                    WeatherManager weatherManager,
                                    FavouritesManager favouritesManager) {
         this.weatherManager = weatherManager;
         this.favouritesManager = favouritesManager;
-        this.context = context;
+        this.context = weatherPage;
     }
 
     public void fetchWeather(int cityID, String cityName, String countryCode) {
@@ -41,12 +40,10 @@ public class WeatherController {
         weatherManager.getWeatherFromDB(city, new IWeatherManager.IWeatherDetailsCallback() {
             @Override
             public void onSuccess(String[] weatherDetails) {
-                context.showLoadingIcon(false);
+                // attach a the new Weather and update the UI
                 weather = new Weather(weatherDetails);
                 city.setWeather(weather);
-                context.setCityLabel(city);
-                context.setStaticUIVisibility(true);
-                context.updateWeatherDetails(weather);
+                context.updateWeatherDetails(city);
             }
 
             @Override

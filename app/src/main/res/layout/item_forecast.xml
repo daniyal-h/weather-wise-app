@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/forecast_temp_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/forecast_temp_text_view"
-        android:contentDescription="forecast icon" />
+        android:contentDescription="@string/forecast_icon" />
 
     <TextView
         android:id="@+id/forecast_date_text_view"

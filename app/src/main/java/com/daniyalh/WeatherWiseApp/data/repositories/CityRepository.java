@@ -30,26 +30,46 @@ public class CityRepository {
 
     public Cursor getCitiesByQuery(String query) {
         /*
-        Mimics a wildcard search with stronger optimization
-        Utilizes index of (name, population (desc))
-         */
-        // Get the next character for the range query
-        query = query.substring(0, 1).toUpperCase() + query.substring(1);
+        Mimics a wildcard search with stronger optimization.
+        Utilizes index of (name, population (desc)).
+        Handles capitalization for names with multiple words.
+        */
+
+        // Capitalize the first letter of the query and letters after spaces
+        query = capitalizeQuery(query);
 
         // Get the next character for the range query
         char lastChar = query.charAt(query.length() - 1);
         String nextQuery = query.substring(0, query.length() - 1) + (char) (lastChar + 1);
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();
-        // Construct the SQL query
-        String sql = "SELECT cityID AS _id, name || ', ' || country_code AS display_name, is_favourite " +
-                "FROM CITIES " +
+
+        String sql = "SELECT cityID AS _id, Cities.country_code, name || ', ' || country AS display_name, is_favourite " +
+                "FROM Cities JOIN Countries ON Cities.country_code = Countries.country_code " +
                 "WHERE name >= ? AND name < ? " +
                 "ORDER BY population DESC " +
                 "LIMIT 10";
 
         // Execute the query and return the cursor
         return database.rawQuery(sql, new String[]{query, nextQuery});
+    }
+
+    private String capitalizeQuery(String query) {
+        // capitalize the first letter of every word
+        StringBuilder capitalized = new StringBuilder();
+        boolean capitalizeNext = true;
+
+        // capitalize after a space; "new york city" --> "New York City"
+        for (char c : query.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            } else if (capitalizeNext) {
+                c = Character.toUpperCase(c);
+                capitalizeNext = false;
+            }
+            capitalized.append(c);
+        }
+        return capitalized.toString();
     }
 
     public void clearFavourites() {

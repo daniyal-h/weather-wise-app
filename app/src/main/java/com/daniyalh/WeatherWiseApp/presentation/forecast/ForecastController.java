@@ -1,7 +1,5 @@
 package com.daniyalh.WeatherWiseApp.presentation.forecast;
 
-import android.util.Log;
-
 import com.daniyalh.WeatherWiseApp.logic.forecast.ForecastManager;
 import com.daniyalh.WeatherWiseApp.logic.forecast.IForecastManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
@@ -9,11 +7,11 @@ import com.daniyalh.WeatherWiseApp.objects.Forecast;
 import com.daniyalh.WeatherWiseApp.presentation.weather.WeatherController;
 
 public class ForecastController {
-    private final ForecastDetailActivity context;
+    private final ForecastPage forecastPage;
     private final ForecastManager forecastManager;
 
-    public ForecastController(ForecastDetailActivity context, ForecastManager forecastManager) {
-        this.context = context;
+    public ForecastController(ForecastPage forecastPage, ForecastManager forecastManager) {
+        this.forecastPage = forecastPage;
         this.forecastManager = forecastManager;
     }
 
@@ -23,13 +21,9 @@ public class ForecastController {
             @Override
             public void onSuccess(Forecast[] forecasts) {
                 // set the forecasts to the city and display appropriately
-                context.showLoadingIcon(false);
+                forecastPage.showLoadingIcon(false);
                 city.setForecast(forecasts);
-
-                String displayName = city.getCityName() + ", " + city.getCountryCode();
-
-                context.setDisplayName(displayName);
-                context.displayForecasts(forecasts);
+                forecastPage.displayForecasts(city);
             }
 
             @Override
