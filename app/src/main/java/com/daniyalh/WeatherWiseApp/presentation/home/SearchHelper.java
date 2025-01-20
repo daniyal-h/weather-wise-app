@@ -61,7 +61,7 @@ public class SearchHelper {
         int cityID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String pair = cursor.getString(cursor.getColumnIndexOrThrow("display_name"));
         String cityName = pair.substring(0, pair.indexOf(","));
-        String countryCode = pair.substring(pair.indexOf(",")+2); // Winnipeg, *CA* (comma+2)
+        String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("Cities.country_code"));
         int isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("is_favourite")); // 0 or 1
 
         // close the old cursor so it doesn't remain active while viewing forecast
