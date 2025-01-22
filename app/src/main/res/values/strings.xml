@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">WW</string>
+    <string name="app_name">Weather Wise</string>
     <string name="clear_favourites">Clear Favourites</string>
-    <string name="city_search">Search for a city...</string>
+    <string name="city_search">Search for a city…</string>
     <string name="from_favourites">Favourites:</string>
     <string name="sunrise_label">Sunrise</string>
     <string name="sunset_label">Sunset</string>
     <string name="wind_label">Wind</string>
     <string name="humidity_label">Humidity</string>
     <string name="back_home">Home</string>
-    <string name="go_back">Go Back</string>
+    <string name="go_back">Back</string>
     <string name="forecast_icon">forecast icon</string>
 </resources>

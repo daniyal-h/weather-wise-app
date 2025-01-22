@@ -5,7 +5,8 @@ The things added to improve iteration 3 based on thoughts from iteration 2 went 
 
 ---
 
-**What didn't go well:**  
+**What didn't go well:**
+The offline support feature was forgone due to time restrictions and coming to the conclusion that the major refactoring required was not worth it. Most users have access to internet, be it Wifi or Cellular network. Trading the feature with the many additions to the first two features panned out well.
 
 ---
 
@@ -14,4 +15,8 @@ Although the cities supported is now over 126,000, the one downside from searchi
 
 ---
 
-**New thoughts to add to Iteration 4?:**
+**New thoughts to add to future updates?:**
+- Call API for a city with more precision to allow for duplicate city-country pairs as well
+- Add more details to extended forecasting
+- Add a default city that loads up every time the app is launched
+- Add more intricate ordering of favourites beyond population (user's top three, by continent, etc.)
