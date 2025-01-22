@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/city_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:autoLink="none"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:clickable="false"
+        android:focusable="false"
+        android:fontFamily="@font/roboto_bold"
+        android:inputType="none"
+        android:longClickable="false"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/text_dark"
+        android:textIsSelectable="true"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Winnipeg, CA" />
+
+    <TextView
+        android:id="@+id/forecast_update_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_light"
+        app:layout_constraintEnd_toEndOf="@+id/description_text_view"
+        app:layout_constraintStart_toStartOf="@+id/description_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/description_text_view"
+        tools:text="Updated 7 minutes ago" />
+
+    <TextView
+        android:id="@+id/temperature_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="128dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="64sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_update_text_view"
+        tools:text="-23°C" />
+
+    <TextView
+        android:id="@+id/feels_like_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/temperature_text_view"
+        app:layout_constraintHorizontal_bias="0.355"
+        app:layout_constraintStart_toStartOf="@+id/temperature_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/temperature_text_view"
+        tools:text="Feels Like -25" />
+
+    <TextView
+        android:id="@+id/sunrise_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/sunrise_label"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feels_like_text_view" />
+
+    <TextView
+        android:id="@+id/sunset_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="72dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/sunset_label"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sunrise_label_text_view" />
+
+    <TextView
+        android:id="@+id/sunrise_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/sunrise_label_text_view"
+        app:layout_constraintStart_toStartOf="@+id/sunrise_label_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/sunrise_label_text_view"
+        tools:text="08:25 am" />
+
+    <TextView
+        android:id="@+id/sunset_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/sunset_label_text_view"
+        app:layout_constraintStart_toStartOf="@+id/sunset_label_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/sunset_label_text_view"
+        tools:text="04:30 pm" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading_weather_icon_lottie"
+        android:layout_width="700px"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="80dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/sun_icon_lottie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/sunrise_text_view"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/sunrise_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/sunrise_text_view"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/sun_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/moon_icon_lottie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/sunset_text_view"
+        app:layout_constraintStart_toStartOf="@+id/sunset_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/sunset_text_view"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/moon_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/wind_icon_lottie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/wind_text_view"
+        app:layout_constraintStart_toStartOf="@+id/wind_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/wind_text_view"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/wind_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/humidity_icon_lottie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/humidity_text_view"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="@+id/humidity_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/humidity_text_view"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/humidity_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/favourite_icon_lottie"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="12dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
+        app:layout_constraintStart_toEndOf="@+id/back_home_button"
+        app:layout_constraintTop_toTopOf="@+id/back_home_button"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/favourite_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/extended_forecast_icon_lottie"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="12dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
+        app:layout_constraintEnd_toStartOf="@+id/back_home_button"
+        app:layout_constraintTop_toTopOf="@+id/back_home_button"
+        app:layout_constraintVertical_bias="0.0"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/extended_forecast_icon" />
+
+    <TextView
+        android:id="@+id/wind_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/wind_label"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/sun_icon_lottie"
+        app:layout_constraintStart_toStartOf="@+id/sun_icon_lottie"
+        app:layout_constraintTop_toBottomOf="@+id/sun_icon_lottie" />
+
+    <TextView
+        android:id="@+id/wind_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/wind_label_text_view"
+        app:layout_constraintStart_toStartOf="@+id/wind_label_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/wind_label_text_view"
+        tools:text="30 km/h" />
+
+    <TextView
+        android:id="@+id/humidity_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/humidity_label"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/moon_icon_lottie"
+        app:layout_constraintStart_toStartOf="@+id/moon_icon_lottie"
+        app:layout_constraintTop_toTopOf="@+id/wind_label_text_view" />
+
+    <TextView
+        android:id="@+id/humidity_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/humidity_label_text_view"
+        app:layout_constraintStart_toStartOf="@+id/humidity_label_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/humidity_label_text_view"
+        tools:text="93%" />
+
+    <TextView
+        android:id="@+id/description_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/city_text_view"
+        app:layout_constraintStart_toStartOf="@+id/city_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/city_text_view"
+        tools:text="overcast clouds" />
+
+    <Button
+        android:id="@+id/back_home_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="4dp"
+        android:drawableLeft="@drawable/ic_home"
+        android:fontFamily="@font/roboto_bold"
+        android:paddingRight="44dp"
+        android:text="@string/back_home"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,6 @@
     <item android:state_pressed="true" android:drawable="@color/pressed_color" />
 
     <!-- Default State with Faint Outline -->
-    <item android:drawable="@drawable/item_default_background" />
+    <item android:drawable="@drawable/default_background" />
 
 </selector>

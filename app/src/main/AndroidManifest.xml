@@ -8,14 +8,15 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/weather_wise_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/weather_wise_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherWiseApp"
-        tools:targetApi="31">
+        android:screenOrientation="portrait"
+        tools:targetApi="33">
         <activity
-            android:name="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
+            android:name="com.daniyalh.WeatherWiseApp.presentation.home.HomePage"
             android:exported="true"
             android:theme="@style/Theme.WeatherWiseApp">
             <intent-filter>
@@ -24,10 +25,20 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.daniyalh.WeatherWiseApp.presentation.ForecastDetailActivity"
-            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.MainActivity"
+        <activity android:name="com.daniyalh.WeatherWiseApp.presentation.weather.WeatherPage"
+            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.home.HomePage"
             android:theme="@style/Theme.WeatherWiseApp"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity
+            android:name="com.daniyalh.WeatherWiseApp.presentation.forecast.ForecastPage"
+            android:parentActivityName="com.daniyalh.WeatherWiseApp.presentation.weather.WeatherPage"
+            android:theme="@style/Theme.WeatherWiseApp"
+            android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

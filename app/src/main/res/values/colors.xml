@@ -9,4 +9,5 @@
     <color name="night_background">#98a1f3</color>
     <color name="hover_color">#E0E0E0</color> <!-- Light Gray for Hover -->
     <color name="pressed_color">#BDBDBD</color>
+    <color name="white">#FFFFFF</color>
 </resources>

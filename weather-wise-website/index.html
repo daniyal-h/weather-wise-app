@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Weather Wise</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<h1><a href="index.html">Weather Wise</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+								<li><a href="searching.html">Searching</a></li>
+								<li><a href="immediate-weather.html">Immediate Weather</a></li>
+								<li><a href="extended-forecast.html">Extended Forecast</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Banner -->
+					<section id="banner">
+						<div class="inner">
+							<div class="logo">
+								<img src="images/logo.png" alt="Weather Wise Logo" style="width: 100px; height: auto;" />
+							</div>
+							<h2>Weather Wise</h2>
+							<p>Your real-time weather companion</p>
+						</div>
+					</section>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+
+						<!-- One -->
+							<section id="one" class="wrapper spotlight style1">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/citySearch.png" alt="Search Icon" /></a>
+									<div class="content">
+										<h2 class="major">Search for cities across the globe</h2>
+										<p>
+											Weather Wise allows users to search for weather from a vast selection of over 126,000 cities 
+											worldwide. Whether you're traveling, working, or just curious about the weather in different 
+											locations, you can get instant updates on conditions, temperatures, and more, all in one 
+											place. You can also search through cities you set as favourites, allowing for one-tap results.
+										</p>
+										<a href="searching.html" class="special">Learn more</a>
+									</div>
+								</div>
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="wrapper alt spotlight style2">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/immediateWeather.png" alt="Weather Icon" /></a>
+									<div class="content">
+										<h2 class="major">Immediate weather data</h2>
+										<p>The Weather Wise App provides real-time weather data for your selected location, either through search or from favourites, including the current temperature, humidity levels, and wind speed. This detailed information helps users understand their immediate environment and make informed decisions for the day.</p>
+										<a href="immediate-weather.html" class="special">Learn more</a>
+									</div>
+								</div>
+							</section>
+
+						<!-- Three -->
+							<section id="three" class="wrapper spotlight style3">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/extendedForecast2.png" alt="Forecast Icon" style="width: 150px; height: auto;"/></a>
+									<div class="content">
+										<h2 class="major">5-day forecast</h2>
+										<p>Users can easily check the 5-day weather forecast for their selected city, with actual and feels-like temperatures alongside wind speeds and a simple description of conditions. This feature allows users to plan their activities for the upcoming days with confidence, whether it's deciding on an outdoor event or preparing for a change in weather.</p>
+										<a href="extended-forecast.html" class="special">Learn more</a>
+									</div>
+								</div>
+							</section>
+
+						<!-- Four -->
+							<section id="four" class="wrapper alt style4">
+								<div class="inner">
+									<h2 class="major">THE VISION</h2>
+									<p>Weather Wise aims to provide users with quick, reliable, and visually appealing access to real-time and forecasted weather information. It helps users plan their activities effectively, offering data across the globe, the ability to favourite select cities for quick reference and an extended forecast for week ahead.</p>
+								</div>
+							</section>
+					</section>
+
+						<!-- Five -->
+							<section id="five" class="wrapper alt style5">
+								<div class="inner">
+									<h2 class="major">PROJECT POSTMORTEM</h2>
+									<p><strong>What went right?</strong><br>
+										The app finished better than planned. The original immediate-weather showcasing for a few hundred cities was entirely overhauled to 
+										support over 126,000 cities, alongside five-day forecasting with near-instant results. Beyond that, the development panned out well: 
+										features were added iteratively, delivering working version every time, and on time. Agile additions were incorporated in the latter two 
+										iterations, allowing the app to gradually grow while correcting the mistakes from the iteration one.
+									<p><strong>What went wrong?</strong><br>
+										Many points throughout revealed the poor planning at the start. As this was my first project, there were things I did not plan for well or at
+										all. Many dev-tasks were estimated incorrectly and/or planned inadequately with too much overlap with one another, leading to 
+										redundancies. Testing the program also showcased errors with the database being in internal storage and instrumented tests overwriting 
+										the original save from its built-in clean-up procedures, pointing towards a non-ACID database. Another problem was that the search 
+										feature is restricted: only unique cities within a country are allowed. This reduced the true support cities count from over 200,000 down to 
+										126,000. 
+									</p>
+									<p><strong>What took the most time?</strong><br>
+										Feature two, implementing the search and favouriting feature, took the most time. It began by implementing a database, starting from its
+										designing and conversion to SQLite. The logic to weave together the presentation layer with the data layer was tedious. Finding proper 
+										data for the search to reference was also time-consuming; I began with 500 major cities, having the database helper return a cursor for 
+										every change in the search bar. Small edges cases existed that were resulting in empty or null calls, but were fixed later. Building on the 
+										database interaction saw updates to the database. This required updated to the database design and demanded more effort to fulfill. 
+										One such was adding a population column to each city entry to refine search beyond simple, alphabetical order. Finding updated 
+										population numbers to match to every city in the database proved difficult, and was accounted for by iteration 3.
+									</p>
+									<p><strong>How did the project change?</strong><br>
+										The original offline-support feature was forgone to be replaced by extended forecasting. It was decided that offline support, for most 
+										users, was not a priority; free wi-fi is becoming increasingly prevalent alongside cellular data, rendering offline weather support fairly
+										obsolete. Setting aside time for the quality-of-life update with extended forecasting was definitely worthwhile and beneficial for the app.
+									</p>
+									<ul class="actions">
+										<li><a href="#" class="button">UP</a></li>
+									</ul>
+								</div>
+							</section>
+					</section>		
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

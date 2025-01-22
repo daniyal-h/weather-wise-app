@@ -1,0 +1,84 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@drawable/default_background">
+
+    <ImageView
+        android:id="@+id/forecast_icon_image_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/item_background"
+        app:layout_constraintBottom_toBottomOf="@+id/forecast_temp_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/forecast_temp_text_view"
+        android:contentDescription="@string/forecast_icon" />
+
+    <TextView
+        android:id="@+id/forecast_date_text_view"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/forecast_icon_image_view"
+        app:layout_constraintTop_toTopOf="@+id/forecast_feels_like_text_view"
+        tools:text="Mon, 12 pm" />
+
+    <TextView
+        android:id="@+id/forecast_description_text_view"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:autoLink="none"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:fontFamily="@font/roboto_medium"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@+id/forecast_wind_speed_text_view"
+        app:layout_constraintStart_toStartOf="@+id/forecast_date_text_view"
+        tools:text="Thunderstorm" />
+
+    <TextView
+        android:id="@+id/forecast_temp_text_view"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textAlignment="textEnd"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/forecast_wind_speed_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/forecast_feels_like_text_view"
+        app:layout_constraintTop_toTopOf="@+id/forecast_feels_like_text_view"
+        tools:text="-23°C" />
+
+    <TextView
+        android:id="@+id/forecast_feels_like_text_view"
+        android:layout_width="115sp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:maxLines="1"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Feels Like -39" />
+
+    <TextView
+        android:id="@+id/forecast_wind_speed_text_view"
+        android:layout_width="115sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/forecast_feels_like_text_view"
+        app:layout_constraintTop_toBottomOf="@id/forecast_feels_like_text_view"
+        tools:text="Wind: 13 km/h" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
