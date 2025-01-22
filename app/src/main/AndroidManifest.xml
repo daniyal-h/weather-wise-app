@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/weather_wise_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherWiseApp"
+        android:screenOrientation="portrait"
         tools:targetApi="33">
         <activity
             android:name="com.daniyalh.WeatherWiseApp.presentation.home.HomePage"
