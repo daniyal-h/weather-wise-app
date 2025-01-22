@@ -48,7 +48,7 @@
         android:id="@+id/forecast_temp_text_view"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="12dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="textEnd"
         android:textSize="30sp"

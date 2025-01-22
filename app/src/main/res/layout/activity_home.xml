@@ -4,7 +4,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home_gradient_background">
+    android:background="@drawable/gradient_background_home">
 
     <Button
         android:id="@+id/back_home_button"

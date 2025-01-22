@@ -22,7 +22,10 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
             R.drawable.ic_art1, R.drawable.ic_art2, R.drawable.ic_art3,
             R.drawable.ic_art4, R.drawable.ic_art5, R.drawable.ic_art6,
             R.drawable.ic_art7, R.drawable.ic_art8, R.drawable.ic_art9,
-            R.drawable.ic_art10
+            R.drawable.ic_art10, R.drawable.ic_art11, R.drawable.ic_art12,
+            R.drawable.ic_art13, R.drawable.ic_art14, R.drawable.ic_art15,
+            R.drawable.ic_art16, R.drawable.ic_art17, R.drawable.ic_art18,
+            R.drawable.ic_art19, R.drawable.ic_art20
     };
 
 

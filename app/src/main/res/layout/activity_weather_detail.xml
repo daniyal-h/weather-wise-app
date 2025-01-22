@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
         android:autoLink="none"
         android:autoSizeMaxTextSize="30sp"
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="128dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="center"
@@ -66,7 +66,7 @@
         android:id="@+id/feels_like_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/roboto_medium"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -80,7 +80,7 @@
         android:id="@+id/sunrise_label_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
+        android:layout_marginStart="72dp"
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/sunrise_label"
@@ -93,7 +93,7 @@
         android:id="@+id/sunset_label_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="96dp"
+        android:layout_marginEnd="72dp"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/sunset_label"
         android:textSize="16sp"
@@ -112,7 +112,7 @@
         app:layout_constraintEnd_toEndOf="@+id/sunrise_label_text_view"
         app:layout_constraintStart_toStartOf="@+id/sunrise_label_text_view"
         app:layout_constraintTop_toBottomOf="@+id/sunrise_label_text_view"
-        tools:text="08:25 a.m." />
+        tools:text="08:25 am" />
 
     <TextView
         android:id="@+id/sunset_text_view"
@@ -125,7 +125,7 @@
         app:layout_constraintEnd_toEndOf="@+id/sunset_label_text_view"
         app:layout_constraintStart_toStartOf="@+id/sunset_label_text_view"
         app:layout_constraintTop_toBottomOf="@+id/sunset_label_text_view"
-        tools:text="04:30 p.m." />
+        tools:text="04:30 pm" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading_weather_icon_lottie"
@@ -197,7 +197,7 @@
         android:id="@+id/favourite_icon_lottie"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
         app:layout_constraintStart_toEndOf="@+id/back_home_button"
@@ -209,7 +209,7 @@
         android:id="@+id/extended_forecast_icon_lottie"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/back_home_button"
         app:layout_constraintEnd_toStartOf="@+id/back_home_button"
@@ -285,15 +285,16 @@
         android:id="@+id/back_home_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="4dp"
+        android:drawableLeft="@drawable/ic_home"
         android:fontFamily="@font/roboto_bold"
+        android:paddingRight="44dp"
         android:text="@string/back_home"
         android:textColor="#FFFFFF"
-        android:drawableLeft="@drawable/ic_home"
-        android:paddingRight="44dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/humidity_icon_lottie"
-        app:layout_constraintStart_toStartOf="@+id/wind_icon_lottie" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

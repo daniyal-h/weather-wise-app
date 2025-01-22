@@ -53,32 +53,31 @@ public class ForecastsAdapter extends RecyclerView.Adapter<ForecastsAdapter.fore
         // get the icon resource based on the icon group and if it's day or night
         switch(iconGroup) {
             case ("Clear"):
-                iconResource = isDay ? R.drawable.clear_day_icon : R.drawable.clear_night_icon;
+                iconResource = isDay ? R.drawable.icon_clear_day : R.drawable.icon_clear_night;
                 break;
 
             case("Clouds"):
-                iconResource = isDay ? R.drawable.cloudy_day_icon : R.drawable.cloudy_night_icon;
-                //iconResource = R.drawable.clouds_icon;
+                iconResource = isDay ? R.drawable.icon_cloudy_day : R.drawable.icon_cloudy_night;
                 break;
 
             case("Drizzle"):
-                iconResource = isDay ? R.drawable.drizzle_day_icon : R.drawable.drizzle_night_icon;
+                iconResource = isDay ? R.drawable.icon_drizzle_day : R.drawable.icon_drizzle_night;
                 break;
 
             case("Rain"):
-                iconResource = R.drawable.rain_icon;
+                iconResource = R.drawable.icon_rain;
                 break;
 
             case("Snow"):
-                iconResource = R.drawable.snow_icon;
+                iconResource = R.drawable.icon_snow;
                 break;
 
             case("Thunderstorm"):
-                iconResource = isDay ? R.drawable.thunderstorm_day_icon : R.drawable.thunderstorm_night_icon;
+                iconResource = isDay ? R.drawable.icon_thunderstorm_day : R.drawable.icon_thunderstorm_night;
                 break;
 
             default:
-                iconResource = R.drawable.atmosphere_icon;
+                iconResource = R.drawable.icon_atmosphere;
                 break;
         }
 

@@ -8,24 +8,30 @@ import java.time.format.DateTimeFormatter;
 public class Weather {
     public static final double MPS_TO_KMPH = 3.6;
 
-    private final String description, sunrise, sunset;
+    private final String mainDescription, detailedDescription, sunrise, sunset;
     private final int humidity, timezoneOffset;
     Long lastUpdated;
     private final double temp, feelsLike, windSpeed;
-    private final char timeOfDay;
+    private final boolean isDay;
 
     public Weather(String[] weatherDetails) {
         // atomically update each weather attribute when called
         lastUpdated = Long.parseLong(weatherDetails[0]);
         temp = Math.round(Double.parseDouble(weatherDetails[1]));
         feelsLike = Math.round(Double.parseDouble(weatherDetails[2]));
-        description = weatherDetails[3];
+
+        // description is stored as "Main: Detailed"
+        int descriptionDivider = weatherDetails[3].indexOf(":");
+
+        mainDescription = weatherDetails[3].substring(0, descriptionDivider);
+        detailedDescription = weatherDetails[3].substring(descriptionDivider+2);
+
         humidity = Integer.parseInt(weatherDetails[4]);
         windSpeed = Math.round(Double.parseDouble(weatherDetails[5]) * MPS_TO_KMPH);
         timezoneOffset = Integer.parseInt(weatherDetails[6]);
         sunrise = timeStampToTime(Long.parseLong(weatherDetails[7]));
         sunset = timeStampToTime(Long.parseLong(weatherDetails[8]));
-        timeOfDay = weatherDetails[9].charAt(0); // is either 'd' or 'n'
+        isDay = weatherDetails[9].charAt(0) == 'd'; // is either 'd' or 'n'
     }
 
     private String timeStampToTime(long timestamp) {
@@ -44,7 +50,6 @@ public class Weather {
     }
 
     // Getters
-
     public Long getLastUpdated() {
         return lastUpdated;
     }
@@ -61,8 +66,12 @@ public class Weather {
         return windSpeed;
     }
 
-    public String getDescription() {
-        return description;
+    public String getMainDescription() {
+        return mainDescription;
+    }
+
+    public String getDetailedDescription() {
+        return detailedDescription;
     }
 
     public String getSunrise() {
@@ -81,8 +90,7 @@ public class Weather {
         return timezoneOffset;
     }
 
-    public char getTimeOfDay() {
-        return timeOfDay;
+    public boolean isDay() {
+        return isDay;
     }
 }
-

@@ -15,7 +15,12 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
 
             weatherDetails[1] = String.valueOf(root.getJSONObject("main").getDouble("temp"));       // Temperature
             weatherDetails[2] = String.valueOf(root.getJSONObject("main").getDouble("feels_like")); // Feels Like
-            weatherDetails[3] = root.getJSONArray("weather").getJSONObject(0).getString("description"); // Description
+
+            // description as "Clouds: few clouds"
+            String mainDescription = root.getJSONArray("weather").getJSONObject(0).getString("main"); // General description
+            String detailedDescription = root.getJSONArray("weather").getJSONObject(0).getString("description"); // Description
+
+            weatherDetails[3] = mainDescription + ": " + detailedDescription;
             weatherDetails[4] = String.valueOf(root.getJSONObject("main").getInt("humidity"));      // Humidity
             weatherDetails[5] = String.valueOf(root.getJSONObject("wind").getDouble("speed"));      // Wind Speed
             weatherDetails[6] = String.valueOf(root.getInt("timezone"));                            // Timezone Offset

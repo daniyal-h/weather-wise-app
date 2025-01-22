@@ -83,13 +83,13 @@ public class WeatherUIManager {
             if (isFavourite) {
                 favouritingAnimationButton.setSpeed(-1f); // reverse animation
                 favouritingAnimationButton.playAnimation();
-                showToast("Unfavourited city", Toast.LENGTH_SHORT);
+                showToast("Removed from favourites", Toast.LENGTH_SHORT);
                 isFavourite = false;
             }
             else {
-                favouritingAnimationButton.playAnimation();
-                favouritingAnimationButton.cancelAnimation();
-                showToast("Favourited city", Toast.LENGTH_SHORT);
+                //favouritingAnimationButton.playAnimation();
+                favouritingAnimationButton.setProgress(1f);
+                showToast("Added to favourites", Toast.LENGTH_SHORT);
                 isFavourite = true;
             }
             weatherPage.toggleFavourite(isFavourite); // toggle favourite
@@ -150,15 +150,21 @@ public class WeatherUIManager {
     }
 
     private void updateWeatherDetails(Weather weather) {
+        /*
+        Set the text views based on the weather
+        Set the background appropriately
+        Concurrently update the last update time
+         */
+
         // set the weather details to their corresponding UI elements
         Long lastUpdatedTime = weather.getLastUpdated();
         String temp = (int) weather.getTemp() + "°C";
         String feelsLike = "Feels Like " + (int) weather.getFeelsLike();
-        String description = weather.getDescription();
+        String description = weather.getDetailedDescription();
         String humidity = weather.getHumidity() + "%";
         String windSpeed = (int) weather.getWindSpeed() + " km/h";
         String sunrise = weather.getSunrise().toLowerCase();
-        String sunset = weather.getSunset().toUpperCase();
+        String sunset = weather.getSunset().toLowerCase();
 
         tempTextView.setText(temp);
         feelsLikeTextView.setText(feelsLike);
@@ -167,22 +173,70 @@ public class WeatherUIManager {
         windTextView.setText(windSpeed);
         sunriseTextView.setText(sunrise);
         sunsetTextView.setText(sunset);
-        setTimeOfDay(weather.getTimeOfDay());
+
+        setWeatherBackground(weather.isDay(), weather.getMainDescription());
 
         // update the last updated time through a thread every minute
         startUpdatingTime(lastUpdatedTime);
     }
 
-    private void setTimeOfDay(char timeOfDay) {
-        // set the background colour depending on the time of day
-        if (timeOfDay == 'd') {
-            weatherPage.findViewById(R.id.root_layout).
-                    setBackground(ContextCompat.getDrawable(weatherPage,
-                            R.drawable.day_gradient_background));
-        } else { // nighttime
-            weatherPage.findViewById(R.id.root_layout).
-                    setBackground(ContextCompat.getDrawable(weatherPage,
-                            R.drawable.night_gradient_background));
+    private void setWeatherBackground(boolean isDay, String mainDescription) {
+        /*
+        Set the background resource based on the description
+        Ensure the text colour is valid per selection
+        Default to atmosphere background (fog, haze, smoke, etc.)
+         */
+        int backgroundResource;
+
+        switch (mainDescription) {
+            case ("Clear"):
+                backgroundResource = isDay ? R.drawable.background_clear_day : R.drawable.background_clear_night;
+                if (!isDay) setWhiteTextColour();
+                break;
+
+            case("Clouds"):
+                backgroundResource = isDay ? R.drawable.background_cloudy_day : R.drawable.background_cloudy_night;
+                if (!isDay) setWhiteTextColour();
+                break;
+
+            case("Rain"):
+
+            case("Drizzle"):
+                backgroundResource = R.drawable.background_rainy;
+                break;
+
+            case("Snow"):
+                backgroundResource = R.drawable.background_snowy;
+                break;
+
+            case("Thunderstorm"):
+                backgroundResource = R.drawable.background_thunderstorm;
+                setWhiteTextColour();
+                break;
+
+            default:
+                backgroundResource = R.drawable.background_atmosphere;
+                break;
+        } 
+
+        // set the background resource
+        weatherPage.findViewById(R.id.root_layout).
+                setBackground(ContextCompat.getDrawable(weatherPage, backgroundResource));
+    }
+
+    private void setWhiteTextColour() {
+        // set text to white for all text views
+        setTextColorForAll(
+                ContextCompat.getColor(weatherPage, R.color.white),
+                cityTextView, descriptionTextView, forecastUpdateTextView, tempTextView,
+                feelsLikeTextView, sunriseLabelTextView, sunriseTextView, sunsetLabelTextView,
+                sunsetTextView, windLabelTextView, windTextView, humidityLabelTextView, humidityTextView
+        );
+    }
+
+    private void setTextColorForAll(int color, TextView... textViews) {
+        for (TextView textView : textViews) {
+            textView.setTextColor(color);
         }
     }
 
