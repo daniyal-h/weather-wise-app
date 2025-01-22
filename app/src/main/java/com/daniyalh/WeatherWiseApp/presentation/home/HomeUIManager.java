@@ -58,7 +58,7 @@ public class HomeUIManager {
                 // update when useful change is detected
                 if (!isSelecting && !s.toString().trim().equals("")
                         && !s.toString().equals(UIConstants.SELECTION_FLAG)) {
-                    homePage.debounceSearch(s.toString());
+                    homePage.debounceSearch(s.toString().trim());
                 }
             }
             @Override
