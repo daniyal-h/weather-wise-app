@@ -7,3 +7,6 @@ Weather Wise aims to provide users with quick, reliable, and visually appealing 
 - **Immediate Wather Data:** The Weather Wise App provides real-time weather data for your selected location, either through search or from favourites, including the current temperature, humidity levels, and wind speed. This detailed information helps users understand their immediate environment and make informed decisions for the day.
   
 - **Five-Day Forecast:** Users can easily check the 5-day weather forecast for their selected city, with actual and feels-like temperatures alongside wind speeds and a simple description of conditions. This feature allows users to plan their activities for the upcoming days with confidence, whether it's deciding on an outdoor event or preparing for a change in weather.
+<br>
+<br>
+See the features in action → [https://daniyal-h.github.io/weather-wise-app/]
