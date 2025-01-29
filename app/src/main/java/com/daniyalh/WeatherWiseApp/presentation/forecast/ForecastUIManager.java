@@ -3,6 +3,7 @@ package com.daniyalh.WeatherWiseApp.presentation.forecast;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,6 +57,10 @@ public class ForecastUIManager {
 
     private void setDisplayName(String displayName) {
         displayNameTextView.setText(displayName);
+    }
+
+    public void showToast(String message, int duration) {
+        Toast.makeText(forecastPage, message, duration).show();
     }
 
     public void resetUI() {

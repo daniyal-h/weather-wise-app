@@ -18,14 +18,14 @@ public class WeatherManager implements IWeatherManager {
 
     // inject context which indirectly injects the volley through overloading
     public WeatherManager(Context context) {
-        this(Volley.newRequestQueue(context), new WeatherJsonAdapter());
+        this(Volley.newRequestQueue(context), new WeatherJsonAdapter(), DatabaseHelper.getInstance());
     }
 
     // overloaded constructor
-    public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter weatherJsonAdapter) {
+    public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter weatherJsonAdapter, DatabaseHelper dbHelper) {
         this.requestQueue = requestQueue;
         this.weatherJsonAdapter = weatherJsonAdapter;
-        dbHelper = DatabaseHelper.getInstance();
+        this.dbHelper = dbHelper;
         dbHelper.getWeatherRepository().setWeatherManager(this); // DBHelper always has latest WeatherManager
     }
 

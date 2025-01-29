@@ -1,6 +1,7 @@
 package com.daniyalh.WeatherWiseApp.presentation.forecast;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,6 +32,10 @@ public class ForecastPage extends AppCompatActivity {
 
     public void showLoadingIcon(boolean visible) {
         forecastUIManager.showLoadingIcon(visible);
+    }
+
+    public void showToast(String message, int duration) {
+        forecastUIManager.showToast(message, duration);
     }
 
     public void displayForecasts(City city) {

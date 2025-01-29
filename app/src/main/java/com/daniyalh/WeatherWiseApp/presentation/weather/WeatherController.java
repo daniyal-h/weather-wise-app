@@ -1,5 +1,7 @@
 package com.daniyalh.WeatherWiseApp.presentation.weather;
 
+import android.widget.Toast;
+
 import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
@@ -48,7 +50,7 @@ public class WeatherController {
 
             @Override
             public void onError(String error) {
-                // TODO
+                context.showToast(error, Toast.LENGTH_SHORT);
             }
         });
     }
