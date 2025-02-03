@@ -5,8 +5,8 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
-import com.daniyalh.WeatherWiseApp.logic.ISearchManager;
-import com.daniyalh.WeatherWiseApp.logic.SearchManager;
+import com.daniyalh.WeatherWiseApp.logic.home.ISearchManager;
+import com.daniyalh.WeatherWiseApp.logic.home.SearchManager;
 
 public class SearchHelper {
     private final HomePage homePage;

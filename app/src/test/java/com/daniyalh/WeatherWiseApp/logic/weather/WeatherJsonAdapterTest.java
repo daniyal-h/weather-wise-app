@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.weather;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

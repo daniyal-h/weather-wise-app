@@ -1,10 +1,12 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.home;
 
 import static org.junit.Assert.assertEquals;
 import android.database.Cursor;
 
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.data.repositories.CityRepository;
+import com.daniyalh.WeatherWiseApp.logic.home.ISearchManager;
+import com.daniyalh.WeatherWiseApp.logic.home.SearchManager;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

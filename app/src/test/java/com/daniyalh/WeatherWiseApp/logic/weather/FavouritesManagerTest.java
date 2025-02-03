@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.weather;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
