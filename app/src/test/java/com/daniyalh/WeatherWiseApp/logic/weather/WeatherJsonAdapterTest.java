@@ -4,7 +4,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.daniyalh.WeatherWiseApp.logic.weather.WeatherJsonAdapter;
 
 public class WeatherJsonAdapterTest {
     WeatherJsonAdapter weatherJsonAdapter = new WeatherJsonAdapter();

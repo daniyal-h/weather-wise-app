@@ -6,9 +6,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.data.repositories.WeatherRepository;
 import com.daniyalh.WeatherWiseApp.logic.exceptions.InvalidJsonParsingException;
-import com.daniyalh.WeatherWiseApp.logic.weather.IWeatherManager;
-import com.daniyalh.WeatherWiseApp.logic.weather.WeatherJsonAdapter;
-import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 import org.junit.Before;
@@ -31,7 +28,6 @@ import static org.mockito.Mockito.*;
 @Config(manifest = Config.NONE)
 @SuppressWarnings("unchecked")
 public class WeatherManagerTest {
-
     @Mock
     private WeatherRepository mockWeatherRepository;
     @Mock
@@ -171,6 +167,7 @@ public class WeatherManagerTest {
 
         when(mockWeatherJsonAdapter.parseWeather(anyString())).thenReturn(weatherDetails);
         String[] parsedWeather = weatherManager.fetchImmediateWeather(sampleJson);
+
         verify(mockWeatherJsonAdapter).parseWeather(sampleJson);
 
         assertNotNull(parsedWeather);
@@ -226,7 +223,7 @@ public class WeatherManagerTest {
             System.out.println("Exception thrown!");
         }
 
-        // Verify that parseWeather was actually called inside setWeather()
+        // Verify that parseWeather was actually called
         verify(mockWeatherJsonAdapter).parseWeather(malformedJson);
 
         System.out.println("Finished testSetWeather_InvalidJSON. All exceptions were successfully thrown.\n");
