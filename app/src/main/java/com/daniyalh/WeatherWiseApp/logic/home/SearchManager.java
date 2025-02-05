@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.home;
 
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 

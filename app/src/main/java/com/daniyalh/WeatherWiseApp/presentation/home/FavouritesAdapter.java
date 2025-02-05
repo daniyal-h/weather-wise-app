@@ -18,7 +18,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
     private final List<String> favouriteCities;
     private final Context context;
     private final OnItemClickListener listener;
-    private final int[] icons = {
+    public final int[] icons = {
             R.drawable.ic_art1, R.drawable.ic_art2, R.drawable.ic_art3,
             R.drawable.ic_art4, R.drawable.ic_art5, R.drawable.ic_art6,
             R.drawable.ic_art7, R.drawable.ic_art8, R.drawable.ic_art9,
@@ -27,7 +27,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
             R.drawable.ic_art16, R.drawable.ic_art17, R.drawable.ic_art18,
             R.drawable.ic_art19, R.drawable.ic_art20
     };
-
 
     public interface OnItemClickListener {
         void onItemClick(String city);
@@ -63,7 +62,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
         return favouriteCities.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView cityName;
 
         ViewHolder(View itemView) {

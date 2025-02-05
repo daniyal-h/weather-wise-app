@@ -1,7 +1,5 @@
 package com.daniyalh.WeatherWiseApp.logic.forecast;
 
-import static com.daniyalh.WeatherWiseApp.logic.weather.WeatherManager.API_KEY;
-
 import android.content.Context;
 
 import com.android.volley.RequestQueue;
@@ -16,15 +14,16 @@ public class ForecastManager implements IForecastManager {
     private final ForecastJsonAdapter forecastJsonAdapter;
     private final DatabaseHelper dbHelper;
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/forecast?q=";
+    private static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
 
     public ForecastManager(Context context) {
-        this(Volley.newRequestQueue(context), new ForecastJsonAdapter());
+        this(Volley.newRequestQueue(context), new ForecastJsonAdapter(), DatabaseHelper.getInstance());
     }
 
-    public ForecastManager(RequestQueue requestQueue, ForecastJsonAdapter forecastJsonAdapter) {
+    public ForecastManager(RequestQueue requestQueue, ForecastJsonAdapter forecastJsonAdapter, DatabaseHelper dbHelper) {
         this.requestQueue = requestQueue;
         this.forecastJsonAdapter = forecastJsonAdapter;
-        this.dbHelper = DatabaseHelper.getInstance();
+        this.dbHelper = dbHelper;
         dbHelper.getForecastRepository().setForecastManager(this);
     }
 

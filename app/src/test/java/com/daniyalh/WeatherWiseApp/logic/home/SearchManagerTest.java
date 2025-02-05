@@ -1,9 +1,12 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.home;
 
 import static org.junit.Assert.assertEquals;
 import android.database.Cursor;
 
 import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
+import com.daniyalh.WeatherWiseApp.data.repositories.CityRepository;
+import com.daniyalh.WeatherWiseApp.logic.home.ISearchManager;
+import com.daniyalh.WeatherWiseApp.logic.home.SearchManager;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -38,24 +41,27 @@ public class SearchManagerTest {
         System.out.println("Starting testSearchCitiesWithValidInput...");
         // Create mocks
         DatabaseHelper mockDb = Mockito.mock(DatabaseHelper.class);
+        CityRepository mockCityRepository = Mockito.mock(CityRepository.class);
         ISearchManager.SearchCallback callback = Mockito.mock(ISearchManager.SearchCallback.class);
 
-        Cursor dummyCursor = Mockito.mock(Cursor.class);
-        Mockito.when(dummyCursor.getCount()).thenReturn(4);  // Simulate 4 results
+        Mockito.when(mockDb.getCityRepository()).thenReturn(mockCityRepository);
 
-        Mockito.when(mockDb.getCityRepository().getCitiesByQuery("New")).thenReturn(dummyCursor);
+        Cursor dummyCursor = Mockito.mock(Cursor.class);
+        Mockito.when(dummyCursor.getCount()).thenReturn(5);  // Simulate 5 results
+
+        Mockito.when(mockCityRepository.getCitiesByQuery("new y")).thenReturn(dummyCursor);
 
         SearchManager manager = new SearchManager(mockDb);
 
-        manager.searchCities("New", callback); // should return 4
+        manager.searchCities("new y", callback); // should return 5
 
         // Capture the argument passed to onResults.
         ArgumentCaptor<Cursor> cursorCaptor = ArgumentCaptor.forClass(Cursor.class);
         Mockito.verify(callback).onResults(cursorCaptor.capture());
 
-        // Verify that the cursor has 4 results
+        // Verify that the cursor has 5 results
         Cursor capturedCursor = cursorCaptor.getValue();
-        assertEquals("Expected 4 results", 4, capturedCursor.getCount());
+        assertEquals("Expected 5 results", 5, capturedCursor.getCount());
 
         System.out.println("Finished testSearchCitiesWithValidInput successfully.\n");
     }

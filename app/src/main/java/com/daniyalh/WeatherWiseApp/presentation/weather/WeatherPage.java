@@ -66,6 +66,10 @@ public class WeatherPage extends AppCompatActivity {
         weatherController.toggleFavourite(isFavourite);
     }
 
+    public void showToast(String message, int duration) {
+        weatherUIManager.showToast(message, duration);
+    }
+
     public void startForecast() {
         startActivity(new Intent(WeatherPage.this, ForecastPage.class));
     }

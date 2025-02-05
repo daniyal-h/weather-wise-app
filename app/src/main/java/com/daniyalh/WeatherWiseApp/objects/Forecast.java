@@ -4,7 +4,6 @@ import static com.daniyalh.WeatherWiseApp.objects.Weather.MPS_TO_KMPH;
 
 public class Forecast {
     private String mainDescription, detailedDescription, dateTime;
-    Long lastUpdated;
     private double temp, feelsLike, windSpeed;
     boolean isDay;
 
@@ -28,10 +27,6 @@ public class Forecast {
 
     public String getDateTime() {
         return dateTime;
-    }
-
-    public Long getLastUpdated() {
-        return lastUpdated;
     }
 
     public double getTemp() {
