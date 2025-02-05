@@ -7,7 +7,8 @@ import com.daniyalh.WeatherWiseApp.logic.weather.FavouritesManagerTest;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherJsonAdapterTest;
 import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManagerTest;
 import com.daniyalh.WeatherWiseApp.objects.*;
-import com.daniyalh.WeatherWiseApp.presentation.*;
+import com.daniyalh.WeatherWiseApp.presentation.home.CityCursorAdapterTest;
+import com.daniyalh.WeatherWiseApp.presentation.home.FavouritesAdapterTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

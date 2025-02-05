@@ -1,12 +1,14 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.home;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import android.content.Context;
 import android.database.Cursor;
 
+import com.daniyalh.WeatherWiseApp.presentation.UIConstants;
 import com.daniyalh.WeatherWiseApp.presentation.home.CityCursorAdapter;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.RobolectricTestRunner;
@@ -36,7 +38,7 @@ public class CityCursorAdapterTest {
         CityCursorAdapter adapter = new CityCursorAdapter(context, dummyCursor);
         // Invoke convertToString and verify that it returns the expected constant.
         CharSequence result = adapter.convertToString(dummyCursor);
-        assertEquals(UIConstants.SELECTION_FLAG, result);
+        Assert.assertEquals(UIConstants.SELECTION_FLAG, result);
 
         System.out.println("----- Finished CityCursorAdapterTest -----\n");
     }
