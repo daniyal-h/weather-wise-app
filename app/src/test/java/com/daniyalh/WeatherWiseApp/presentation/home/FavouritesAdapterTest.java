@@ -1,29 +1,29 @@
-package com.daniyalh.WeatherWiseApp.presentation;
+package com.daniyalh.WeatherWiseApp.presentation.home;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.daniyalh.WeatherWiseApp.R;
-import com.daniyalh.WeatherWiseApp.presentation.home.FavouritesAdapter;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadow.api.Shadow;
+import org.robolectric.shadows.ShadowDrawable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(RobolectricTestRunner.class)
-
 public class FavouritesAdapterTest {
 
     private Context context;
@@ -51,23 +51,36 @@ public class FavouritesAdapterTest {
     public void testOnBindViewHolderAndClick() {
         System.out.println("Starting testOnBindViewHolderAndClick...");
 
-        // Use a proper ViewGroup parent for inflating the view holder.
+        // Use a proper ViewGroup parent for inflating the view holder
         ViewGroup parent = new LinearLayout(context);
 
-        // Create a view holder using the adapter.
-        RecyclerView.ViewHolder viewHolder = adapter.onCreateViewHolder(parent, 0);
+        // Create a view holder using the adapter
+        FavouritesAdapter.ViewHolder viewHolder = (FavouritesAdapter.ViewHolder) adapter.onCreateViewHolder(parent, 0);
 
-        // Bind the view holder to the first item.
-        adapter.onBindViewHolder((FavouritesAdapter.ViewHolder) viewHolder, 0);
+        // Bind the view holder to the first item
+        adapter.onBindViewHolder(viewHolder, 0);
 
-        // Check that the TextView was set with the correct city name.
+        // Check that the TextView was set with the correct city name
         TextView textView = viewHolder.itemView.findViewById(R.id.favourite_text_view);
         assertEquals("City1, Country1", textView.getText().toString());
 
-        // Simulate a click on the item view.
+        // Verify that a drawable was set using Robolectric
+        Drawable[] drawables = textView.getCompoundDrawables();
+        assertNotNull("Drawable should be set for the left icon", drawables[0]); // Left drawable
+        assertNull("No top drawable expected", drawables[1]);
+        assertNull("No right drawable expected", drawables[2]);
+        assertNull("No bottom drawable expected", drawables[3]);
+
+        // Verify that the drawable is from the expected set
+        List<Integer> iconList = Arrays.stream(adapter.icons).boxed().collect(Collectors.toList());
+        ShadowDrawable shadowDrawable = Shadow.extract(drawables[0]);
+        int drawableResId = shadowDrawable.getCreatedFromResId();
+        assertTrue("Drawable should be from the predefined set", iconList.contains(drawableResId));
+
+        // Simulate a click on the item view
         viewHolder.itemView.performClick();
 
-        // Verify that the click listener was invoked with the correct city.
+        // Verify that the click listener was invoked with the correct city
         verify(mockListener).onItemClick("City1, Country1");
 
         System.out.println("Finished testOnBindViewHolderAndClick.\n");

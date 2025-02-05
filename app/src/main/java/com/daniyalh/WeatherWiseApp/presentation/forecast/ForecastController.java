@@ -1,5 +1,7 @@
 package com.daniyalh.WeatherWiseApp.presentation.forecast;
 
+import android.widget.Toast;
+
 import com.daniyalh.WeatherWiseApp.logic.forecast.ForecastManager;
 import com.daniyalh.WeatherWiseApp.logic.forecast.IForecastManager;
 import com.daniyalh.WeatherWiseApp.objects.City;
@@ -28,7 +30,7 @@ public class ForecastController {
 
             @Override
             public void onError(String error) {
-                // TODO
+                forecastPage.showToast(error, Toast.LENGTH_SHORT);
             }
         });
     }

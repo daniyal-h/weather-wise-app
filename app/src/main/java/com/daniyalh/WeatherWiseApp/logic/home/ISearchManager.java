@@ -1,4 +1,4 @@
-package com.daniyalh.WeatherWiseApp.logic;
+package com.daniyalh.WeatherWiseApp.logic.home;
 
 import android.database.Cursor;
 

@@ -9,7 +9,7 @@ import com.daniyalh.WeatherWiseApp.data.DatabaseHelper;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public class WeatherManager implements IWeatherManager {
-    public static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
+    private static final String API_KEY = "76c99c45ce84e16b80a83eaa2b188f38";
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     private final RequestQueue requestQueue;
@@ -18,14 +18,14 @@ public class WeatherManager implements IWeatherManager {
 
     // inject context which indirectly injects the volley through overloading
     public WeatherManager(Context context) {
-        this(Volley.newRequestQueue(context), new WeatherJsonAdapter());
+        this(Volley.newRequestQueue(context), new WeatherJsonAdapter(), DatabaseHelper.getInstance());
     }
 
     // overloaded constructor
-    public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter weatherJsonAdapter) {
+    public WeatherManager(RequestQueue requestQueue, WeatherJsonAdapter weatherJsonAdapter, DatabaseHelper dbHelper) {
         this.requestQueue = requestQueue;
         this.weatherJsonAdapter = weatherJsonAdapter;
-        dbHelper = DatabaseHelper.getInstance();
+        this.dbHelper = dbHelper;
         dbHelper.getWeatherRepository().setWeatherManager(this); // DBHelper always has latest WeatherManager
     }
 

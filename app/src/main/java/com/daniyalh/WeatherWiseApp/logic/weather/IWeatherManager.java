@@ -1,5 +1,5 @@
 package com.daniyalh.WeatherWiseApp.logic.weather;
-
+;
 import com.daniyalh.WeatherWiseApp.objects.City;
 
 public interface IWeatherManager {

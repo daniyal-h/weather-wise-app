@@ -13,6 +13,8 @@ public class WeatherJsonAdapter implements IWeatherJsonAdapter {
             // Parse the JSON data
             JSONObject root = new JSONObject(JSON);
 
+            // weatherDetails[0] is set in WeatherRepository with last update time
+
             weatherDetails[1] = String.valueOf(root.getJSONObject("main").getDouble("temp"));       // Temperature
             weatherDetails[2] = String.valueOf(root.getJSONObject("main").getDouble("feels_like")); // Feels Like
 
