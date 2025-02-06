@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 @Config(manifest = Config.NONE)
 @SuppressWarnings("unchecked")
 public class FavouritesManagerTest {
-
     private DatabaseHelper mockDbHelper;
     private FavouritesManager favouritesManager;
     private CityRepository mockCityRepository;

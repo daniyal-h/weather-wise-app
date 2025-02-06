@@ -9,6 +9,9 @@ import com.daniyalh.WeatherWiseApp.logic.weather.WeatherManagerTest;
 import com.daniyalh.WeatherWiseApp.objects.*;
 import com.daniyalh.WeatherWiseApp.presentation.home.CityCursorAdapterTest;
 import com.daniyalh.WeatherWiseApp.presentation.home.FavouritesAdapterTest;
+import com.daniyalh.WeatherWiseApp.presentation.home.FavouritesCoordinatorTest;
+import com.daniyalh.WeatherWiseApp.presentation.home.HomeUIManagerTest;
+import com.daniyalh.WeatherWiseApp.presentation.home.SearchHelperTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -24,6 +27,9 @@ import org.junit.runners.Suite;
         FavouritesManagerTest.class,
         CityCursorAdapterTest.class,
         FavouritesAdapterTest.class,
+        SearchHelperTest.class,
+        HomeUIManagerTest.class,
+        FavouritesCoordinatorTest.class,
         ForecastManagerTest.class,
         ForecastJsonAdapterTest.class
 })
